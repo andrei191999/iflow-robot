@@ -1,0 +1,28 @@
+1. Email field
+#td_reg_email
+
+2. Password field
+#td_reg_password
+
+3. Login button (has text "intra in cont")
+#app > div.td-router-view.td-is-not-logged-in > div > div > div > div.col-md-4.td-login-register-wrap.td-login-register-long-form > div > form > button:nth-child(6)
+
+3.1. possible prompt for location permission from Chrome, select Never allow
+
+4. Clock-in button
+#app > div.td-router-view > div > div.col-md-12.td-fit-container > div.td-check-in-out > a
+
+5. Location selector
+#app > div.td-router-view > div > div.col-md-12.td-fit-container > div.td-check-in-out > div.td-checkin-modal > div > div > div > div.modal-body > div > form > div:nth-child(2) > div > div > div > div > div.td-select-single-button
+
+one and/or the other from the following 2, depending on what is needed
+(morning - checkin)
+6.1. Check in time field
+#td-ckeck-in-out-end-time-67
+
+(afternoon - checkout)
+6.2. Check out time field
+#td-ckeck-in-out-start-time-67
+
+7. Add button for check in/out, used after selecting the location and times
+#app > div.td-router-view > div > div.col-md-12.td-fit-container > div.td-check-in-out > div.td-checkin-modal > div > div > div > div.modal-footer > button

@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+google-cloud-firestore
+firebase-admin
+google-auth
+python-dotenv
+python-dateutil
+croniter
+httpx
+holidays
+pytest
+pytest-cov
+freezegun
+playwright

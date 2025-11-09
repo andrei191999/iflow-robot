@@ -1,0 +1,9 @@
+[tool.coverage.run]
+source = ["app/backend"]
+omit = [
+  "app/backend/compare.py",
+  "app/backend/core/__init__.py",
+  "app/backend/routers/__init__.py",
+  "app/backend/schemas/__init__.py",
+  "app/backend/services/__init__.py"
+]

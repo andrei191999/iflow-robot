@@ -1,0 +1,76 @@
+import os, sys, traceback
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from firebase_admin import initialize_app
+
+from routers import schedules, runs, cron, auth_debug, settings
+
+# Initialize Firebase Admin (ADC on Cloud Run / local)
+try:
+    initialize_app()
+except ValueError:
+    pass
+
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=".env.local")
+
+PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("FIREBASE_PROJECT_ID") or "unknown"
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development").lower()  # development, staging, production
+
+def create_app() -> FastAPI:
+    app = FastAPI(
+        title="ISO Backend",
+        description="Paste ONLY the raw Firebase ID token in Authorize (no 'Bearer ' prefix). Use /auth/me to verify.",
+        version="0.1.0",
+        swagger_ui_parameters={"persistAuthorization": True},
+    )
+
+    class ErrorLoggerMiddleware(BaseHTTPMiddleware):
+        async def dispatch(self, request, call_next):
+            try:
+                return await call_next(request)
+            except Exception:
+                exc_text = "".join(traceback.format_exception(*sys.exc_info()))
+                print(f"[ERROR] {request.method} {request.url}\n{exc_text}")
+                raise
+    app.add_middleware(ErrorLoggerMiddleware)
+
+    # Configure CORS based on environment
+    if ENVIRONMENT == "production":
+        # Production: strict CORS - only allow production domains
+        allowed_origins = [
+            "https://iflow-robot.web.app",
+            "https://iflow-robot.firebaseapp.com",
+        ]
+    else:
+        # Development/Staging: allow localhost for testing
+        allowed_origins = [
+            "https://iflow-robot.web.app",
+            "https://iflow-robot.firebaseapp.com",
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+        ]
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=allowed_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["Authorization", "Content-Type"],
+    )
+
+    @app.get("/health")
+    def health():
+        return {"ok": True, "project": PROJECT_ID}
+
+    # Mount routers
+    app.include_router(auth_debug.router)
+    app.include_router(schedules.router)
+    app.include_router(runs.router)
+    app.include_router(cron.router)
+    app.include_router(settings.router)
+
+    return app
+
+app = create_app()

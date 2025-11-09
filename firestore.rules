@@ -1,0 +1,74 @@
+// firestore.rules
+// =============================================================================
+// SECURITY RULES - CURRENTLY CONFIGURED FOR DEVELOPMENT
+// =============================================================================
+// PRODUCTION DEPLOYMENT CHECKLIST:
+// 1. Add field validation for all collections (validate required fields)
+// 2. Add data size limits to prevent abuse
+// 3. Add rate limiting considerations
+// 4. Validate data types and structure
+// 5. Add more granular permissions based on business logic
+// 6. Consider adding resource.data checks for updates vs creates
+// 7. Add audit logging for sensitive operations
+// =============================================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // User profile (optional)
+    // DEV: Basic user-only access
+    // PROD TODO: Add field validation, size limits
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Schedules
+    // DEV: User can create/update their own schedules
+    // PROD TODO:
+    //   - Validate schedule structure (cronExpression, nextEvent, etc.)
+    //   - Limit number of schedules per user
+    //   - Validate locationId references exist
+    //   - Prevent modification of system fields (createdAt, etc.)
+    match /schedules/{id} {
+      allow read, write: if request.auth != null
+                         && request.auth.uid == request.resource.data.uid;
+    }
+
+    // User Settings (includes iFlow credentials)
+    // SECURITY WARNING: Contains sensitive user credentials
+    // DEV: Basic user-only access
+    // PROD TODO:
+    //   - Consider encrypting sensitive fields at application level
+    //   - Add field validation for credential structure
+    //   - Consider separate collection for encrypted credentials
+    //   - Add audit logging for credential access/updates
+    match /settings/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Runs (append-only by backend)
+    // DEV: Users can read their own runs, backend writes via Admin SDK
+    // PROD TODO:
+    //   - Add pagination limits
+    //   - Consider data retention policy
+    //   - Add cleanup for old runs
+    //   - Validate status field values
+    match /runs/{id} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.uid;
+      allow write: if false; // backend only via Admin SDK / service account
+    }
+
+    // Location profiles: team-visible later; for MVP keep user-only
+    // DEV: User-only access
+    // PROD TODO:
+    //   - Implement team/organization sharing
+    //   - Add role-based access (owner, viewer, editor)
+    //   - Validate location data structure
+    //   - Add search/discovery permissions for shared profiles
+    match /locationProfiles/{id} {
+      allow read, write: if request.auth != null
+                         && (request.auth.uid == request.resource.data.ownerUid);
+    }
+  }
+}
