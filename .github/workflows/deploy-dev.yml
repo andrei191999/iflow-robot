@@ -83,7 +83,7 @@ jobs:
             const url = '${{ steps.deploy.outputs.url }}';
             github.rest.repos.createCommitComment({
               owner: context.repo.owner,
-              repo: context.repo.name,
+              repo: context.repo.repo,
               commit_sha: context.sha,
               body: `✅ **Development Backend Deployed**\n\nBackend URL: ${url}\n\nEnvironment: Development`
             });

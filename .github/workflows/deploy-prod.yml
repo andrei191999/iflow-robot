@@ -93,7 +93,7 @@ jobs:
             const url = '${{ steps.deploy.outputs.url }}';
             github.rest.repos.createCommitComment({
               owner: context.repo.owner,
-              repo: context.repo.name,
+              repo: context.repo.repo,
               commit_sha: context.sha,
               body: `✅ **Production Backend Deployed**\n\nBackend URL: ${url}\n\nEnvironment: Production\n\n⚠️ Run the credential migration script if needed:\n\`\`\`bash\npython app/backend/scripts/migrate_credentials.py --dry-run\n\`\`\``
             });
