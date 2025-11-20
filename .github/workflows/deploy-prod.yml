@@ -50,7 +50,7 @@ jobs:
       url: https://iso-backend-416751442341.europe-west1.run.app
 
     permissions:
-      contents: read
+      contents: write
       id-token: write
 
     steps:
