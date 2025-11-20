@@ -261,6 +261,9 @@ def test_credentials(user: dict = Depends(require_firebase_user)) -> Dict[str, A
                 logger.warning(f"No password found in Secret Manager for user {uid}")
                 raise HTTPException(status_code=400, detail="Password not configured")
             password = creds["password"]
+        except HTTPException:
+            # Re-raise HTTP exceptions (like 400 errors) without modification
+            raise
         except Exception as e:
             logger.error(f"Error retrieving password from Secret Manager: {e}", exc_info=True)
             raise HTTPException(status_code=500, detail="Failed to retrieve password")
