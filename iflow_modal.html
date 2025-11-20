@@ -1,0 +1,140 @@
+<div class="td-checkin-modal">
+    <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled" style="">
+        <div class="modal-wrapper">
+            <div class="modal-container"><span class="modal-close td-icon-modal-close"></span>
+                <div class="modal-header">
+                    Clock in
+                    <div class="td-header-info"><span class="glyphicon glyphicon-info-sign"></span>
+                        <div class="td-header-info-text" style="display: none;"><span>Description:</span>Here you can
+                            add Clock In and Clock Out events through which the time spent at work will be recorded
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <form>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="alert alert-danger" style="display: none;"><span></span></div>
+                                </div>
+                            </div> <!---->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group td-checkin-location-edit"><label>
+                                            Clock in location
+                                            <span>/ Clock out location</span></label>
+                                        <div class="td-select-single-outer-wrap">
+                                            <div title="Telemunca" class="td-select-single">
+                                                <div class="td-select-single-button"><svg width="1em" height="1em"
+                                                        viewBox="0 0 16 16" fill="currentColor"
+                                                        xmlns="http://www.w3.org/2000/svg" class="bi bi-plus-circle"
+                                                        style="display: none;">
+                                                        <path fill-rule="evenodd"
+                                                            d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z"
+                                                            clip-rule="evenodd"></path>
+                                                        <path fill-rule="evenodd"
+                                                            d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z"
+                                                            clip-rule="evenodd"></path>
+                                                        <path fill-rule="evenodd"
+                                                            d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg> <!----> <span class="td-select-single-name">Telemunca</span>
+                                                </div>
+                                                <div class="form-group td-select-list" style="visibility: hidden;">
+                                                    <div class="td-select-list-header"><span>Select location</span> <a
+                                                            href="#" class="td-icon-list-close"></a></div>
+                                                    <div class="td-select-list-search"><input type="text"
+                                                            placeholder="Filter locations"
+                                                            class="form-control td-element-search"></div>
+                                                    <div class="td-elements-list"><!---->
+                                                        <div class="td-dropdown-pad td-add-new-element"
+                                                            style="display: none;">
+                                                            <div>No matching locations</div> <a href="#"><svg
+                                                                    width="1em" height="1em" viewBox="0 0 16 16"
+                                                                    fill="currentColor"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    class="bi bi-plus-circle">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z"
+                                                                        clip-rule="evenodd"></path>
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z"
+                                                                        clip-rule="evenodd"></path>
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z"
+                                                                        clip-rule="evenodd"></path>
+                                                                </svg>
+                                                                Create new location
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> <a href="#" class="td-show-check-out-location">
+                                                Edit clock out location
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!----> <!----> <!---->
+                            <div class="row">
+                                <div class="col-sm-12 form-group"><label>Attendance note</label>
+                                    <div><input type="text" placeholder="Add note" class="form-control"></div>
+                                </div>
+                            </div>
+                            <hr class="td-hr-checkinout">
+                            <div class="row td-date-select">
+                                <div class="col-sm-4">
+                                    <div class="form-group"><label for="td-ckeck-in-out-date-65">Date<span
+                                                title="Required" class="td-user-required-field">*</span></label>
+                                        <div class="td-date-input-wrap">
+                                            <div class="td-date-picker"><input id="td-ckeck-in-out-date-65"
+                                                    placeholder="d/m/y" maxlength="10" type="text" autocomplete="off"
+                                                    class="form-control notranslate hasDatepicker"> <a href="#"
+                                                    tabindex="-1" id="td-date-picker-x-70"
+                                                    class="td-date-clear-button-picker"><span title="Delete date"
+                                                        class="td-icon-close-picker td-clear-date-button"></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!---->
+                            </div>
+                            <div class="row td-time-interval-select">
+                                <div class="col-sm-4">
+                                    <div title="" class="form-group"><label for="td-ckeck-in-out-start-time-65">Clock
+                                            in<span title="Required" class="td-user-required-field">*</span></label>
+                                        <div data-v-d6cc6db8="" class="td-time-picker"><input data-v-d6cc6db8=""
+                                                id="td-ckeck-in-out-start-time-65" placeholder="Event start"
+                                                maxlength="5" type="text" autocomplete="off"
+                                                class="form-control ui-timepicker-input notranslate"></div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div title="" class="form-group"><label for="td-ckeck-in-out-end-time-65">Clock
+                                            out</label>
+                                        <div data-v-d6cc6db8="" class="td-time-picker"><input data-v-d6cc6db8=""
+                                                id="td-ckeck-in-out-end-time-65" placeholder="Event end" maxlength="5"
+                                                type="text" autocomplete="off"
+                                                class="form-control ui-timepicker-input notranslate"></div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group"><label>Total hours</label>
+                                        <div class="td-input-wrap"><input type="text" disabled="disabled"
+                                                class="form-control" style="position: relative; text-align: center;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!---->
+                            <div><span>Geolocation cannot be registered because permissions are denied.</span></div>
+                            <!----> <!---->
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn cancel-btn"><a href="#" class="">Cancel</a></div> <button
+                        class="btn modal-default-button">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

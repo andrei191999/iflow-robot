@@ -16,6 +16,7 @@ import WeekGrid from "./WeekGrid";
 import JitterFields from "./JitterFields";
 import HolidaysFields from "./HolidaysFields";
 import PreviewPanel from "./PreviewPanel";
+import { FlaskConicalIcon } from "lucide-react";
 
 const DAY_DEFAULTS = {
   enabled: true,
@@ -115,6 +116,11 @@ export default function ScheduleForm() {
     }
   }
 
+  function openTestSimulation() {
+    // Navigate to Advanced Simulation with the current spec
+    nav("/simulation", { state: { spec: doc.spec, duration: "1-week" } });
+  }
+
   if (loading) return <div className="p-6">Loading…</div>;
 
   return (
@@ -158,6 +164,14 @@ export default function ScheduleForm() {
               </div>
             </div>
             <div className="ml-auto flex gap-2">
+              <Button
+                variant="outline"
+                onClick={openTestSimulation}
+                className="gap-1"
+              >
+                <FlaskConicalIcon className="w-4 h-4" />
+                Test
+              </Button>
               <Button variant="secondary" onClick={doPreview}>
                 Preview 10
               </Button>

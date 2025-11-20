@@ -4,6 +4,8 @@ import SchedulesList from "./pages/SchedulesList";
 import ScheduleForm from "./pages/schedules/ScheduleForm";
 import Runs from "./pages/Runs";
 import Settings from "./pages/Settings";
+import SimulationLab from "./pages/SimulationLab";
+import AdvancedSimulation from "./pages/AdvancedSimulation";
 import { useAuth } from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
 
@@ -19,10 +21,27 @@ function Protected({ children }: { children: React.ReactNode }) {
   );
 }
 
+function Public({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen">
+      <Navbar />
+      <main className="p-4 max-w-5xl mx-auto w-full">{children}</main>
+    </div>
+  );
+}
+
 export const router = createBrowserRouter(
   [
     { path: "/", element: <Navigate to="/schedules" replace /> },
     { path: "/signin", element: <SignIn /> },
+    {
+      path: "/demo",
+      element: (
+        <Public>
+          <SimulationLab />
+        </Public>
+      ),
+    },
     {
       path: "/schedules",
       element: (
@@ -52,6 +71,14 @@ export const router = createBrowserRouter(
       element: (
         <Protected>
           <Settings />
+        </Protected>
+      ),
+    },
+    {
+      path: "/simulation",
+      element: (
+        <Protected>
+          <AdvancedSimulation />
         </Protected>
       ),
     },

@@ -1,0 +1,2126 @@
+<body>
+    <script type="text/javascript">(function () {
+            // mobile device pe genunchi detector
+            var tdHtml = document.getElementsByTagName('html')[0]; // '0' to assign the first (and only `HTML` tag)
+
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                tdHtml.className += " td-is-mobile";
+
+                if (/Android/i.test(navigator.userAgent)) {
+                    tdHtml.className += " td-is-android";
+                }
+
+                if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                    tdHtml.className += " td-is-ios";
+                }
+
+                if (/iPhone|iPod/i.test(navigator.userAgent)) {
+                    tdHtml.className += " td-is-iphone";
+                }
+                if (/iPad/i.test(navigator.userAgent)) {
+                    tdHtml.className += " td-is-ipad";
+                }
+
+            } else {
+                tdHtml.className += " td-is-desktop";
+            }
+
+
+        })();</script>
+    <div id="app" class="td-top-banner-36">
+        <div class="td-app-loader" style="display: none;">
+            <div class="td-app-loader-wrapper">
+                <div class="td-app-loader-container">
+                    <div class="progress td-progress-bar">
+                        <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                            class="progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-bar-text">
+                        Loading<span class="loader__dot">.</span><span class="loader__dot">.</span><span
+                            class="loader__dot">.</span></div>
+                </div>
+            </div>
+        </div> <!---->
+        <div class="td-companies-messages-on-routes-banner"><!----></div> <!----> <!----> <!---->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div><!---->
+                <div class="td-top-site-message">
+                    <div class="container td-top-site-message-wrap">
+                        <div class="col-md-12">
+                            <div class="td-top-site-message-text">Ne-am schimbat numele în HRiFlow. Dacă nu ai făcut-o
+                                deja, te rugăm să folosești și să marchezi ca favorit <a target="_blank"
+                                    class="top-site-btn" href="https://app.hriflow.ro">this link</a></div>
+                            <div class="td-top-site-message-close"><a href="#" class="td-icon-close"></a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="td-padding-container-sidebar">
+                <div class="container">
+                    <div class="col-md-12 td-navbar-wrap"><button type="button" data-toggle="collapse"
+                            data-target="#navbar" aria-expanded="false" aria-controls="navbar"
+                            class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span> <span
+                                class="icon-bar"></span> <span class="icon-bar"></span> <span
+                                class="icon-bar"></span></button>
+                        <div class="td-vertical-sidebar">
+                            <ul class="vertical-sidebar">
+                                <li class="td-navbar-link active"><a href="#/dashboard" class="logo-nav-dropdown"><svg
+                                            id="Layer_4" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+                                            version="1.1" viewBox="0 0 60 60" class="link-logo">
+                                            <g>
+                                                <path
+                                                    d="M30.0014424,10.1557028c-10.9622423.0010042-19.8421608,8.8849098-19.8432634,19.8452322.0011027,10.9563846,8.8810211,19.8402806,19.8432634,19.8433622,10.9594561-.0030816,19.8403786-8.8869776,19.8403786-19.8433622,0-10.9603224-8.8809225-19.844228-19.8403786-19.8452322ZM30.0014424,47.807055c-4.9227313,0-9.3670372-1.9910872-12.5936065-5.2147747-.1888311-.190557-.3746336-.3832407-.5545707-.5812999h.2787273c.814502.0037511,1.6012628-.275936,2.1578115-.8353201.5596598-.5554361.8369938-1.3418149.8341091-2.1568438v-6.1179195c0-.6397616.5190476-1.155964,1.1602959-1.1588093.6411991.0028453,1.1593803.5190476,1.1603353,1.1588093v5.9102414c.0019297,1.7651459,1.4312797,3.1979222,3.1972921,3.199842,1.7665929-.0019198,3.1960414-1.4318114,3.1975379-3.199842v-11.0733377c.0017232-.6407166.5193824-1.1598627,1.1620681-1.1617334.639801.0018706,1.1593803.5210167,1.1607192,1.1617334v11.0733377c0,1.7651459,1.4285431,3.1979222,3.1951358,3.199842,1.7665833-.0019198,3.1963764-1.4318114,3.1973417-3.199842v-5.9102414c.0019193-.6397616.5206229-1.155964,1.1617328-1.1588093.6396533.0028453,1.1593212.5190476,1.1607685,1.1588093v6.1171516c-.0037511.8139754.2744986,1.6021756.8338728,2.1576117.556204.5593841,1.3425828.8390712,2.1571391.8353201h.2795887c-.180948.1980592-.3661196.3907428-.5555345.5812999-3.2250264,3.2236875-7.6717837,5.2147747-12.5907641,5.2147747ZM44.7534806,39.9738366h-1.8853282c-.3888131-.0037511-.5880335-.1120107-.717924-.2366137-.1253709-.1302837-.2335419-.3293964-.236909-.7191744v-6.1171516c-.000571-1.7651065-1.4322839-3.1940234-3.1969474-3.1940234-1.7655397,0-3.1968588,1.4289169-3.1968588,3.1940234v5.9102414c-.0014473.640628-.5218831,1.1626982-1.1622157,1.1626982-.6398601,0-1.1588486-.5220702-1.1602959-1.1626982v-11.0733377c0-1.7660123-1.4307477-3.1959036-3.1955592-3.1969078-1.7669279.0010042-3.197341,1.4308955-3.19931,3.1969078v11.0733377c0,.640628-.5205343,1.1626982-1.1602959,1.1626982-.6407166,0-1.1588979-.5220702-1.1602861-1.1626982v-5.9102414c-.0017328-1.7651065-1.4332488-3.1940234-3.1973413-3.1940234-1.7660123,0-3.195894,1.4297833-3.1972921,3.1940234v6.1179195c-.0034626.3890101-.1111463.5881227-.2361844.7184064-.1297974.1246029-.3303573.2328626-.7187401.2366137h-1.8848922c-1.9274468-2.8454483-3.0527916-6.2742541-3.0527916-9.9729016,0-4.9208607,1.9901814-9.3676673,5.2135273-12.5932745,3.2265692-3.2246916,7.6708752-5.215828,12.5936065-5.215828,4.9199452,0,9.3657377,1.9911364,12.5907641,5.215828,3.2243569,3.2256072,5.2145875,7.6724138,5.2145875,12.5932745,0,3.6986476-1.1262605,7.1274534-3.0533134,9.9729016Z"
+                                                    stroke-width="0"></path>
+                                                <path
+                                                    d="M32.6117636,19.8154034c0,1.4423361-1.1682706,2.6107544-2.6103212,2.6107544-1.4441673,0-2.6131567-1.1684183-2.6131567-2.6107544,0-1.4413712,1.1689894-2.6108036,2.6131567-2.6108036,1.4420505,0,2.6103212,1.1694324,2.6103212,2.6108036Z"
+                                                    stroke-width="0"></path>
+                                                <path
+                                                    d="M41.3271166,24.9804195c0,1.4413808-1.1673058,2.6127233-2.6107445,2.6127233-1.4421982,0-2.6106559-1.1713424-2.6106559-2.6127233,0-1.441322,1.1684577-2.6107445,2.6106559-2.6107445,1.4434387,0,2.6107445,1.1694226,2.6107445,2.6107445Z"
+                                                    stroke-width="0"></path>
+                                                <path
+                                                    d="M23.8948651,24.9804195c0,1.4413808-1.1687531,2.6127233-2.610656,2.6127233-1.4428677,0-2.6117587-1.1713424-2.6117587-2.6127233,0-1.441322,1.1688909-2.6107445,2.6117587-2.6107445,1.4419029,0,2.610656,1.1694226,2.610656,2.6107445Z"
+                                                    stroke-width="0"></path>
+                                            </g>
+                                        </svg>
+                                        <div class="label">
+                                            <div class="td-vertical-logo">
+                                                <div class="td-vertical-title">HRiFlow</div>
+                                                <div class="td-vertical-desc">Your complete solution for timekeeping
+                                                    &amp; HR</div>
+                                            </div>
+                                            <ul>
+                                                <li class="td-navbar-link" id="dashboard-tab"><a
+                                                        href="#/dashboard">Dashboard</a></li>
+                                                <li class="td-navbar-link active"><a href="#/activity">Events</a></li>
+                                                <li class="td-navbar-link" id="work_schedule"><a
+                                                        href="#/workSchedule">Work schedule</a></li> <!----> <!---->
+                                                <!----> <!---->
+                                            </ul>
+                                        </div>
+                                    </a></li>
+                                <li class="td-navbar-link"><a href="#/mainEfactura" class="logo-nav-dropdown"><svg
+                                            id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+                                            version="1.1" viewBox="0 0 60 60" class="link-logo">
+                                            <g>
+                                                <circle cx="17.5464912" cy="35.4884916" r="3.1924721" stroke-width="0">
+                                                </circle>
+                                                <g>
+                                                    <path
+                                                        d="M44.3597994,32.3544203c-1.1283869-.3715262-2.3442572.242062-2.7157525,1.3704489-.5218419,1.5851105-1.3731982,3.0572835-2.5061261,4.3044464-1.1337002,1.24741-2.5458828,2.2709219-4.2093021,2.9696148-1.5137832.6350265-3.0733777.9330013-4.6110706.9333719-2.6188783.0006796-5.1744918-.871559-7.2429076-2.4467227-.9452804-.7195444-2.2948779-.5365151-3.0143914.4087499-.7195289.945265-.5365151,2.2948624.4087653,3.0144068l-.0000154-.0000309c2.8157004,2.1425698,6.2764051,3.3248924,9.8485491,3.325572,2.0956772.0003707,4.2295975-.4093677,6.2760653-1.2686321,2.2499469-.9439985,4.1854233-2.34401,5.7287692-4.0438807,1.5440873-1.7001178,2.6990713-3.6989825,3.4078656-5.8515919.3714953-1.1283869-.2420929-2.3442572-1.3704489-2.7157525Z"
+                                                        stroke-width="0"></path>
+                                                    <path
+                                                        d="M25.6946155,19.0011314c1.5135978-.6351192,3.0731924-.933063,4.6110088-.9334337,2.3268964-.0004325,4.6038112.6876339,6.5334801,1.9464427,1.358216.8867883,2.5414036,2.0513795,3.4593301,3.4609055l-16.8101941,7.0564031c-1.0953799.4597818-1.6106111,1.7205367-1.1507983,2.8159012.4597973,1.0953644,1.7205367,1.6105956,2.8159012,1.1508138v-.0000309l18.9730747-7.9643209c.5222744-.2192644.9443074-.6452824,1.1585983-1.1696264.2142601-.5243132.2114181-1.1240004-.0078154-1.6462747-1.3003881-3.1000985-3.4649522-5.5980384-6.0881244-7.3072382-2.6236664-1.7106207-5.7096168-2.6445178-8.8834521-2.6449503-2.0956772-.0003707-4.229721.409275-6.2762043,1.2687557-2.8097075,1.1786466-5.1263327,3.0678791-6.8069273,5.3646259-1.6817376,2.2972411-2.7358008,5.0025524-3.0481089,7.8382856-.129943,1.1808399.7219847,2.2434289,1.90284,2.3733565,1.1808399.1299276,2.2434289-.7219847,2.373372-1.9028246.2288252-2.0827956,1.0065836-4.0794054,2.2428729-5.7672285,1.2374322-1.6883483,2.9250237-3.0672922,5.0011468-3.9395617Z"
+                                                        stroke-width="0"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                        <div class="label">
+                                            <div class="td-vertical-logo">
+                                                <div class="td-vertical-title">HRiFlow eFactura</div>
+                                                <div class="td-vertical-desc">Online invoicing, SPV invoices, purchases
+                                                    and inventories</div>
+                                            </div>
+                                            <ul>
+                                                <li class="td-navbar-link"><a href="#/companyEfactura">e-Factura SPV</a>
+                                                </li>
+                                                <li class="td-navbar-link"><a href="#/billingEfactura">Invoicing</a>
+                                                </li>
+                                                <li class="td-navbar-link"><a
+                                                        href="#/acquisitionsRoute/none/created/desc/1/30/all/all/None/None/None/None">Purchases</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </a></li>
+                                <li class="td-navbar-link"><a
+                                        href="https://control-acces.ro/?utm_source=app&amp;utm_medium=header&amp;utm_campaign=iflowapp"
+                                        target="_blank" rel="noopener noreferrer" class="logo-nav-dropdown"><svg
+                                            id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 60 60" class="link-logo">
+                                            <g id="uuid-95d6ad2e-202a-4dab-bd3f-b5df70f5169e" fill-rule="evenodd"
+                                                stroke-width="0">
+                                                <path
+                                                    d="M17.0648978,30.4034308c-.6207359-.1385886-1.2368128.2527196-1.3742365.8734555-.418094,1.8750185-.5974437,3.659196-.5974437,5.3362316,0,1.6549078.1758555,3.2038341.4693366,4.6374672.1281066.6230656.7360318,1.024853,1.3602614.8967491.6230647-.1281075,1.0248544-.7371949.8967477-1.3602605h0c-.2643659-1.2903851-.4227526-2.6832563-.4227526-4.1739522,0-1.5116598.1618803-3.1246417.542707-4.8354501.1385881-.6207359-.25272-1.2368124-.8746199-1.374237v-.0000036Z"
+                                                    class="cls-1"></path>
+                                                <path
+                                                    d="M20.432942,24.778378h0c.661497-1.2321548,1.4452781-2.3525073,2.3816216-3.307485l.0069874-.0069874.0058234-.0069874c1.9577046-2.0636843,4.516347-3.0209917,7.0866363-3.0244854,2.0427222,0,4.0772896.6172422,5.7543252,1.7713676,1.6781996,1.15762,3.0011936,2.8358186,3.6766662,5.0147997v.0034937l.0046576.0128108c.3074563.9456606.4541961,1.9402362.4553619,2.9441272,0,1.0236891-.153729,2.056697-.4448808,3.0512708l-.0046576.0163044v-.0034937c-.1898316.6836239-.4180936,1.3893775-.6079252,2.1405488-.1886658.7511714-.3389012,1.5524218-.3493822,2.4153962-.0081531.6358764.5007815,1.1587839,1.1378218,1.1657713.6358764.0081531,1.1587839-.5007815,1.1657713-1.1378218.0069874-.6102549.1152968-1.2274953.2806708-1.8820059.1630443-.6498511.3819911-1.333475.589291-2.067178h0l.0034937-.0116468h0c.3482165-1.1925585.5345543-2.4363583.5345543-3.6871472,0-1.2240017-.1793505-2.4538285-.5625038-3.6393979h0l-.0034937-.0093171-.0023279-.0069874h0c-.8291998-2.6785968-2.4945887-4.7946881-4.5664243-6.2166744-2.0764951-1.4278088-4.557109-2.1766514-7.059849-2.1778158-3.1362867-.0034937-6.3342991,1.1913932-8.7450359,3.7290727h0l-.0046585.0046585-.0093171.0093171h0c-1.1122003,1.1378218-2.0124413,2.4363583-2.7531316,3.8164187-.3004689.5601758-.0908392,1.2589402.4693366,1.5594091s1.2589402.0908392,1.5594091-.4693366l.0011595.0000009Z"
+                                                    class="cls-1"></path>
+                                                <path
+                                                    d="M30.5650257,27.3253745c-.5473651-.3249247-1.2531168-.1455759-1.5792072.4017892h0c-1.8167881,3.0547645-2.7764234,5.9872467-2.7775883,8.7927853,0,1.3998585.2422376,2.7612847.7267147,4.0586554.4833113,1.2973743,1.2053693,2.5283615,2.1487002,3.6848157.4017892.4926302,1.127339.5671632,1.6211332.1653758.4937941-.4017909.5671632-1.127339.165374-1.621135-.8012504-.9840946-1.3870477-1.9926414-1.7760262-3.0338024-.3878145-1.0411592-.5811397-2.117257-.5811397-3.2539131,0-2.2674906.7826163-4.8051692,2.4538267-7.6153672.3249247-.5473651.1455759-1.2531168-.4017892-1.5792072l.0000018.0000036Z"
+                                                    class="cls-1"></path>
+                                                <path
+                                                    d="M47.6020672,28.1336123c-.0244558-2.7310038-.5741506-5.2011367-1.5326237-7.3603179-1.4382908-3.2411024-3.7919611-5.7694648-6.6033231-7.473285-2.8136917-1.7049861-6.0827453-2.5959107-9.394887-2.5959107-3.2224682,0-6.4915218.8466695-9.4042041,2.625025-2.9045309,1.7713676-5.4445392,4.4720923-7.2170717,8.1219712h0l-.0116461.0232918-.0058229.010481h0c-.8315296,1.5873595-1.5139895,3.2422664-2.0625195,4.9216299l-.0570658.1735271v.1886658c0,.6358764.515921,1.1517966,1.1517967,1.1517966.5124273,0,.9421672-.3365714,1.091237-.8000847h.0034939c.5159211-1.5792072,1.1552905-3.1281353,1.9285894-4.5990349l.0104815-.0197981.0069878-.0151396c1.5955121-3.2911805,3.8268997-5.643687,6.3610855-7.1926146,2.5353506-1.5477632,5.3828152-2.2872887,8.2046582-2.2872887,3.865332,0,7.6642805,1.3940351,10.4826316,3.968982,1.4103378,1.2880559,2.5807702,2.868428,3.4088043,4.7317997.8268719,1.8633717,1.3125112,4.0120719,1.334639,6.4484302v.0023297c0,.0861816.0011657.1711974.0011657.257379,0,1.8645357-.2247684,3.917739-.4576898,5.7811107-.1281075.9852586-.2981392,1.8948166-.5636695,2.6785968-.2655303.7872739-.6184062,1.4394547-1.1121986,1.9763388l-.0081531.0093171-.0081531.0093171c-.8618087.9829289-2.2267286,1.5454344-3.5916485,1.5431047-.8082378,0-1.6013351-.1933252-2.283795-.5764803l-.0128108-.0069874-.0139747-.0069874c-.7569948-.3994595-1.375401-1.0260188-1.8063053-1.7876729-.4309044-.7593245-.6673195-1.6479186-.6661555-2.5248696,0-.2212747.0151405-.4413854.0442556-.6591682l.0023297-.0186341v-.0128108c.0873455-.8198828.3901442-1.7224534.7267156-2.7007247.3249247-.9631308.681296-2.0007963.7826163-3.1560865h.0023297l.001164-.0256215.0034937-.0291152h-.0023297c.0267855-.2317575.0430899-.4623492.0430899-.6906113,0-.8874302-.2014766-1.7329363-.5496948-2.491095-.5240733-1.1378218-1.3730712-2.0823176-2.397926-2.7508028-1.0260188-.6673204-2.2383754-1.064451-3.5066327-1.0656159-.8082378,0-1.6362736.165374-2.4270412.5229084h0l-.010481.0046585-.0081531.0034937h0c-.8431763.3691803-1.5652325.8816077-2.1731577,1.4767221-.92004.9014058-1.5873595,1.9786676-2.1219147,3.0803869-.5345543,1.1040472-.9375092,2.2407051-1.3008662,3.287686l-.0023288.0081531-.0046585.0139747c-.7104103,2.1882981-1.0528051,4.2857553-1.0516403,6.2923732-.0034937,3.8455339,1.2670924,7.328873,3.4472375,10.4395417.3645218.5217454,1.0830852.6486871,1.6036639.2841645.5217436-.3645227.6486871-1.0830834.2841645-1.603663h0c-1.9600343-2.810198-3.027979-5.7822746-3.0314727-9.1188757,0-1.7422533.2958104-3.5904846.9363444-5.572645.47516-1.3730712.9910811-2.7822468,1.6828572-3.9387028.3458885-.5811397.7325381-1.0958959,1.1704298-1.5244706.4390575-.4274107.9246985-.7698055,1.4976851-1.0190314l.0046576-.0023288.0139747-.0058234c.4891347-.2224404.9887523-.3225958,1.4918617-.3225958,1.0376655-.0034937,2.1009508.4483736,2.8835671,1.1925576.3913081.3703452.7104112.8082369.9281922,1.2833969.2189467.476324.3389012.9887523.3389012,1.5279642,0,.1502336-.0093171.3027986-.0291152.4588556l-.0034937.0279512-.0023297.0256215c-.0582304.7896036-.3400651,1.6758699-.6731429,2.6436583-.3249247.9596371-.6952707,2.0007963-.8291998,3.1630739h-.001164l-.0023297.0209621-.0023297.0116468h0c-.0419259.3132797-.062888.6265593-.062888.9398372,0,1.2845617.3377354,2.5504893.9654587,3.66036.6230656,1.0993896,1.539611,2.0497096,2.708876,2.6739374h0l.0151405.0081531.0128108.0069874h0c1.0504763.5834694,2.2232349.8571493,3.3843486.858315,1.964692-.0023279,3.9363713-.7779568,5.3012912-2.3035931h0l.0081531-.0081531.0093153-.0093171h0c.7535011-.8245422,1.2507871-1.7853432,1.5861946-2.7834108.3389012-1.0073846.5264012-2.0601906.6649898-3.1199822v-.0081531l.0023279-.0069874v.0058234c.2340872-1.8878292.473996-4.0225529.4751582-6.0676031,0-.0943329,0-.1886658-.0011657-.2818348l.0000071-.0023297Z"
+                                                    class="cls-1"></path>
+                                                <polygon
+                                                    points="47.6020672 28.1336123 47.6020672 28.1336123 47.6020672 28.1359402 47.6020672 28.1336123"
+                                                    class="cls-1"></polygon>
+                                            </g>
+                                        </svg>
+                                        <div class="label">
+                                            <div class="td-vertical-logo">
+                                                <div class="td-vertical-title">Access control</div>
+                                                <div class="td-vertical-desc">Access control and electronic time and
+                                                    attendance systems</div>
+                                            </div>
+                                            <ul>
+                                                <li class="td-navbar-link"><a target="_blank"
+                                                        href="https://control-acces.ro/control-acces-cu-cartela/">Card
+                                                        access</a></li>
+                                                <li class="td-navbar-link"><a target="_blank"
+                                                        href="https://control-acces.ro/control-acces-cu-recunoastere-faciala/">Facial
+                                                        recognition</a></li>
+                                                <li class="td-navbar-link"><a target="_blank"
+                                                        href="https://control-acces.ro/control-acces-cu-amprenta-exterior/">Fingerprint
+                                                        access</a></li>
+                                                <li class="td-navbar-link"><a target="_blank"
+                                                        href="https://control-acces.ro/control-acces-cu-amprenta-exterior/">Kits</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </a></li> <!---->
+                            </ul>
+                        </div>
+                        <div class="navbar-header"><a href="#/dashboard" class="navbar-brand"><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKwAAABICAYAAABr5B5MAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA4RpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDkuMS1jMDAzIDc5Ljk2OTBhODdmYywgMjAyNS8wMy8wNi0yMDo1MDoxNiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmZmQzNjQ2My1mNDk2LTVjNDQtODk1Ny1jMzIyMDg5MmEyN2EiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QzhCQzMxNkU4Qzg2MTFGMDkxNjlBMjVERjQ4MEY4NDgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QzhCQzMxNkQ4Qzg2MTFGMDkxNjlBMjVERjQ4MEY4NDgiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ODkzNGIzYmEtYTM0Yi0zYzQ5LTkwMjAtMzZmOTUxM2I3MmEwIiBzdFJlZjpkb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6YjQ3NzllYmEtNjZhMS1kYTQ2LTk1MmUtZmIwMDIwYjc4ZmZmIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+w9h8QQAADGVJREFUeNrsXQt0FNUZviQBQRIgEOShBYICrQ9QQBuqFo0CEQqkqFCp2iK2hlqrIoeiRy1wVLSiRKQUz6mW1geCUhBJgkSNQIHKo75qaAEFEZBHQAoBDCGk/+1+c/Ln9s7szO4m2aX/d853Mrtzd2Yy8829/+vONKqurlYCQaIgSU6BQAQrEIhgBQIRrEAEKxCIYAUCEaxABCsQiGAFAhGsICGREsNtnUnsR+xJ/DbxbGIqsRWxHNxH3EzcRFxJ3C+XQFCfgm1DHEX8ETGL2Djg7z8lLiK+CCELBJ5oFGHxSzfiA8Qfu4j0JHE78QjxMHpf3dt+C39tKCE+SnxHLosgVoJtTXyCOFb/ln3/NXEJ8T3iGuLnEK0N5xD7Eq8i/oB4rrFemwp3Ev8hl0cQjWBvIM6BGcDF9QyxgFgRyf5h996B3joZ31fhxviNh/AFIlgrmhDziePYdxuJ4yHYWCGT+AhxNPtuNXEkcbdcKoEfwaYRFxIH4PM3xAnE3xNP1dExZRPnwt7V2EEcRPynXC6Bl2C1WN8mXobPm2EWfFIPx9Uaoh2Kz2UQ8idyyZQkDlzMgL8wsb5PvCICwZxBPF+FYrFBcJD4Q9jMGhnEImJnuWQiWBtmEq/F8jr0bkGD/GOIe1Uo1lqGbSYH+H0V7OaZ+KwTEUuJzeSyiUnAoZMA85gZcDkEFwTfJa41Ql8ak+D9B40kzEOCQuN54u1y6aSH1TiLOJs5WDdEIFaNGy1i1bgpgm1VI+5bis9jmRMo+D8X7OPEdCyPj8LJcUv5Jke4vaPo+Z2Y7GzYx6cbdFLlApebPdZIR81HwpoE5yO71Ah2a78oQlf9VSjrZWKqCiUDIoU2JyZi+RcqFF7zY1Jo+3cXemu/SIXzedBlfXvQDbrYZw/++sHDxClYfgNOp+14O2IkDIIdxv+h0+mfqVDoUO9nccIoVgsWfLm6Blns+0h5L7GCbfNVYpMot5lKLMP2dvjc3hy0fy7AfjoSDxKPE3tb1l9LrKz2h8+JM4ldPfaXgn1xXGxpN5RYVR0c5cb+u7B1k2NwreuNjknQToUyShoriH9T7iWET8BUWE+8x2P4mkHsgN62K4b0Ey5tB6pQ0cu/iK+oUNbLrdeagWXdOwz3cU/m4O+gAPfxpRgymxK/b1l/XYBKN/2/3KVCJZVjXdqcspybb5Q9qRJJDXNzmBvqdCkvvIkt53u0XwRxOeiLIWqico+nhkvfXodaBEf43YlXEy9ycfjmwKzQw9otxNfqwlQKsz7ZSB+XuWxD36gXqprY9h+Ih1Qoe2gK9k7Y5jpsN13ZM3v8uP6oQpVwfqA7glWnhZWPrnYNhgc93DZ26Y4vdRluKjBU236TRuxFbO/Rza902e6vPX6zCG0qsQ+vYWQ72m4PMPTksuO4x7I+n62/Ksy2uhOLWfvdHqZMchgzh++3SxRDa0KbBGkso6UD85Uu2u6o3LNibSzfPUs8QPyQ+BWxmNUHmJ5xkP0pZOGcEaJ/nPcJOpY9hJVLdjBGKWUkS05I8Mo7rHUlG+Le9Wj7oUvUQGfAdlqG7V8axd06c7bckqla77K/v3scS4kRkYh3nGDxbceUsmE8yjWbx9GxN2Wm13rceIXE+8JESX6FKI5XWj4DiaBJYcywLMxKydLd7AQ2PHQL0yU/bAzbeki+3mO42ULMIxax78YY7c8j7jG2WwzP2etYvkTbojg3CXhkwUG+ZX03tv72ODEJBhG3hYk+aP00Mn7XibWZ4rH9p1i7/h7tNqLNCj2kfkfVTGvZFuZumwonarAKFWzPt8wMuIgt34eZCC8zB6Gn0X4rHJMxMAN0re2rPgq3N8OcSJTgdzsjEWLz5HkMuKExGr1aEjvmD3BdeiGKoo/5SVzzn7K48V60b444r1vs/Xq2PAIRKhNdiL2xvCWFdetf+qzuf88lKWDzoB2RHgnjgZfhHw+CzxDm6ZAggh3Jlj+I82Pti/LOJJiBUxC5OMYSD7qe4ymYeLfif3IiTBXwh0ZBzJmWzrCXUX2nQ5R3W46Fhy5fT4HTpQKESOIF5ayEMcXHzaZtqck+tx3rXlvHq4epmvlvhTHYpt+yza0Bsm0OpjP/42fEF4z1lbBPS1EznYJzOxdhOwWbdxQTnRkuzTU+d4aIP3Jpp/VZonfUAl/822cQ/CEVquDSjsQyFZrpeiiKE6975DzizRg2N+GElYT53WFjCA13DC2jTAu74WKP/6s75qpdzr6fwHqqaFDgs10p6hP84hLmyBZaxMqhh/CnEYfX5/c2fNZ4S4WSH00hunyXnrMAxUxN8N1HRiG/k7jRpmVFCrvwaT56nbXGXX0hZgVkRSHaF40qrkxkp35CfEl5P7jDyyasL8xQ/ut7J4YRQF3gbDa0+8Fgtvw7H+3zWeJoMBNsOQQ/ApGo1qyeoRNuDOf6K4T+hsFPcjCU2dALnDimY1+28HFgrVgoSrfvAU4Cg2IQE+sBhLKy0TvNUqHM2lGPHtOxlyp97OsAejc/6I10aixwFL3DbxEajBWe8dFJVGEUDFLExJ1mP9mxr5BJ6wEzheM1CDYJU/r/bPSuJ9DDpkKwfeBI77SYA8sdwe5RNbl5tzsxhdWgFmDnTZA+zER6NRLB5hixNm1v3Yu7tCUKwd1iw13YCfNr88712fZQAMEutMSh9chzDZb3weSJtY+Qj4eVxBpt8fe44Sx7YScEm2F8v5SZBcMsgl2O6/ImdJeEdk6KeiA3BxQabFI12alzlXupndM1b2B3x8dGb6ciqMl07OetFg+6RRinQ8XBbNpZcKo4h7NHL2X6HFrjBU7RTbMAj54608UPKmcOZg6Em85s5MXspl5tiHkA2+4CxTJdpap2lVIioD1L6cbjE2KOwtlyIhc3o1otEfAFW+7j02m+gIVGlcUsUIjJXgM7NwU96huqdmGVQuFTS5s54Ah2FWwdxSYexjsGGJ5qPGKDEZWYkyCzfrkJdotPJ80ZCYst65eyXns4E+JKo8ptMYvxDmFT/JfwpwolwU5Zx7yyxglwUnNZdm5FHB+nrh3+KzObXopimlB9YRkcVIXkwCUebZuxSaU6y/UnF9+hkOkrxyhgcrCNhbSmMnt4gbLM6VrAihFy4vyEtoHTp/CsgiNxfKxV6KWcY7wiQudU1XNC5nHm1xTB+VWWwpWlLLX/imFecrzOTLlUNg1IWeqtFfOlapkDXLDzmL11d5yf0J/jRCrmdcYztqM428Fkn7ahauDYcjGrgViDHvEunP9n4VRmo80WFarOckOhUTa5AfPM3ASrbOYAF+xe1stqw/h7cXoiU1GC5xj4SxroOCpdlpVHcmS+qgkRjlL2aTK8Z3brscO18YOTxjR6235ymYCSUMSiH2rynAqVjqYz8WV7TNZ0ogdveQjTwcd4VKuymQPmNO9H2cFPN4pUUsJcuDRmm7Vl64+z5WOWqqWWlpNfbczu5HiA2TbTfBY7F3s4BF4O0yHc3bbg+XzUBKxHdZkfjEPI7muL/abQY22AI/K2ci9cP4z1u6IQ7G7MoTsMm9WGYwj658IOr7bUK+chfr7Txz6fhPO1L0w8/Gm2/SLlMWtW8wVWn/gY6kJHYMapg9tY+4fY93rW7ThMAXGmzrRgbVexGtoHUVt7Et+VsHad2Tb19JmROI5biSdYne0ZPms/kzBjNClgzWgr4lmJNH2kjqnPR09iH2LbCLehpzM189Euw60e2nxUUVuk2dKVe3rzPJYSzEActJ2lrTbc71e1Z8Yus5QXnkKY6l2jV/QKsQ0M2GMK1On55Jf9eECFcqk/zTHy185jMDca00EeIz5o/H456gb2qtp56Bst6dfRhs3D8byIVcnD4NT/zsm6g4lqCAo3vJ6c0hUVOZvCVE/xzMinYZyHcyDQgSyrdZlhGwtEsP8NGxWwYfl9BH3r871aTsVWHj7vQl3pF3LZRLAqAZ7AfbW8WUbg9dibI4jJFrMnsqxDELwuX/mZDfNjKHuQ2ZUiVoGfd82WIw06m81RnwXhxvp5AJlI773DHrixGk9RlBdyCOLqPV15iAzw93RNw2xNeU+XIKo3IU7DTErzTYhvYuLgWoTA5E2Igrh61+z9KEwO8q7ZTh6P4ZF3zQrqTLAqhm/zXog60S1yOQR1LVhlzOvph0cR9cDQn4qZtuXgPoTHSlFUsl8ugaChBCsQqIYOawkEIliBQAQrEMEKBCJYgUAEKxDBCgQiWIFABCsQwQoEIliBIGr8R4ABABblSAR5PjXeAAAAAElFTkSuQmCC"></a>
+                        </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <div class="navbar-link-efactura td-navbar-link"><a href="#/mainEfactura">HRiFlow eFactura<i
+                                        class="el-icon-ArrowOut"></i></a></div>
+                            <ul class="nav navbar-nav navbar-left"><!---->
+                                <li class="td-navbar-link" id="dashboard-tab"><a href="#/dashboard">Dashboard</a></li>
+                                <li class="td-navbar-link active"><a href="#/activity">Events</a></li>
+                                <li class="td-navbar-link" id="work_schedule"><a href="#/workSchedule">Work schedule</a>
+                                </li> <!----> <!---->
+                                <li id="settings_menu" class="nav-item dropdown"><!---->
+                                    <ul class="dropdown-menu td-settings-menu"><!----> <!----> <!----> <!----> <!---->
+                                        <!----> <!----> <!----> <!----> <!----> <!----> <!----> <!----> <!----> <!---->
+                                        <!----> <!----></ul>
+                                </li> <!----> <!---->
+                            </ul>
+                        </div>
+                        <div class="td-menu-element search search-touch"><a href="#" class="search search-touch"><span
+                                    class="glyphicon glyphicon-search search-touch"></span></a></div>
+                        <div class="td-menu-element notifications"><a href="#/notifications/unread/1" class=""
+                                id="notifications-tab"><span class="glyphicon glyphicon-bell"><span class="unread"><span
+                                            class="td-unread-count">52</span></span></span></a></div>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="nav-item dropdown"><a href="#" data-toggle="dropdown" role="button"
+                                    aria-haspopup="true" aria-expanded="false"
+                                    class="dropdown-toggle nav-user td-navbar-dropdown"><span
+                                        class="nav-user-name">MACOVEI ANDREI</span> <span class="nav-user-type">Team
+                                        Member</span> <!----> <img src="api_thumb/uploads/default-profile.png"
+                                        class="td-user-avatar nav-user-avatar"></a>
+                                <ul class="dropdown-menu">
+                                    <li class="td-navbar-link">
+                                        <div class="td-margin-space"></div> <a href="#/user/48940"
+                                            class="td-nav-account">My Account</a>
+                                    </li>
+                                    <li class="td-navbar-link"><a href="#/user/48940/attendance">My attendance</a></li>
+                                    <li class="td-reports-btn td-navbar-link td-extra-sub-type"><a
+                                            href="#/user/48940/documents/view_all">Documents</a>
+                                        <div class="td-sub-type-info-box">
+                                            <div class="td-sub-type-value">Business</div> <span
+                                                class="td-sub-type-info">
+                                                This feature is part of the Business plan.
+                                                <!---->
+                                                Soon, you will need to upgrade your subscription to use it.
+                                            </span>
+                                        </div>
+                                    </li>
+                                    <li class="td-navbar-link"><a href="#/loginCompaniesList">Companies list</a></li>
+                                    <!---->
+                                    <div class="no-margin-hr"></div>
+                                    <li><a href="#">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="td-router-view" style="margin-top: 36px;">
+            <div class="td-activity-page-wrap td-reports-content">
+                <div class="td-activity-full-column">
+                    <div class="td-add-events-wrap">
+                        <div class="td-add-events-button-wrap">
+                            <div class="td-add-events-button">Add <span
+                                    class="td-icon-right td-events-button-arrow"></span></div>
+                            <div class="td-add-events-all-selectors td-add-events-selector">
+                                <div>
+                                    <div class="td-add-event-name"><span class="td-add-event-color"
+                                            style="background-color: rgb(246, 12, 12);"></span>
+                                        <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+                                        <!---->
+                                        Paid Leave
+                                        <span class="td-icon-right"></span>
+                                    </div> <!----> <!----> <!----> <!----> <!----> <!----> <!----> <!---->
+                                    <!----><!----> <!---->
+                                    <div class="td-add-event-name"><span class="td-add-event-color"
+                                            style="background-color: rgb(246, 12, 12);"></span>
+                                        <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+                                        <!---->
+                                        Sick Leave
+                                        <span class="td-icon-right"></span>
+                                    </div> <!----> <!----> <!----> <!----> <!----> <!----> <!----><!----> <!---->
+                                    <!---->
+                                    <div class="td-add-event-name"><span class="td-add-event-color"
+                                            style="background-color: rgb(239, 232, 232);"></span>
+                                        <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+                                        <!---->
+                                        Business Trip
+                                        <span class="td-icon-right"></span>
+                                    </div> <!----> <!----> <!----> <!----> <!----> <!----><!----> <!----> <!---->
+                                    <div class="td-add-event-name"><span class="td-add-event-color"
+                                            style="background-color: rgb(246, 12, 12);"></span>
+                                        <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+                                        <!---->
+                                        Social leave of absence
+                                        <span class="td-icon-right"></span>
+                                    </div> <!----> <!----> <!----> <!----> <!----> <!----><!----> <!----> <!---->
+                                    <div class="td-add-event-name"><span class="td-add-event-color"
+                                            style="background-color: rgb(246, 12, 12);"></span>
+                                        <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+                                        <!---->
+                                        Unpaid Leave
+                                        <span class="td-icon-right"></span>
+                                    </div> <!----> <!----> <!----> <!----> <!----> <!----><!----> <!----> <!---->
+                                    <!----> <!---->
+                                    <div class="td-add-event-name"><span class="td-add-event-color"
+                                            style="background-color: rgb(20, 11, 233);"></span>
+                                        <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+                                        <!---->
+                                        OnCall - Week
+                                        <span class="td-icon-right"></span>
+                                    </div> <!----> <!----> <!----> <!----><!----> <!----> <!----> <!----> <!---->
+                                    <div class="td-add-event-name"><span class="td-add-event-color"
+                                            style="background-color: rgb(20, 11, 233);"></span>
+                                        <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+                                        <!---->
+                                        OnCall - Weekend
+                                        <span class="td-icon-right"></span>
+                                    </div> <!----> <!----> <!----> <!----><!----> <!----> <!----> <!----> <!---->
+                                    <div class="td-add-event-name"><span class="td-add-event-color"
+                                            style="background-color: rgb(10, 154, 10);"></span>
+                                        <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+                                        <!---->
+                                        Overtime
+                                        <span class="td-icon-right"></span>
+                                    </div> <!----> <!----> <!----> <!----><!----> <!----> <!----> <!----> <!---->
+                                    <div class="td-add-event-name"><span class="td-add-event-color"
+                                            style="background-color: rgb(249, 227, 10);"></span>
+                                        <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+                                        <!---->
+                                        Short personal absence
+                                        <span class="td-icon-right"></span>
+                                    </div> <!----> <!----> <!----> <!----><!----> <!----> <!----> <!----> <!---->
+                                    <div class="td-add-event-name"><span class="td-add-event-color"
+                                            style="background-color: rgb(246, 12, 12);"></span>
+                                        <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+                                        <!---->
+                                        Time Off
+                                        <span class="td-icon-right"></span>
+                                    </div> <!----> <!----> <!----> <!---->
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div id="eventTimeIntervalAddEdit" class="modal-container"><span
+                                            class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <div class="td-header-info"><span
+                                                    class="glyphicon glyphicon-info-sign"></span>
+                                                <div class="td-header-info-text" style="display: none;">
+                                                    <span>Description:</span>...</div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div><!----> <!----></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                class="btn modal-default-button">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div id="td-event-paid-leave-add-edit" class="modal-container"><span
+                                            class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <div class="td-header-info"><span
+                                                    class="glyphicon glyphicon-info-sign"></span>
+                                                <div class="td-header-info-text" style="display: none;">
+                                                    <span>Description:</span>...</div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div><!----> <!----></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                disabled="disabled"
+                                                class="btn modal-default-button modal-disabled-button">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div id="td-event-paid-leave-add-edit" class="modal-container"><span
+                                            class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <div class="td-header-info"><span
+                                                    class="glyphicon glyphicon-info-sign"></span>
+                                                <div class="td-header-info-text" style="display: none;">
+                                                    <span>Description:</span>...</div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div><!----> <!----></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                disabled="disabled"
+                                                class="btn modal-default-button modal-disabled-button">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div id="eventDateIntervalAddEdit" class="modal-container"><span
+                                            class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <div class="td-header-info"><span
+                                                    class="glyphicon glyphicon-info-sign"></span>
+                                                <div class="td-header-info-text" style="display: none;">
+                                                    <span>Description:</span>...</div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div><!----> <!----></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                class="btn modal-default-button">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div id="td-event-other-leave-add-edit" class="modal-container"><span
+                                            class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <div class="td-header-info"><span
+                                                    class="glyphicon glyphicon-info-sign"></span>
+                                                <div class="td-header-info-text" style="display: none;">
+                                                    <span>Description:</span>...</div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div><!----> <!----></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                class="btn modal-default-button">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div id="td-event-compensatory-time-add-edit" class="modal-container"><span
+                                            class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <div class="td-header-info"><span
+                                                    class="glyphicon glyphicon-info-sign"></span>
+                                                <div class="td-header-info-text" style="display: none;">
+                                                    <span>Description:</span>...</div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div><!----> <!----></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                class="btn modal-default-button">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div id="td-shift-swap-add-edit" class="modal-container"><span
+                                            class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <div class="td-header-info"><span
+                                                    class="glyphicon glyphicon-info-sign"></span>
+                                                <div class="td-header-info-text" style="display: none;">
+                                                    <span>Description:</span>...</div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div><!----> <!----></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                class="btn modal-default-button">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div id="td-overtime-compensation-add-edit" class="modal-container"><span
+                                            class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <div class="td-header-info"><span
+                                                    class="glyphicon glyphicon-info-sign"></span>
+                                                <div class="td-header-info-text" style="display: none;">
+                                                    <span>Description:</span>...</div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div><!----> <!----></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                class="btn modal-default-button">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div id="td-event-paid-leave-planning-add-edit" class="modal-container"><span
+                                            class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <div class="td-header-info"><span
+                                                    class="glyphicon glyphicon-info-sign"></span>
+                                                <div class="td-header-info-text" style="display: none;">
+                                                    <span>Description:</span>...</div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div><!----> <!----></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                class="btn modal-default-button">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="td-users-issues-modal">
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div class="modal-container"><span class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <!---->
+                                        </div>
+                                        <div class="modal-body">
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <ul></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer"><!----> <button
+                                                class="btn modal-default-button">Close</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!---->
+                    <div class="td-check-in-out"><a title="" class="td-check-in-out-button btn">
+                            Clock in
+                        </a>
+                        <div class="td-check-in-out-extra">
+                            <div aria-hidden="true" class="btn fa fa-plus"></div>
+                            <ul>
+                                <li><a href="#">Add attendance</a></li>
+                                <li><a href="#">Close attendance</a></li>
+                            </ul>
+                        </div> <span title="Today's total work hours" class="td-check-in-out-counter">
+                            00:00
+                        </span>
+                        <div class="td-checkin-modal">
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div class="modal-container"><span class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <div class="td-header-info"><span
+                                                    class="glyphicon glyphicon-info-sign"></span>
+                                                <div class="td-header-info-text" style="display: none;">
+                                                    <span>Description:</span>Here you can add Clock In and Clock Out
+                                                    events through which the time spent at work will be recorded</div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div>
+                                                <form>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="alert alert-danger" style="display: none;">
+                                                                <span></span></div>
+                                                        </div>
+                                                    </div> <!---->
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group td-checkin-location-edit"><label>
+                                                                    Clock in location
+                                                                    <span>/ Clock out location</span></label>
+                                                                <div class="td-select-single-outer-wrap">
+                                                                    <div title=""
+                                                                        class="td-select-single td-not-selected">
+                                                                        <div class="td-select-single-button"><svg
+                                                                                width="1em" height="1em"
+                                                                                viewBox="0 0 16 16" fill="currentColor"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="bi bi-plus-circle">
+                                                                                <path fill-rule="evenodd"
+                                                                                    d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z"
+                                                                                    clip-rule="evenodd"></path>
+                                                                                <path fill-rule="evenodd"
+                                                                                    d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z"
+                                                                                    clip-rule="evenodd"></path>
+                                                                                <path fill-rule="evenodd"
+                                                                                    d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z"
+                                                                                    clip-rule="evenodd"></path>
+                                                                            </svg> <span>Location</span></div>
+                                                                        <div class="form-group td-select-list"
+                                                                            style="visibility: hidden;">
+                                                                            <div class="td-select-list-header">
+                                                                                <span>Select location</span> <a href="#"
+                                                                                    class="td-icon-list-close"></a>
+                                                                            </div>
+                                                                            <div class="td-select-list-search"><input
+                                                                                    type="text"
+                                                                                    placeholder="Filter locations"
+                                                                                    class="form-control td-element-search">
+                                                                            </div>
+                                                                            <div class="td-elements-list"><!---->
+                                                                                <div class="td-dropdown-pad td-add-new-element"
+                                                                                    style="display: none;">
+                                                                                    <div>No matching locations</div> <a
+                                                                                        href="#"><svg width="1em"
+                                                                                            height="1em"
+                                                                                            viewBox="0 0 16 16"
+                                                                                            fill="currentColor"
+                                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                                            class="bi bi-plus-circle">
+                                                                                            <path fill-rule="evenodd"
+                                                                                                d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z"
+                                                                                                clip-rule="evenodd">
+                                                                                            </path>
+                                                                                            <path fill-rule="evenodd"
+                                                                                                d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z"
+                                                                                                clip-rule="evenodd">
+                                                                                            </path>
+                                                                                            <path fill-rule="evenodd"
+                                                                                                d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z"
+                                                                                                clip-rule="evenodd">
+                                                                                            </path>
+                                                                                        </svg>
+                                                                                        Create new location
+                                                                                    </a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <a href="#"
+                                                                        class="td-show-check-out-location">
+                                                                        Edit clock out location
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> <!----> <!----> <!---->
+                                                    <div class="row">
+                                                        <div class="col-sm-12 form-group"><label>Attendance note</label>
+                                                            <div><input type="text" placeholder="Add note"
+                                                                    class="form-control"></div>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="td-hr-checkinout">
+                                                    <div class="row td-date-select">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group"><label
+                                                                    for="td-ckeck-in-out-date-65">Date<span
+                                                                        title="Required"
+                                                                        class="td-user-required-field">*</span></label>
+                                                                <div class="td-date-input-wrap">
+                                                                    <div class="td-date-picker"><input
+                                                                            id="td-ckeck-in-out-date-65"
+                                                                            placeholder="d/m/y" maxlength="10"
+                                                                            type="text" autocomplete="off"
+                                                                            class="form-control notranslate hasDatepicker">
+                                                                        <a href="#" tabindex="-1"
+                                                                            id="td-date-picker-x-70"
+                                                                            class="td-date-clear-button-picker td-is-disabled"><span
+                                                                                title="Delete date"
+                                                                                class="td-icon-close-picker td-clear-date-button"></span></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div> <!---->
+                                                    </div>
+                                                    <div class="row td-time-interval-select">
+                                                        <div class="col-sm-4">
+                                                            <div title="" class="form-group"><label
+                                                                    for="td-ckeck-in-out-start-time-65">Clock in<span
+                                                                        title="Required"
+                                                                        class="td-user-required-field">*</span></label>
+                                                                <div data-v-d6cc6db8="" class="td-time-picker"><input
+                                                                        data-v-d6cc6db8=""
+                                                                        id="td-ckeck-in-out-start-time-65"
+                                                                        placeholder="Event start" maxlength="5"
+                                                                        type="text" autocomplete="off"
+                                                                        class="form-control ui-timepicker-input notranslate">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div title="" class="form-group"><label
+                                                                    for="td-ckeck-in-out-end-time-65">Clock out</label>
+                                                                <div data-v-d6cc6db8="" class="td-time-picker"><input
+                                                                        data-v-d6cc6db8=""
+                                                                        id="td-ckeck-in-out-end-time-65"
+                                                                        placeholder="Event end" maxlength="5"
+                                                                        type="text" autocomplete="off"
+                                                                        class="form-control ui-timepicker-input notranslate">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group"><label>Total hours</label>
+                                                                <div class="td-input-wrap"><input type="text"
+                                                                        disabled="disabled" class="form-control"
+                                                                        style="position: relative; text-align: center;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> <!---->
+                                                    <div><span></span></div> <!----> <!---->
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                class="btn modal-default-button">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="td-close-attendance-modal">
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div class="modal-container"><span class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <div class="td-header-info"><span
+                                                    class="glyphicon glyphicon-info-sign"></span>
+                                                <div class="td-header-info-text" style="display: none;">
+                                                    <span>Description:</span>This allows you to close opened live
+                                                    attendance intervals.</div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div>
+                                                <div>
+                                                    There are no clock ins without a clock out.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                class="btn modal-default-button">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="td-info-box" style="top: 1px;"><span class="glyphicon glyphicon-info-sign"
+                            style="font-size: 12px;"></span>
+                        <div class="td-info-box-text" style="display: none; z-index: 1000; line-height: 1.4;">
+                            For additional details <a href="https://hriflow.ro/en/documentation/requests-menu"
+                                target="_blank" rel="noreferrer noopener" style="font-weight: 700;">click here</a>.
+                        </div>
+                    </div> <button class="td-filter-menu-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24.77 21.17">
+                            <g>
+                                <polygon points="16.77 0 9.99 9 9.99 18.42 6.79 21.17 6.79 9 0 0 16.77 0"></polygon>
+                                <polygon points="19.1 1.9 16.84 4.9 24.77 4.9 24.77 1.9 19.1 1.9"></polygon>
+                                <polygon points="14 8.66 12.99 10 12.99 11.66 24.77 11.66 24.77 8.66 14 8.66"></polygon>
+                                <rect x="12.99" y="15.42" width="11.79" height="3"></rect>
+                            </g>
+                        </svg></button> <!---->
+                </div>
+                <div class="td-row-container td-report-body-wrap">
+                    <div class="td-sidebar">
+                        <div class="td-sidebar-box td-panel">
+                            <div class="td-filters"><span class="modal-close td-icon-modal-close"
+                                    style="display: none;"></span>
+                                <div class="td-filter"><label>Select time frame:</label>
+                                    <div class="td-date-interval-select"><label for="td-daterange-77"
+                                            class="td-date-interval-select-en"><span class="td-period-text btn">Date
+                                                interval</span> <i
+                                                class="fa fa-calendar td-period-glyph td-calendar-always-show"></i></label>
+                                        <input id="td-daterange-77" name="daterange" placeholder="Select time frame"
+                                            readonly="readonly" class="td-date-interval-input"></div>
+                                </div>
+                                <div class="td-list-render-visible td-filter td-height-increase">
+                                    <div class="td-list-content-wrap">
+                                        <div class="td-filter-header"><label class="">Employees
+                                                <span>(1)</span>:</label> <!----> <!----></div>
+                                        <div class="td-filter-input td-filter-search"><input type="text"
+                                                placeholder="Search by name ..."></div>
+                                        <div class="td-list-wrap td-list-wrap-9">
+                                            <ul style="height: 207px;">
+                                                <li title="BAGIU RAZVAN" class="" style="top: 0px;"><input
+                                                        id="td-list-item-4894278" type="checkbox" name="BAGIU RAZVAN"
+                                                        value="48942"> <label for="td-list-item-4894278">BAGIU
+                                                        RAZVAN</label></li>
+                                                <li title="COCIUBA DENIS" class="" style="top: 23px;"><input
+                                                        id="td-list-item-6822778" type="checkbox" name="COCIUBA DENIS"
+                                                        value="68227"> <label for="td-list-item-6822778">COCIUBA
+                                                        DENIS</label></li>
+                                                <li title="DEAC ADINA" class="" style="top: 46px;"><input
+                                                        id="td-list-item-1594278" type="checkbox" name="DEAC ADINA"
+                                                        value="15942"> <label for="td-list-item-1594278">DEAC
+                                                        ADINA</label></li>
+                                                <li title="IONESCU ALEXANDRU" class="" style="top: 69px;"><input
+                                                        id="td-list-item-5706578" type="checkbox"
+                                                        name="IONESCU ALEXANDRU" value="57065"> <label
+                                                        for="td-list-item-5706578">IONESCU ALEXANDRU</label></li>
+                                                <li title="MACOVEI ANDREI" class="" style="top: 92px;"><input
+                                                        id="td-list-item-4894078" type="checkbox" name="MACOVEI ANDREI"
+                                                        value="48940"> <label for="td-list-item-4894078">MACOVEI
+                                                        ANDREI</label></li>
+                                                <li title="SLAVIK ADRIAN" class="" style="top: 115px;"><input
+                                                        id="td-list-item-6822678" type="checkbox" name="SLAVIK ADRIAN"
+                                                        value="68226"> <label for="td-list-item-6822678">SLAVIK
+                                                        ADRIAN</label></li>
+                                                <li title="SOCOL ANDREI" class="" style="top: 138px;"><input
+                                                        id="td-list-item-3765078" type="checkbox" name="SOCOL ANDREI"
+                                                        value="37650"> <label for="td-list-item-3765078">SOCOL
+                                                        ANDREI</label></li>
+                                                <li title="TOROK ANDREI" class="" style="top: 161px;"><input
+                                                        id="td-list-item-3790378" type="checkbox" name="TOROK ANDREI"
+                                                        value="37903"> <label for="td-list-item-3790378">TOROK
+                                                        ANDREI</label></li>
+                                                <li title="VASILCIN ANDREI" class="" style="top: 184px;"><input
+                                                        id="td-list-item-1813278" type="checkbox" name="VASILCIN ANDREI"
+                                                        value="18132"> <label for="td-list-item-1813278">VASILCIN
+                                                        ANDREI</label></li>
+                                            </ul>
+                                        </div>
+                                        <div class="td-select-all-wrap"><a href="#" class="td-filter-btn td-is-selected"
+                                                style="visibility: visible;">Select all</a> <a href="#"
+                                                title="Deselect all" class="td-filter-reset td-icon-close"></a></div>
+                                    </div>
+                                    <div class="td-filter-header" style="display: none;"><label class="">Employees
+                                            <span>(1)</span></label> <!----></div>
+                                </div> <!---->
+                                <div class="td-filter"><label>Event types: </label>
+                                    <div class="td-filter-checkbox-list">
+                                        <ul>
+                                            <li class=""><input type="checkbox" id="event_type_16035" name="Paid Leave"
+                                                    value="16035"> <label for="event_type_16035">Paid Leave</label>
+                                                <!----></li>
+                                            <li class=""><input type="checkbox" id="event_type_16036" name="Sick Leave"
+                                                    value="16036"> <label for="event_type_16036">Sick Leave</label>
+                                                <!----></li>
+                                            <li class=""><input type="checkbox" id="event_type_16039"
+                                                    name="Business Trip" value="16039"> <label
+                                                    for="event_type_16039">Business Trip</label> <!----></li>
+                                            <li class=""><input type="checkbox" id="event_type_16059"
+                                                    name="Social leave of absence" value="16059"> <label
+                                                    for="event_type_16059">Social leave of absence</label> <!----></li>
+                                            <li class=""><input type="checkbox" id="event_type_16327"
+                                                    name="Unpaid Leave" value="16327"> <label
+                                                    for="event_type_16327">Unpaid Leave</label> <!----></li>
+                                            <li class=""><input type="checkbox" id="event_type_23177"
+                                                    name="OnCall - Week" value="23177"> <label
+                                                    for="event_type_23177">OnCall - Week</label> <!----></li>
+                                            <li class=""><input type="checkbox" id="event_type_23184"
+                                                    name="OnCall - Weekend" value="23184"> <label
+                                                    for="event_type_23184">OnCall - Weekend</label> <!----></li>
+                                            <li class=""><input type="checkbox" id="event_type_16037" name="Overtime"
+                                                    value="16037"> <label for="event_type_16037">Overtime</label>
+                                                <!----></li>
+                                            <li class=""><input type="checkbox" id="event_type_16524"
+                                                    name="Short personal absence" value="16524"> <label
+                                                    for="event_type_16524">Short personal absence</label> <!----></li>
+                                            <li class=""><input type="checkbox" id="event_type_16038" name="Time Off"
+                                                    value="16038"> <label for="event_type_16038">Time Off</label>
+                                                <!----></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="td-filter"><label>Status: </label>
+                                    <div class="td-filter-checkbox-list">
+                                        <ul>
+                                            <li><input type="checkbox" id="status_approved" name="approved"
+                                                    value="approved"><label for="status_approved">Approved</label></li>
+                                            <li><input type="checkbox" id="status_partially_approved"
+                                                    name="partially_approved" value="partially_approved"><label
+                                                    for="status_partially_approved">Partially approved</label></li>
+                                            <li><input type="checkbox" id="status_not_approved" name="not_approved"
+                                                    value="not_approved"><label
+                                                    for="status_not_approved">Rejected</label></li>
+                                            <li><input type="checkbox" id="status_waiting_approval" name="waiting"
+                                                    value="waiting"><label for="status_waiting_approval">Waiting
+                                                    approval</label></li>
+                                            <li><input type="checkbox" id="status_approval_not_required"
+                                                    name="not_required" value="not_required"><label
+                                                    for="status_approval_not_required">Not required</label></li>
+                                            <li><input type="checkbox" id="status_request_edit" name="not_required"
+                                                    value="request_edit"><label for="status_request_edit">Request
+                                                    edit</label></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="td-filter">
+                                    <div class="td-filter-checkbox-list">
+                                        <ul>
+                                            <li><input type="checkbox" id="status_archived" name="archived"
+                                                    value="archived"><label title="Deleted events list"
+                                                    for="status_archived">Archived</label></li>
+                                            <li><input type="checkbox" id="status_invalid" name="invalid"
+                                                    value="invalid"><label title="Invalid events list"
+                                                    for="status_invalid">Invalid Events</label></li>
+                                            <li><input type="checkbox" id="status_reason" name="reason"
+                                                    value="reason"><label
+                                                    title="Search by the reason that wes entered by the employee"
+                                                    for="status_reason">Search by reason</label></li>
+                                            <div class="td-filter-input td-filter-search"><!----></div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="td-filter"><label>Hours Interval: </label>
+                                    <div class="td-filter-input td-filter-input-interval-hours"><input
+                                            id="td-event-hour-start" type="text" placeholder="From"
+                                            class="td-hour-input-dropdown ui-timepicker-input"
+                                            style="display: inline-block; position: relative; max-width: 49%;"
+                                            autocomplete="off"> <input id="td-event-hour-end" type="text"
+                                            placeholder="Until" class="td-hour-input-dropdown ui-timepicker-input"
+                                            style="display: inline-block; position: relative; max-width: 49%;"
+                                            autocomplete="off"></div> <!---->
+                                </div>
+                                <div class="td-checkbox">
+                                    <ul>
+                                        <li class="td-excel-download-element"><a
+                                                title="Download a report with all events corresponding to the selected filters"
+                                                class="td-excel-download-btn"><i class="fa fa-download"></i> Download
+                                                totals</a></li>
+                                        <li class="td-excel-download-element"><a
+                                                title="Download a report with total events for each user"
+                                                class="td-excel-download-btn"><i class="fa fa-download"></i> Download
+                                                events</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="td-content">
+                        <div class="td-activity-user-events-wrap">
+                            <table class="td-activity-user-events">
+                                <tr class="td-activity-user-events-heading td-sticky">
+                                    <th class="td-activity-select-all"><span title="Select All"
+                                            class="td-icon-checkbox-unchecked"></span></th>
+                                    <th class="td-activity-name-heading">Name</th>
+                                    <th class="td-activity-type-heading">Type</th>
+                                    <th class="td-activity-duration-heading">Duration</th>
+                                    <th class="td-activity-date-heading">Date</th>
+                                    <th class="td-activity-attachment-heading"></th>
+                                    <th class="td-activity-overlapping-events">
+                                        Overlapping
+                                        <div class="td-info-box"><span class="glyphicon glyphicon-info-sign"
+                                                style="font-size: 13px;"></span>
+                                            <div class="td-info-box-text"
+                                                style="display: none; z-index: 1000; line-height: 1.4;">
+                                                For additional details <a
+                                                    href="https://hriflow.ro/en/documentation/paid-leave#how-to-view-overlapping-vacation-days"
+                                                    target="_blank" rel="noreferrer noopener"
+                                                    style="font-weight: 700;">click here</a>.
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="td-activity-status-heading">Status</th>
+                                    <th class="td-activity-payroll-locked-heading"></th>
+                                </tr> <!---->
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2364050"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2364050"
+                                        class="td-event-type-name td-act-link-table-cell">Overtime <!----></a> <a
+                                        href="#/activity/eventDetails/2364050"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 1 Hour">1<span
+                                                class="td-min-h-sep">:</span>00</span></a> <a
+                                        href="#/activity/eventDetails/2364050"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>19:00-20:00<span
+                                                class="td-activity-time-interval">06/11/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2364050"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2364050"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2357198"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2357198"
+                                        class="td-event-type-name td-act-link-table-cell">Short personal absence
+                                        <!----></a> <a href="#/activity/eventDetails/2357198"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 1hours 30minutes">1<span
+                                                class="td-min-h-sep">:</span>30</span></a> <a
+                                        href="#/activity/eventDetails/2357198"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>10:00-11:30<span
+                                                class="td-activity-time-interval">04/11/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2357198"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2357198"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2349555"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2349555"
+                                        class="td-event-type-name td-act-link-table-cell">Overtime <!----></a> <a
+                                        href="#/activity/eventDetails/2349555"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 1 Hour">1<span
+                                                class="td-min-h-sep">:</span>00</span></a> <a
+                                        href="#/activity/eventDetails/2349555"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>19:00-20:00<span
+                                                class="td-activity-time-interval">30/10/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2349555"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2349555"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2342065"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2342065"
+                                        class="td-event-type-name td-act-link-table-cell">Short personal absence
+                                        <!----></a> <a href="#/activity/eventDetails/2342065"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 1 Hour">1<span
+                                                class="td-min-h-sep">:</span>00</span></a> <a
+                                        href="#/activity/eventDetails/2342065"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>09:30-10:30<span
+                                                class="td-activity-time-interval">28/10/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2342065"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2342065"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2324492"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2324492"
+                                        class="td-event-type-name td-act-link-table-cell">Contractual holidays
+                                        <span>2025</span></a> <a href="#/activity/eventDetails/2324492"
+                                        class="td-event-days-hours td-act-link-table-cell"><span>1 Day</span></a> <a
+                                        href="#/activity/eventDetails/2324492"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>03/11-03/11<span
+                                                class="td-activity-last-year">2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2324492"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2324492"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2323261"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2323261"
+                                        class="td-event-type-name td-act-link-table-cell">Short personal absence
+                                        <!----></a> <a href="#/activity/eventDetails/2323261"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 2 Hours">2<span
+                                                class="td-min-h-sep">:</span>00</span></a> <a
+                                        href="#/activity/eventDetails/2323261"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>08:45-10:45<span
+                                                class="td-activity-time-interval">20/10/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2323261"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2323261"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2321348"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2321348"
+                                        class="td-event-type-name td-act-link-table-cell">Overtime <!----></a> <a
+                                        href="#/activity/eventDetails/2321348"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 1 Hour">1<span
+                                                class="td-min-h-sep">:</span>00</span></a> <a
+                                        href="#/activity/eventDetails/2321348"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>19:00-20:00<span
+                                                class="td-activity-time-interval">16/10/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2321348"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2321348"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2314083"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2314083"
+                                        class="td-event-type-name td-act-link-table-cell">Contractual holidays
+                                        <span>2025</span></a> <a href="#/activity/eventDetails/2314083"
+                                        class="td-event-days-hours td-act-link-table-cell"><span>1 Day</span></a> <a
+                                        href="#/activity/eventDetails/2314083"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>21/10-21/10<span
+                                                class="td-activity-last-year">2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2314083"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2314083"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2311261"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2311261"
+                                        class="td-event-type-name td-act-link-table-cell">Short personal absence
+                                        <!----></a> <a href="#/activity/eventDetails/2311261"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 3 Hours">3<span
+                                                class="td-min-h-sep">:</span>00</span></a> <a
+                                        href="#/activity/eventDetails/2311261"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>14:00-17:00<span
+                                                class="td-activity-time-interval">14/10/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2311261"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2311261"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2309031"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2309031"
+                                        class="td-event-type-name td-act-link-table-cell">Overtime <!----></a> <a
+                                        href="#/activity/eventDetails/2309031"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 1 Hour">1<span
+                                                class="td-min-h-sep">:</span>00</span></a> <a
+                                        href="#/activity/eventDetails/2309031"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>19:00-20:00<span
+                                                class="td-activity-time-interval">09/10/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2309031"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2309031"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2215960"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2215960"
+                                        class="td-event-type-name td-act-link-table-cell">Loyalty day off_2025
+                                        <span>2025</span></a> <a href="#/activity/eventDetails/2215960"
+                                        class="td-event-days-hours td-act-link-table-cell"><span>1 Day</span></a> <a
+                                        href="#/activity/eventDetails/2215960"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>02/09-02/09<span
+                                                class="td-activity-last-year">2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2215960"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2215960"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2189556"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2189556"
+                                        class="td-event-type-name td-act-link-table-cell">Short personal absence
+                                        <!----></a> <a href="#/activity/eventDetails/2189556"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 1 Hour">1<span
+                                                class="td-min-h-sep">:</span>00</span></a> <a
+                                        href="#/activity/eventDetails/2189556"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>13:45-14:45<span
+                                                class="td-activity-time-interval">07/08/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2189556"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2189556"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2184676"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2184676"
+                                        class="td-event-type-name td-act-link-table-cell">Day off_2025 (Birthday/School
+                                        Day/Christmas/New Year Eve) <span>2025</span></a> <a
+                                        href="#/activity/eventDetails/2184676"
+                                        class="td-event-days-hours td-act-link-table-cell"><span>1 Day</span></a> <a
+                                        href="#/activity/eventDetails/2184676"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>01/09-01/09<span
+                                                class="td-activity-last-year">2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2184676"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2184676"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2162556"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2162556"
+                                        class="td-event-type-name td-act-link-table-cell">Short personal absence
+                                        <!----></a> <a href="#/activity/eventDetails/2162556"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 1hours 30minutes">1<span
+                                                class="td-min-h-sep">:</span>30</span></a> <a
+                                        href="#/activity/eventDetails/2162556"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>16:00-17:30<span
+                                                class="td-activity-time-interval">25/07/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2162556"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2162556"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2158045"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2158045"
+                                        class="td-event-type-name td-act-link-table-cell">Short personal absence
+                                        <!----></a> <a href="#/activity/eventDetails/2158045"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 30 minutes">0<span
+                                                class="td-min-h-sep">:</span>30</span></a> <a
+                                        href="#/activity/eventDetails/2158045"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>10:00-10:30<span
+                                                class="td-activity-time-interval">23/07/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2158045"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2158045"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2120679"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2120679"
+                                        class="td-event-type-name td-act-link-table-cell">Time Off <!----></a> <a
+                                        href="#/activity/eventDetails/2120679"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 1 Hour">1<span
+                                                class="td-min-h-sep">:</span>00</span></a> <a
+                                        href="#/activity/eventDetails/2120679"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>10:00-11:00<span
+                                                class="td-activity-time-interval">14/06/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2120679"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2120679"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2119461"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2119461"
+                                        class="td-event-type-name td-act-link-table-cell">Contractual holidays
+                                        <span>2025</span></a> <a href="#/activity/eventDetails/2119461"
+                                        class="td-event-days-hours td-act-link-table-cell"><span>1 Day</span></a> <a
+                                        href="#/activity/eventDetails/2119461"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>08/07-08/07<span
+                                                class="td-activity-last-year">2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2119461"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2119461"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2096062"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2096062"
+                                        class="td-event-type-name td-act-link-table-cell">Contractual holidays
+                                        <span>2025</span></a> <a href="#/activity/eventDetails/2096062"
+                                        class="td-event-days-hours td-act-link-table-cell"><span>10 Days</span></a> <a
+                                        href="#/activity/eventDetails/2096062"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>09/07-22/07<span
+                                                class="td-activity-last-year">2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2096062"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2096062"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2064821"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2064821"
+                                        class="td-event-type-name td-act-link-table-cell">Compensation Legal
+                                        Holidays_2025 <span>2025</span></a> <a href="#/activity/eventDetails/2064821"
+                                        class="td-event-days-hours td-act-link-table-cell"><span>1 Day</span></a> <a
+                                        href="#/activity/eventDetails/2064821"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>06/06-06/06<span
+                                                class="td-activity-last-year">2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2064821"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2064821"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                                <tr title="" class="td-activity-event-row td-ev-status-approved">
+                                    <td>
+                                        <div class="td-activity-employee-image"><span title="Select"
+                                                class="td-icon-checkbox-unchecked"></span> <span
+                                                class="td-activity-image"><img
+                                                    src="api_thumb/uploads/default-profile.png" title="Select"
+                                                    alt=""></span></div>
+                                    </td>
+                                    <td class="td-activity-employee-data"><a href="#/activity/eventDetails/2054439"
+                                            class="td-activity-employee-info td-act-link-table-cell">
+                                            <div title="MACOVEI ANDREI" class="td-employee-full-name">MACOVEI ANDREI
+                                            </div>
+                                            <div title="Implementation Team - Team member" class="td-employee-details">
+                                                Implementation Team
+                                                <!---->
+                                            </div>
+                                        </a></td> <a href="#/activity/eventDetails/2054439"
+                                        class="td-event-type-name td-act-link-table-cell">Short personal absence
+                                        <!----></a> <a href="#/activity/eventDetails/2054439"
+                                        class="td-event-days-hours td-act-link-table-cell"><span
+                                            title="Event duration : 1hours 30minutes">1<span
+                                                class="td-min-h-sep">:</span>30</span></a> <a
+                                        href="#/activity/eventDetails/2054439"
+                                        class="td-event-d-t-interval td-act-link-table-cell"><span>15:30-17:00<span
+                                                class="td-activity-time-interval">03/06/2025</span></span></a> <a
+                                        href="#/activity/eventDetails/2054439"
+                                        class="td-act-file-icon td-act-link-table-cell"></a>
+                                    <div class="td-act-link-table-cell td-activity-overlapping-events"><!----></div> <a
+                                        href="#/activity/eventDetails/2054439"
+                                        class="td-status-cell td-act-link-table-cell"><span
+                                            class="td-status-approved">Approved</span></a>
+                                    <div class="td-payroll-locked-cell td-act-link-table-cell"><!----></div>
+                                </tr>
+                            </table>
+                        </div>
+                        <div>
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div class="modal-container"><span class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <!---->
+                                        </div>
+                                        <div class="modal-body">
+                                            <div>
+                                                <form>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="alert alert-danger" style="display: none;">
+                                                                <span>false</span></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="td-warning">Are you sure you want to approve all events?
+                                                    </div>
+                                                    <div class="td-message">
+                                                        0 events are waiting your approval. To view them just click:
+                                                        <a href="#/activity/1/All/All/All/waiting+reason/All/All"
+                                                            class="" target="_blank">here</a>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                class="btn modal-default-button">Approve all</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                                style="display: none;">
+                                <div class="modal-wrapper">
+                                    <div class="modal-container"><span class="modal-close td-icon-modal-close"></span>
+                                        <div class="modal-header">
+
+                                            <!---->
+                                        </div>
+                                        <div class="modal-body">
+                                            <div>
+                                                <form>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="alert alert-danger" style="display: none;">
+                                                                <span>false</span></div>
+                                                        </div>
+                                                    </div> <!----> <!---->
+                                                    <div class="col-sm-12"></div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn cancel-btn"><a href="#">Cancel</a></div> <button
+                                                class="btn modal-default-button">Enable</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="td-pagination-wrap">
+                            <div data-v-100a5205="" class="td-pagination"><span data-v-100a5205=""
+                                    title="There is no previous page" class="glyphicon glyphicon-chevron-left"></span>
+                                <a data-v-100a5205="" title="Next page" class="glyphicon glyphicon-chevron-right"></a>
+                                <!----></div> <!---->
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="modal-mask shepherd-target shepherd-modal-target shepherd-enabled"
+                        style="display: none;">
+                        <div class="modal-wrapper">
+                            <div class="modal-container"><span class="modal-close td-icon-modal-close"></span>
+                                <div class="modal-header">
+
+                                    <!---->
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer"><!----> <button
+                                        class="btn modal-default-button">Close</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!---->
+    </div>
+    <script type="text/javascript" src="/static/js/manifest.3c8fbb714cfab55e4bbc.js"></script>
+    <script type="text/javascript" src="/static/js/vendor.facd1e6904746de9c886.js"></script>
+    <script type="text/javascript" src="/static/js/app.6df763fe14a1837dd0ee.js"></script>
+    <div id="ui-datepicker-div"
+        class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all notranslate">
+        <div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all"><a
+                class="ui-datepicker-prev ui-corner-all" data-handler="prev" data-event="click" title="Prev"><span
+                    class="ui-icon ui-icon-circle-triangle-w">Prev</span></a><a class="ui-datepicker-next ui-corner-all"
+                data-handler="next" data-event="click" title="Next"><span
+                    class="ui-icon ui-icon-circle-triangle-e">Next</span></a>
+            <div class="ui-datepicker-title"><select class="ui-datepicker-month" aria-label="Select month"
+                    data-handler="selectMonth" data-event="change">
+                    <option value="0">01 - January</option>
+                    <option value="1">02 - February</option>
+                    <option value="2">03 - March</option>
+                    <option value="3">04 - April</option>
+                    <option value="4">05 - May</option>
+                    <option value="5">06 - June</option>
+                    <option value="6">07 - July</option>
+                    <option value="7">08 - August</option>
+                    <option value="8">09 - September</option>
+                    <option value="9">10 - October</option>
+                    <option value="10" selected="selected">11 - November</option>
+                    <option value="11">12 - December</option>
+                </select><select class="ui-datepicker-year" aria-label="Select year" data-handler="selectYear"
+                    data-event="change">
+                    <option value="1900">1900</option>
+                    <option value="1901">1901</option>
+                    <option value="1902">1902</option>
+                    <option value="1903">1903</option>
+                    <option value="1904">1904</option>
+                    <option value="1905">1905</option>
+                    <option value="1906">1906</option>
+                    <option value="1907">1907</option>
+                    <option value="1908">1908</option>
+                    <option value="1909">1909</option>
+                    <option value="1910">1910</option>
+                    <option value="1911">1911</option>
+                    <option value="1912">1912</option>
+                    <option value="1913">1913</option>
+                    <option value="1914">1914</option>
+                    <option value="1915">1915</option>
+                    <option value="1916">1916</option>
+                    <option value="1917">1917</option>
+                    <option value="1918">1918</option>
+                    <option value="1919">1919</option>
+                    <option value="1920">1920</option>
+                    <option value="1921">1921</option>
+                    <option value="1922">1922</option>
+                    <option value="1923">1923</option>
+                    <option value="1924">1924</option>
+                    <option value="1925">1925</option>
+                    <option value="1926">1926</option>
+                    <option value="1927">1927</option>
+                    <option value="1928">1928</option>
+                    <option value="1929">1929</option>
+                    <option value="1930">1930</option>
+                    <option value="1931">1931</option>
+                    <option value="1932">1932</option>
+                    <option value="1933">1933</option>
+                    <option value="1934">1934</option>
+                    <option value="1935">1935</option>
+                    <option value="1936">1936</option>
+                    <option value="1937">1937</option>
+                    <option value="1938">1938</option>
+                    <option value="1939">1939</option>
+                    <option value="1940">1940</option>
+                    <option value="1941">1941</option>
+                    <option value="1942">1942</option>
+                    <option value="1943">1943</option>
+                    <option value="1944">1944</option>
+                    <option value="1945">1945</option>
+                    <option value="1946">1946</option>
+                    <option value="1947">1947</option>
+                    <option value="1948">1948</option>
+                    <option value="1949">1949</option>
+                    <option value="1950">1950</option>
+                    <option value="1951">1951</option>
+                    <option value="1952">1952</option>
+                    <option value="1953">1953</option>
+                    <option value="1954">1954</option>
+                    <option value="1955">1955</option>
+                    <option value="1956">1956</option>
+                    <option value="1957">1957</option>
+                    <option value="1958">1958</option>
+                    <option value="1959">1959</option>
+                    <option value="1960">1960</option>
+                    <option value="1961">1961</option>
+                    <option value="1962">1962</option>
+                    <option value="1963">1963</option>
+                    <option value="1964">1964</option>
+                    <option value="1965">1965</option>
+                    <option value="1966">1966</option>
+                    <option value="1967">1967</option>
+                    <option value="1968">1968</option>
+                    <option value="1969">1969</option>
+                    <option value="1970">1970</option>
+                    <option value="1971">1971</option>
+                    <option value="1972">1972</option>
+                    <option value="1973">1973</option>
+                    <option value="1974">1974</option>
+                    <option value="1975">1975</option>
+                    <option value="1976">1976</option>
+                    <option value="1977">1977</option>
+                    <option value="1978">1978</option>
+                    <option value="1979">1979</option>
+                    <option value="1980">1980</option>
+                    <option value="1981">1981</option>
+                    <option value="1982">1982</option>
+                    <option value="1983">1983</option>
+                    <option value="1984">1984</option>
+                    <option value="1985">1985</option>
+                    <option value="1986">1986</option>
+                    <option value="1987">1987</option>
+                    <option value="1988">1988</option>
+                    <option value="1989">1989</option>
+                    <option value="1990">1990</option>
+                    <option value="1991">1991</option>
+                    <option value="1992">1992</option>
+                    <option value="1993">1993</option>
+                    <option value="1994">1994</option>
+                    <option value="1995">1995</option>
+                    <option value="1996">1996</option>
+                    <option value="1997">1997</option>
+                    <option value="1998">1998</option>
+                    <option value="1999">1999</option>
+                    <option value="2000">2000</option>
+                    <option value="2001">2001</option>
+                    <option value="2002">2002</option>
+                    <option value="2003">2003</option>
+                    <option value="2004">2004</option>
+                    <option value="2005">2005</option>
+                    <option value="2006">2006</option>
+                    <option value="2007">2007</option>
+                    <option value="2008">2008</option>
+                    <option value="2009">2009</option>
+                    <option value="2010">2010</option>
+                    <option value="2011">2011</option>
+                    <option value="2012">2012</option>
+                    <option value="2013">2013</option>
+                    <option value="2014">2014</option>
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025" selected="selected">2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                    <option value="2029">2029</option>
+                    <option value="2030">2030</option>
+                    <option value="2031">2031</option>
+                    <option value="2032">2032</option>
+                    <option value="2033">2033</option>
+                    <option value="2034">2034</option>
+                    <option value="2035">2035</option>
+                    <option value="2036">2036</option>
+                    <option value="2037">2037</option>
+                    <option value="2038">2038</option>
+                    <option value="2039">2039</option>
+                    <option value="2040">2040</option>
+                    <option value="2041">2041</option>
+                    <option value="2042">2042</option>
+                    <option value="2043">2043</option>
+                    <option value="2044">2044</option>
+                    <option value="2045">2045</option>
+                    <option value="2046">2046</option>
+                    <option value="2047">2047</option>
+                    <option value="2048">2048</option>
+                    <option value="2049">2049</option>
+                    <option value="2050">2050</option>
+                    <option value="2051">2051</option>
+                    <option value="2052">2052</option>
+                    <option value="2053">2053</option>
+                    <option value="2054">2054</option>
+                    <option value="2055">2055</option>
+                    <option value="2056">2056</option>
+                    <option value="2057">2057</option>
+                    <option value="2058">2058</option>
+                    <option value="2059">2059</option>
+                    <option value="2060">2060</option>
+                    <option value="2061">2061</option>
+                    <option value="2062">2062</option>
+                    <option value="2063">2063</option>
+                    <option value="2064">2064</option>
+                    <option value="2065">2065</option>
+                    <option value="2066">2066</option>
+                    <option value="2067">2067</option>
+                    <option value="2068">2068</option>
+                    <option value="2069">2069</option>
+                    <option value="2070">2070</option>
+                    <option value="2071">2071</option>
+                    <option value="2072">2072</option>
+                    <option value="2073">2073</option>
+                    <option value="2074">2074</option>
+                    <option value="2075">2075</option>
+                    <option value="2076">2076</option>
+                    <option value="2077">2077</option>
+                    <option value="2078">2078</option>
+                    <option value="2079">2079</option>
+                    <option value="2080">2080</option>
+                    <option value="2081">2081</option>
+                    <option value="2082">2082</option>
+                    <option value="2083">2083</option>
+                    <option value="2084">2084</option>
+                    <option value="2085">2085</option>
+                    <option value="2086">2086</option>
+                    <option value="2087">2087</option>
+                    <option value="2088">2088</option>
+                    <option value="2089">2089</option>
+                    <option value="2090">2090</option>
+                    <option value="2091">2091</option>
+                    <option value="2092">2092</option>
+                    <option value="2093">2093</option>
+                    <option value="2094">2094</option>
+                    <option value="2095">2095</option>
+                    <option value="2096">2096</option>
+                    <option value="2097">2097</option>
+                    <option value="2098">2098</option>
+                    <option value="2099">2099</option>
+                </select></div>
+        </div>
+        <table class="ui-datepicker-calendar">
+            <thead>
+                <tr>
+                    <th scope="col"><span title="Monday">Mo</span></th>
+                    <th scope="col"><span title="Tuesday">Tu</span></th>
+                    <th scope="col"><span title="Wednesday">We</span></th>
+                    <th scope="col"><span title="Thursday">Th</span></th>
+                    <th scope="col"><span title="Friday">Fr</span></th>
+                    <th scope="col" class="ui-datepicker-week-end"><span title="Saturday">Sa</span></th>
+                    <th scope="col" class="ui-datepicker-week-end"><span title="Sunday">Su</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td>
+                    <td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td>
+                    <td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td>
+                    <td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td>
+                    <td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td>
+                    <td class=" ui-datepicker-week-end undefined" data-handler="selectDay" data-event="click"
+                        data-month="10" data-year="2025"><a class="ui-state-default" href="#" aria-current="false"
+                            data-date="1">1</a></td>
+                    <td class=" ui-datepicker-week-end undefined" data-handler="selectDay" data-event="click"
+                        data-month="10" data-year="2025"><a class="ui-state-default" href="#" aria-current="false"
+                            data-date="2">2</a></td>
+                </tr>
+                <tr>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="3">3</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="4">4</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="5">5</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="6">6</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="7">7</a></td>
+                    <td class=" ui-datepicker-week-end undefined" data-handler="selectDay" data-event="click"
+                        data-month="10" data-year="2025"><a class="ui-state-default" href="#" aria-current="false"
+                            data-date="8">8</a></td>
+                    <td class=" ui-datepicker-week-end ui-datepicker-days-cell-over undefined ui-datepicker-current-day ui-datepicker-today"
+                        data-handler="selectDay" data-event="click" data-month="10" data-year="2025"><a
+                            class="ui-state-default ui-state-highlight ui-state-active ui-state-hover" href="#"
+                            aria-current="true" data-date="9">9</a></td>
+                </tr>
+                <tr>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="10">10</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="11">11</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="12">12</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="13">13</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="14">14</a></td>
+                    <td class=" ui-datepicker-week-end undefined" data-handler="selectDay" data-event="click"
+                        data-month="10" data-year="2025"><a class="ui-state-default" href="#" aria-current="false"
+                            data-date="15">15</a></td>
+                    <td class=" ui-datepicker-week-end undefined" data-handler="selectDay" data-event="click"
+                        data-month="10" data-year="2025"><a class="ui-state-default" href="#" aria-current="false"
+                            data-date="16">16</a></td>
+                </tr>
+                <tr>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="17">17</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="18">18</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="19">19</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="20">20</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="21">21</a></td>
+                    <td class=" ui-datepicker-week-end undefined" data-handler="selectDay" data-event="click"
+                        data-month="10" data-year="2025"><a class="ui-state-default" href="#" aria-current="false"
+                            data-date="22">22</a></td>
+                    <td class=" ui-datepicker-week-end undefined" data-handler="selectDay" data-event="click"
+                        data-month="10" data-year="2025"><a class="ui-state-default" href="#" aria-current="false"
+                            data-date="23">23</a></td>
+                </tr>
+                <tr>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="24">24</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="25">25</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="26">26</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="27">27</a></td>
+                    <td class=" undefined" data-handler="selectDay" data-event="click" data-month="10" data-year="2025">
+                        <a class="ui-state-default" href="#" aria-current="false" data-date="28">28</a></td>
+                    <td class=" ui-datepicker-week-end undefined" data-handler="selectDay" data-event="click"
+                        data-month="10" data-year="2025"><a class="ui-state-default" href="#" aria-current="false"
+                            data-date="29">29</a></td>
+                    <td class=" ui-datepicker-week-end undefined" data-handler="selectDay" data-event="click"
+                        data-month="10" data-year="2025"><a class="ui-state-default" href="#" aria-current="false"
+                            data-date="30">30</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="daterangepicker dropdown-menu ltr show-calendar opensright">
+        <div class="ranges">
+            <ul>
+                <li data-range-key="Today">Today</li>
+                <li data-range-key="Tomorrow">Tomorrow</li>
+                <li data-range-key="Yesterday">Yesterday</li>
+                <li data-range-key="Current week">Current week</li>
+                <li data-range-key="Previous week">Previous week</li>
+                <li data-range-key="This Month">This Month</li>
+                <li data-range-key="Last Month">Last Month</li>
+                <li data-range-key="Custom Range">Custom Range</li>
+            </ul>
+            <div class="range_inputs"><button class="applyBtn btn btn-sm btn-success" disabled="disabled"
+                    type="button">Apply</button> <button class="cancelBtn btn btn-sm btn-default"
+                    type="button">Clear</button></div>
+        </div>
+        <div class="calendar left">
+            <div class="daterangepicker_input"><input class="input-mini form-control" type="text"
+                    name="daterangepicker_start" value=""><i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
+                <div class="calendar-time" style="display: none;">
+                    <div></div><i class="fa fa-clock-o glyphicon glyphicon-time"></i>
+                </div>
+            </div>
+            <div class="calendar-table"></div>
+        </div>
+        <div class="calendar right">
+            <div class="daterangepicker_input"><input class="input-mini form-control" type="text"
+                    name="daterangepicker_end" value=""><i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
+                <div class="calendar-time" style="display: none;">
+                    <div></div><i class="fa fa-clock-o glyphicon glyphicon-time"></i>
+                </div>
+            </div>
+            <div class="calendar-table"></div>
+        </div>
+    </div>
+    <div id="kbkfaem51v8o1762690527120" class="widget-visible"><iframe src="about:blank" frameborder="0" scrolling="no"
+            width="64px" height="60px"
+            style="outline:none !important; visibility:visible !important; resize:none !important; box-shadow:none !important; overflow:visible !important; background:none !important; opacity:1 !important; filter:alpha(opacity=100) !important; -ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity 1}) !important; -mz-opacity:1 !important; -khtml-opacity:1 !important; top:auto !important; right:20px !important; bottom:20px !important; left:auto !important; position:fixed !important; border:0 !important; min-height:60px !important; min-width:64px !important; max-height:60px !important; max-width:64px !important; padding:0 !important; margin:0 !important; -moz-transition-property:none !important; -webkit-transition-property:none !important; -o-transition-property:none !important; transition-property:none !important; transform:none !important; -webkit-transform:none !important; -ms-transform:none !important; width:64px !important; height:60px !important; display:block !important; z-index:1000003 !important; background-color:transparent !important; cursor:none !important; float:none !important; border-radius:unset !important; pointer-events:auto !important; clip:auto !important; color-scheme:light !important;"
+            id="gklo3hikkhnk1762690527190" class="" title="chat widget"></iframe><iframe src="about:blank"
+            frameborder="0" scrolling="no" width="350px" height="520px"
+            style="outline:none !important; visibility:visible !important; resize:none !important; box-shadow:none !important; overflow:visible !important; background:none !important; opacity:1 !important; filter:alpha(opacity=100) !important; -ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity 1}) !important; -mz-opacity:1 !important; -khtml-opacity:1 !important; top:auto !important; right:20px !important; bottom:98px !important; left:auto !important; position:fixed !important; border:0 !important; min-height:520px !important; min-width:350px !important; max-height:520px !important; max-width:350px !important; padding:0 !important; margin:0 !important; -moz-transition-property:none !important; -webkit-transition-property:none !important; -o-transition-property:none !important; transition-property:none !important; transform:none !important; -webkit-transform:none !important; -ms-transform:none !important; width:350px !important; height:520px !important; display:none !important; z-index:1000002 !important; background-color:transparent !important; cursor:none !important; float:none !important; border-radius:18px !important; pointer-events:auto !important; clip:auto !important; color-scheme:light !important;"
+            id="oq93emntvbn81762690527381" class="" title="chat widget"></iframe><iframe src="about:blank"
+            frameborder="0" scrolling="no" height="30px"
+            style="outline:none !important; visibility:visible !important; resize:none !important; box-shadow:none !important; overflow:visible !important; background:none !important; opacity:1 !important; filter:alpha(opacity=100) !important; -ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity 1}) !important; -mz-opacity:1 !important; -khtml-opacity:1 !important; top:auto !important; right:20px !important; bottom:30px !important; left:auto !important; position:fixed !important; border:0 !important; min-height:45px !important; min-width:350px !important; max-height:45px !important; max-width:350px !important; padding:0 !important; margin:0 !important; -moz-transition-property:none !important; -webkit-transition-property:none !important; -o-transition-property:none !important; transition-property:none !important; transform:none !important; -webkit-transform:none !important; -ms-transform:none !important; width:350px !important; height:45px !important; display:none !important; z-index:1000002 !important; background-color:transparent !important; cursor:none !important; float:none !important; border-radius:unset !important; pointer-events:auto !important; clip:auto !important; color-scheme:light !important;"
+            id="w43npn7cuimc1762690527306" class="" title="chat widget"></iframe><iframe src="about:blank"
+            frameborder="0" scrolling="no" width="360px" height="145px"
+            style="outline:none !important; visibility:visible !important; resize:none !important; box-shadow:none !important; overflow:visible !important; background:none !important; opacity:1 !important; filter:alpha(opacity=100) !important; -ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity 1}) !important; -mz-opacity:1 !important; -khtml-opacity:1 !important; top:auto !important; right:20px !important; bottom:90px; left:auto !important; position:fixed !important; border:0 !important; min-height:145px !important; min-width:360px !important; max-height:145px !important; max-width:360px !important; padding:0 !important; margin:0 !important; -moz-transition-property:none !important; -webkit-transition-property:none !important; -o-transition-property:none !important; transition-property:none !important; transform:none !important; -webkit-transform:none !important; -ms-transform:none !important; width:360px !important; height:145px !important; display:none !important; z-index:auto !important; background-color:transparent !important; cursor:none !important; float:none !important; border-radius:unset !important; pointer-events:auto !important; clip:auto !important; color-scheme:light !important;"
+            id="asj1qkp79pb41762690527264" class="" title="chat widget"></iframe><iframe src="about:blank"
+            frameborder="0" scrolling="no" width="146px" height="85px"
+            style="outline:none !important; visibility:visible !important; resize:none !important; box-shadow:none !important; overflow:visible !important; background:none !important; opacity:1 !important; filter:alpha(opacity=100) !important; -ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity 1}) !important; -mz-opacity:1 !important; -khtml-opacity:1 !important; top:auto !important; right:20px !important; bottom:82px !important; left:auto !important; position:fixed !important; border:0 !important; min-height:85px !important; min-width:146px !important; max-height:85px !important; max-width:146px !important; padding:0 !important; margin:0px 0 0 0 !important; -moz-transition-property:none !important; -webkit-transition-property:none !important; -o-transition-property:none !important; transition-property:none !important; transform:rotate(0deg) translateZ(0); -webkit-transform:rotate(0deg) translateZ(0); -ms-transform:rotate(0deg) translateZ(0); width:146px !important; height:85px !important; display:block !important; z-index:1000004 !important; background-color:transparent !important; cursor:none !important; float:none !important; border-radius:unset !important; pointer-events:auto !important; clip:auto !important; color-scheme:light !important; -moz-transform:rotate(0deg) translateZ(0); -o-transform:rotate(0deg) translateZ(0); transform-origin:0; -moz-transform-origin:0; -webkit-transform-origin:0; -o-transform-origin:0; -ms-transform-origin:0;"
+            id="t5bu79s7j3q81762690527241" class="" title="chat widget"></iframe></div>
+</body>

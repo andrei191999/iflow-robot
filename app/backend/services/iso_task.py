@@ -83,13 +83,23 @@ def _login(page: Page, url: str, username: str, password: str, timeout: int) -> 
         except Exception as e:
             logger.warning(f"Could not save screenshot: {e}")
 
-        # Click login button
+        # Click login button and wait for navigation
         logger.info("Clicking login button")
         page.click(SELECTORS["login_button"])
 
-        # Wait for navigation after login
-        logger.info("Waiting for page to load after login")
-        page.wait_for_load_state("networkidle", timeout=timeout)
+        # Wait for navigation to complete - try multiple strategies
+        logger.info("Waiting for navigation after login")
+        try:
+            page.wait_for_load_state("networkidle", timeout=timeout)
+        except Exception:
+            # If networkidle fails, try waiting for load state
+            try:
+                page.wait_for_load_state("load", timeout=5000)
+            except Exception:
+                pass
+
+        # Give extra time for any redirects to complete
+        page.wait_for_timeout(2000)
 
         # Take a screenshot after login (for debugging)
         try:
@@ -110,6 +120,11 @@ def _login(page: Page, url: str, username: str, password: str, timeout: int) -> 
             if "error" in content or "invalid" in content or "incorrect" in content:
                 logger.error("Error message detected on page")
             return False
+
+        # Also check for "dashboard" as positive signal
+        if "dashboard" in current_url:
+            logger.info("Login successful - redirected to dashboard")
+            return True
 
         # Check page content for error indicators
         content = page.content().lower()

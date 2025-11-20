@@ -11,9 +11,11 @@ from google.cloud import firestore
 from dateutil import tz
 
 from core.db import get_db
+from core.test_users import get_test_user_credentials, is_test_user
 from schemas.schedule import RunDoc
 from services.iso_task import run_iso_check
 from services.scheduler_math import compute_next_event
+from services.user_passwords import get_password_manager
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["cron"])
@@ -106,6 +108,33 @@ def cron_tick(request: Request) -> Dict[str, int]:
             settings_snap = settings_ref.get()
             if settings_snap.exists:
                 user_settings = settings_snap.to_dict()
+
+                # Password is no longer in Firestore - fetch from Secret Manager
+                # Check if test user first (dev environment only)
+                environment = os.getenv("ENVIRONMENT", "development").lower()
+                user_email = user_settings.get("email", "")
+
+                if environment == "development" and user_email and is_test_user(user_email):
+                    logger.info(f"Using test user credentials for {uid}")
+                    test_creds = get_test_user_credentials(uid)
+                    if test_creds:
+                        user_settings["iflowUsername"] = test_creds["username"]
+                        user_settings["iflowPassword"] = test_creds["password"]
+                else:
+                    # Fetch password from Secret Manager for production users
+                    try:
+                        pw_mgr = get_password_manager()
+                        creds = pw_mgr.get_password(uid)
+                        if creds:
+                            user_settings["iflowUsername"] = creds["username"]
+                            user_settings["iflowPassword"] = creds["password"]
+                            logger.info(f"Retrieved password from Secret Manager for {uid}")
+                        else:
+                            logger.warning(f"No password in Secret Manager for {uid}, using environment defaults")
+                    except Exception as e:
+                        logger.error(f"Error retrieving password from Secret Manager for {uid}: {e}")
+                        # Will fall back to environment defaults
+
                 logger.info(f"Using per-user settings for {uid}")
             else:
                 logger.info(f"No user settings found for {uid}, using environment defaults")

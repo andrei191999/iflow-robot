@@ -19,12 +19,14 @@ service-account*.json
 *.p12
 *.pfx
 
-# Credentials and secrets
+# Actual secret/credential data files (not code that manages them)
 credentials.json
 secrets.json
 secret.json
-*credentials*
-*secret*
+*-credentials.json
+*-secret.json
+*.credentials
+*.secret
 
 # ============================================
 # PYTHON

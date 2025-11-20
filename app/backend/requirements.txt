@@ -1,8 +1,10 @@
 fastapi
 uvicorn[standard]
+python-multipart
 google-cloud-firestore
 firebase-admin
 google-auth
+google-cloud-secret-manager
 python-dotenv
 python-dateutil
 croniter

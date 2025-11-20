@@ -4,7 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from firebase_admin import initialize_app
 
-from routers import schedules, runs, cron, auth_debug, settings
+from routers import schedules, runs, cron, auth_debug, settings, demo
+from services.mock_iflow import mock_iflow_router
 
 # Initialize Firebase Admin (ADC on Cloud Run / local)
 try:
@@ -70,6 +71,8 @@ def create_app() -> FastAPI:
     app.include_router(runs.router)
     app.include_router(cron.router)
     app.include_router(settings.router)
+    app.include_router(demo.router)
+    app.include_router(mock_iflow_router)
 
     return app
 
