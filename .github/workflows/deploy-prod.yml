@@ -77,14 +77,7 @@ jobs:
             --timeout 60s \
             --min-instances 0 \
             --max-instances 10 \
-            --set-env-vars ENVIRONMENT=production \
-            --set-env-vars GOOGLE_CLOUD_PROJECT=${{ env.PROJECT_ID }} \
-            --set-env-vars FIREBASE_PROJECT_ID=${{ env.PROJECT_ID }} \
-            --set-env-vars ENABLE_DEBUG_LOGIN=0 \
-            --set-env-vars DEV_SKIP_OIDC=0 \
-            --set-env-vars SCREENSHOT_STORAGE=firebase \
-            --set-env-vars LOG_LEVEL=INFO \
-            --update-env-vars CLOUD_RUN_BASE_URL=https://iso-backend-416751442341.europe-west1.run.app
+            --set-env-vars ENVIRONMENT=production,GOOGLE_CLOUD_PROJECT=${{ env.PROJECT_ID }},FIREBASE_PROJECT_ID=${{ env.PROJECT_ID }},ENABLE_DEBUG_LOGIN=0,DEV_SKIP_OIDC=0,SCREENSHOT_STORAGE=firebase,LOG_LEVEL=INFO,CLOUD_RUN_BASE_URL=https://iso-backend-416751442341.europe-west1.run.app
 
       - name: Get service URL
         id: deploy
