@@ -3,6 +3,11 @@ import pytest
 from fastapi.testclient import TestClient
 
 import sys, pathlib
+
+# Set test environment variables before any imports
+os.environ["GOOGLE_CLOUD_PROJECT"] = "test-project"
+os.environ["FIREBASE_PROJECT_ID"] = "test-project"
+
 # repo root = .../iflow-robot
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 BACKEND = ROOT / "app" / "backend"
@@ -38,6 +43,21 @@ def fake_db(monkeypatch):
     monkeypatch.setattr(r_runs, "get_db", lambda: fdb)
     monkeypatch.setattr(r_cron, "get_db", lambda: fdb)
     monkeypatch.setattr(r_settings, "get_db", lambda: fdb)
+
+    # Mock password manager
+    class MockPasswordManager:
+        def get_password(self, uid):
+            return None
+        def store_password(self, uid, username, password):
+            return True
+        def delete_password(self, uid):
+            return True
+        def password_exists(self, uid):
+            return False
+
+    from services import user_passwords
+    monkeypatch.setattr(user_passwords, "get_password_manager", lambda: MockPasswordManager())
+
     return fdb
 
 
