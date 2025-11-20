@@ -44,7 +44,7 @@ def fake_db(monkeypatch):
     monkeypatch.setattr(r_cron, "get_db", lambda: fdb)
     monkeypatch.setattr(r_settings, "get_db", lambda: fdb)
 
-    # Mock password manager
+    # Mock password manager - patch it where it's used, not where it's defined
     class MockPasswordManager:
         def get_password(self, uid):
             return None
@@ -55,8 +55,9 @@ def fake_db(monkeypatch):
         def password_exists(self, uid):
             return False
 
-    from services import user_passwords
-    monkeypatch.setattr(user_passwords, "get_password_manager", lambda: MockPasswordManager())
+    # Patch in the routers where it's imported
+    monkeypatch.setattr(r_settings, "get_password_manager", lambda: MockPasswordManager())
+    monkeypatch.setattr(r_cron, "get_password_manager", lambda: MockPasswordManager())
 
     return fdb
 
