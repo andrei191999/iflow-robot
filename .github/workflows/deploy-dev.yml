@@ -111,6 +111,8 @@ jobs:
       - name: Build with development config
         working-directory: ./web
         run: |
+          echo "VITE_API_URL=https://iso-backend-dev-ioq56tobdq-ew.a.run.app" > .env.development
+          echo "VITE_ENVIRONMENT=development" >> .env.development
           cp .env.development .env.local
           npm run build
 
