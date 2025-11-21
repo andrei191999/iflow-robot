@@ -40,22 +40,15 @@ def create_app() -> FastAPI:
     # Configure CORS based on environment
     if ENVIRONMENT == "production":
         # Production: strict CORS - only allow production domains
-        allowed_origins = [
-            "https://iflow-robot.web.app",
-            "https://iflow-robot.firebaseapp.com",
-        ]
+        allow_origin_regex = r"https://(iflow-robot\.web\.app|iflow-robot\.firebaseapp\.com)"
     else:
-        # Development/Staging: allow localhost for testing
-        allowed_origins = [
-            "https://iflow-robot.web.app",
-            "https://iflow-robot.firebaseapp.com",
-            "http://localhost:5173",
-            "http://127.0.0.1:5173",
-        ]
+        # Development/Staging: allow Firebase preview URLs and localhost
+        # Firebase preview URLs: https://iflow-robot--dev-*.web.app, https://iflow-robot--pr-*.web.app, etc.
+        allow_origin_regex = r"https://(iflow-robot(--[\w-]+)?\.(web|firebaseapp)\.app|localhost:\d+|127\.0\.0\.1:\d+)"
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=allowed_origins,
+        allow_origin_regex=allow_origin_regex,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["Authorization", "Content-Type"],

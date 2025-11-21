@@ -9,7 +9,12 @@
 .env
 .env.local
 .env.*.local
+.env.development
+.env.production
 *.env
+
+# Firebase service account key
+firebase-sa-key.json
 
 # Service account credentials
 service-account*.json
@@ -283,6 +288,10 @@ $RECYCLE.BIN/
 # ============================================
 # PROJECT-SPECIFIC
 # ============================================
+# User notes (keep local)
+notes.txt
+compare
+
 # Notes and temporary documentation (keep notes.txt for dev)
 TODO.txt
 scratch.md
