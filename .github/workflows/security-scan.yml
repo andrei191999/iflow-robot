@@ -67,8 +67,8 @@ jobs:
     - name: Run Bandit security scan
       run: |
         cd app/backend
-        bandit -r . -f json -o bandit-report.json || true
-        bandit -r . -f screen
+        bandit -ll -r . -f json -o bandit-report.json || true
+        bandit -ll -r . -f screen
 
     - name: Upload Bandit report
       if: always()
