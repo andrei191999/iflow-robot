@@ -52,9 +52,37 @@ export default function SignIn() {
             />
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
-          <Button type="submit" disabled={loading}>
+          <Button type="submit" disabled={loading} className="w-full">
             {loading ? "Signing in…" : "Sign in"}
           </Button>
+
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-gray-500">Or continue with</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => nav("/demo")}
+              className="w-full"
+            >
+              Try Demo
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => nav("/signup")}
+              className="w-full"
+            >
+              Sign Up
+            </Button>
+          </div>
         </div>
       </form>
     </div>
