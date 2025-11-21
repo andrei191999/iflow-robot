@@ -124,7 +124,7 @@ jobs:
       - name: Build with production config
         working-directory: ./web
         run: |
-          echo "VITE_API_URL=https://iso-backend-prod-ioq56tobdq-ew.a.run.app" > .env.production
+          echo "VITE_API_BASE_URL=https://iso-backend-ioq56tobdq-ew.a.run.app" > .env.production
           echo "VITE_ENVIRONMENT=production" >> .env.production
           cp .env.production .env.local
           npm run build
