@@ -222,7 +222,7 @@ async def run_public_simulation(request: PublicSimulationRequest):
 
     # Prepare demo user settings
     user_settings = {
-        "iflowUrl": mock_url,
+        "iflowUrl": mock_url_base,
         "iflowUsername": "demo@example.com",
         "iflowPassword": "demo123",
         "iflowHeadless": headless,
