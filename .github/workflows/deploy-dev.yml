@@ -113,6 +113,11 @@ jobs:
         run: |
           echo "VITE_API_BASE_URL=https://iso-backend-dev-ioq56tobdq-ew.a.run.app" > .env.development
           echo "VITE_ENVIRONMENT=development" >> .env.development
+          echo "VITE_FIREBASE_API_KEY=AIzaSyBdXhCOMR0Yzyn6qtrCRzk_D12psPN7c44" >> .env.development
+          echo "VITE_FIREBASE_AUTH_DOMAIN=iflow-robot.firebaseapp.com" >> .env.development
+          echo "VITE_FIREBASE_PROJECT_ID=iflow-robot" >> .env.development
+          echo "VITE_FIREBASE_MESSAGING_SENDER_ID=416751442341" >> .env.development
+          echo "VITE_FIREBASE_APP_ID=1:416751442341:web:3c5ad9c7f654bee019704c" >> .env.development
           cp .env.development .env.local
           npm run build
 
