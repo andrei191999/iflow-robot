@@ -122,5 +122,4 @@ jobs:
           projectId: iflow-robot
           channelId: dev
           expires: 30d
-          target: hosting
           entryPoint: .

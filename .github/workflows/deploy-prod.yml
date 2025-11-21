@@ -134,7 +134,6 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           projectId: iflow-robot
           channelId: live
-          target: hosting
           entryPoint: .
 
   create-release:
