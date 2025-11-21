@@ -135,7 +135,7 @@ jobs:
           projectId: iflow-robot
           channelId: live
           target: hosting
-          entryPoint: ./web
+          entryPoint: .
 
   create-release:
     name: Create GitHub Release

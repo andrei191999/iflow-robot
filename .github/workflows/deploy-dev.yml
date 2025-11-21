@@ -123,4 +123,4 @@ jobs:
           channelId: dev
           expires: 30d
           target: hosting
-          entryPoint: ./web
+          entryPoint: .
