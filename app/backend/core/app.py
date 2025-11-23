@@ -38,21 +38,24 @@ def create_app() -> FastAPI:
     app.add_middleware(ErrorLoggerMiddleware)
 
     # Configure CORS based on environment
+    allow_origins = []
     if ENVIRONMENT == "production":
         # Production: strict CORS - only allow production domains
         allow_origin_regex = r"https://(iflow-robot\.web\.app|iflow-robot\.firebaseapp\.com)"
     else:
-        # Development/Staging: allow Firebase preview URLs and localhost
-        # Firebase preview URLs: https://iflow-robot--dev-*.web.app, https://iflow-robot--pr-*.web.app, etc.
-        allow_origin_regex = r"https://(iflow-robot(--[\w-]+)?\.(web|firebaseapp)\.app|localhost:\d+|127\.0\.0\.1:\d+)"
+        # Development/Staging: allow Firebase preview URLs and localhost (http and https)
+        allow_origin_regex = r"https?://(iflow-robot(--[\w-]+)?\.(web|firebaseapp)\.app|localhost:\d+|127\.0\.0\.1:\d+)"
+        allow_origins = ["http://localhost:5173", "http://localhost:3000"]
 
     app.add_middleware(
         CORSMiddleware,
+        allow_origins=allow_origins,
         allow_origin_regex=allow_origin_regex,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["Authorization", "Content-Type"],
     )
+
 
     @app.get("/health")
     def health():
@@ -66,6 +69,14 @@ def create_app() -> FastAPI:
     app.include_router(settings.router)
     app.include_router(demo.router)
     app.include_router(mock_iflow_router)
+
+    # Mount static files for screenshots (local development)
+    from fastapi.staticfiles import StaticFiles
+    import os
+
+    # Ensure directory exists
+    os.makedirs("screenshots", exist_ok=True)
+    app.mount("/screenshots", StaticFiles(directory="screenshots"), name="screenshots")
 
     return app
 

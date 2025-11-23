@@ -101,10 +101,15 @@ export const api = {
       body: JSON.stringify(options),
     }),
 
-  // Advanced simulation (auth required)
-  runAdvancedSimulation: (options: AdvancedSimulationOptions) =>
-    request<AdvancedSimulationResponse>("/api/simulation/run-advanced", {
+  // Advanced simulation (auth required in production, dev endpoint in local)
+  runAdvancedSimulation: (options: AdvancedSimulationOptions) => {
+    // Use dev endpoint if running on localhost
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const endpoint = isLocal ? "/api/simulation/run-advanced-dev" : "/api/simulation/run-advanced";
+
+    return request<AdvancedSimulationResponse>(endpoint, {
       method: "POST",
       body: JSON.stringify(options),
-    }),
+    });
+  },
 };

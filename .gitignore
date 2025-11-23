@@ -297,6 +297,9 @@ TODO.txt
 scratch.md
 temp/
 
+# Local documentation (not committed to repo)
+local_docs/
+
 # Local testing files
 test_output/
 debug/

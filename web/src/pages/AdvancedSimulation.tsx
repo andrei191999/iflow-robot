@@ -13,8 +13,10 @@ import {
 import { api } from "../lib/api";
 import type {
   SimulationDuration,
+  SimulationMode,
   AdvancedSimulationOptions,
   AdvancedSimulationResponse,
+  JitterConfig,
 } from "../types/simulation";
 import type { ScheduleSpec, WeekConfig } from "../types/schedule";
 import { PlayCircleIcon, FlaskConicalIcon, CheckCircle2Icon, XCircleIcon, MinusCircleIcon } from "lucide-react";
@@ -43,15 +45,24 @@ const defaultWeek: WeekConfig = {
 const defaultSpec: ScheduleSpec = {
   tz: "Europe/Bucharest",
   week: defaultWeek,
-  jitter: { minutesMinus: 0, minutesPlus: 0 },
+  jitter: { minutesMinus: 0, minutesPlus: 0 }, // Legacy jitter, ignored in advanced sim
   holidays: { publicCalendars: ["RO"], personalDates: [], behavior: "skip" },
   exceptions: { include: [], exclude: [], hourWindows: [] },
+};
+
+const defaultJitterConfig: JitterConfig = {
+  execution: false,
+  executionRange: 15,
+  time: false,
+  timeRange: 5,
 };
 
 export default function AdvancedSimulation() {
   const location = useLocation();
   const [duration, setDuration] = useState<SimulationDuration>("1-week");
+  const [mode, setMode] = useState<SimulationMode>("backend");
   const [spec, setSpec] = useState<ScheduleSpec>(defaultSpec);
+  const [jitterConfig, setJitterConfig] = useState<JitterConfig>(defaultJitterConfig);
   const [isRunning, setIsRunning] = useState(false);
   const [response, setResponse] = useState<AdvancedSimulationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -78,6 +89,8 @@ export default function AdvancedSimulation() {
       const options: AdvancedSimulationOptions = {
         duration,
         spec,
+        mode,
+        jitter: jitterConfig,
       };
       const result = await api.runAdvancedSimulation(options);
       setResponse(result);
@@ -105,7 +118,7 @@ export default function AdvancedSimulation() {
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `simulation-${new Date().toISOString()}.json`;
+    link.download = `simulation-${new Date().toISOString().replace(/:/g, '-')}.json`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -125,7 +138,7 @@ export default function AdvancedSimulation() {
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `simulation-${new Date().toISOString()}.csv`;
+    link.download = `simulation-${new Date().toISOString().replace(/:/g, '-')}.csv`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -164,6 +177,20 @@ export default function AdvancedSimulation() {
         <CardContent>
           <div className="flex gap-3">
             <Select
+              value={mode}
+              onValueChange={(v) => setMode(v as SimulationMode)}
+            >
+              <SelectTrigger className="w-40">
+                <SelectValue placeholder="Mode" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="backend">Backend (Fast)</SelectItem>
+                <SelectItem value="screenshot">Screenshot</SelectItem>
+                <SelectItem value="visual">Visual (3 Days)</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select
               value={duration}
               onValueChange={(v) => setDuration(v as SimulationDuration)}
             >
@@ -189,8 +216,8 @@ export default function AdvancedSimulation() {
         <h2 className="text-lg font-semibold">Schedule Configuration</h2>
 
         <JitterFields
-          value={spec.jitter}
-          onChange={(j) => setSpec({ ...spec, jitter: j })}
+          value={jitterConfig}
+          onChange={setJitterConfig}
         />
 
         <HolidaysFields

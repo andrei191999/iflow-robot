@@ -111,7 +111,7 @@ export default function SimulationLab() {
           <CardTitle>Configuration</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Check-in Time */}
             <div className="space-y-2">
               <Label>Check-in Time</Label>
@@ -163,10 +163,33 @@ export default function SimulationLab() {
                 Work location
               </p>
             </div>
+
+            {/* Speed */}
+            <div className="space-y-2">
+              <Label>Speed</Label>
+              <Select
+                value={options.speed}
+                onValueChange={(v) =>
+                  setOptions({ ...options, speed: v as "slow" | "normal" | "fast" })
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="slow">Slow (2s delays)</SelectItem>
+                  <SelectItem value="normal">Normal (0.5s)</SelectItem>
+                  <SelectItem value="fast">Fast (no delays)</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Playback speed
+              </p>
+            </div>
           </div>
 
           <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">
-            💡 This demo runs in <strong>visual mode</strong> - you'll see the browser automation in real-time
+            💡 This demo runs in <strong>visual mode</strong> - you'll see the browser automation in real-time with a red dot showing where it's clicking
           </div>
 
           {/* Run Button */}

@@ -28,7 +28,8 @@ async def mock_index():
 async def mock_login_page(
     event_type: Optional[str] = Query(None, description="Event type (checkIn or checkOut)"),
     checkin: Optional[str] = Query(None, description="Check-in time to preserve"),
-    checkout: Optional[str] = Query(None, description="Check-out time to preserve")
+    checkout: Optional[str] = Query(None, description="Check-out time to preserve"),
+    date: Optional[str] = Query(None, description="Date to preserve (dd/mm/yyyy)")
 ):
     """
     Display login page with exact selectors matching real iFlow.
@@ -46,15 +47,16 @@ async def mock_login_page(
     await asyncio.sleep(state.page_load_delay / 1000.0)
 
     # Store query params in state if provided (for redirect after login)
-    if event_type or checkin or checkout:
+    if event_type or checkin or checkout or date:
         if not hasattr(state, 'pending_query_params'):
             state.pending_query_params = {}
         state.pending_query_params['latest'] = {
             'event_type': event_type,
             'checkin': checkin,
-            'checkout': checkout
+            'checkout': checkout,
+            'date': date
         }
-        logger.info(f"Storing query params for redirect: event_type={event_type}, checkin={checkin}, checkout={checkout}")
+        logger.info(f"Storing query params for redirect: event_type={event_type}, checkin={checkin}, checkout={checkout}, date={date}")
 
     return HTMLResponse(content=get_login_page())
 
@@ -107,6 +109,8 @@ async def mock_login_submit(
             query_parts.append(f"checkin={params['checkin']}")
         if params.get('checkout'):
             query_parts.append(f"checkout={params['checkout']}")
+        if params.get('date'):
+            query_parts.append(f"date={params['date']}")
         if query_parts:
             redirect_url += "?" + "&".join(query_parts)
             logger.info(f"Redirecting with query params: {redirect_url}")
@@ -128,7 +132,9 @@ async def mock_dashboard(
     session_id: Optional[str] = Cookie(None),
     event_type: Optional[str] = Query(None, description="Event type (checkIn or checkOut)"),
     checkin: Optional[str] = Query(None, description="Pre-fill check-in time (HH:MM)"),
-    checkout: Optional[str] = Query(None, description="Pre-fill check-out time (HH:MM)")
+    checkout: Optional[str] = Query(None, description="Pre-fill check-out time (HH:MM)"),
+    location: Optional[str] = Query(None, description="Pre-fill location"),
+    date: Optional[str] = Query(None, description="Pre-fill date (dd/mm/yyyy)")
 ):
     """
     Display dashboard with check-in button.
@@ -158,14 +164,14 @@ async def mock_dashboard(
     if not state.should_show_checkin_button():
         logger.info("Check-in button hidden due to mock behavior")
         # Return dashboard without the button
-        html = get_dashboard_page(session_id, event_type=event_type, checkin_time=checkin, checkout_time=checkout)
+        html = get_dashboard_page(session_id, event_type=event_type, checkin_time=checkin, checkout_time=checkout, location=location)
         html = html.replace(
             '<a href="#" onclick="openModal(); return false;">Înregistrează Pontaj</a>',
             '<p style="color: #999;">Check-in button not available (mock server configured)</p>'
         )
         return HTMLResponse(content=html)
 
-    return HTMLResponse(content=get_dashboard_page(session_id, event_type=event_type, checkin_time=checkin, checkout_time=checkout))
+    return HTMLResponse(content=get_dashboard_page(session_id, event_type=event_type, checkin_time=checkin, checkout_time=checkout, location=location, date=date))
 
 
 @router.post("/submit")

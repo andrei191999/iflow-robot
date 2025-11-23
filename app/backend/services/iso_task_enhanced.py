@@ -25,13 +25,13 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Constants
-DEFAULT_PAGE_WAIT_MS = 2000
+DEFAULT_PAGE_WAIT_MS = 1000  # Reduced from 2000ms
 SELECTOR_TIMEOUT_MS = 5000
 
 # Speed multipliers for delays
 SPEED_DELAYS = {
-    "slow": 2000,     # 2 seconds between steps
-    "normal": 500,    # 0.5 seconds between steps
+    "slow": 1000,     # 1 second between steps (was 2s)
+    "normal": 250,    # 0.25 seconds between steps (was 0.5s)
     "fast": 0         # No artificial delays
 }
 
@@ -155,6 +155,67 @@ def _setup_browser(playwright, headless: bool = True) -> Browser:
     )
 
 
+def _inject_cursor(page: Page):
+    """Inject a visual cursor (red dot) into the page for easier tracking."""
+    try:
+        page.evaluate("""
+            () => {
+                if (document.getElementById('automation-cursor')) return;
+
+                const cursor = document.createElement('div');
+                cursor.id = 'automation-cursor';
+                cursor.style.position = 'fixed';
+                cursor.style.width = '20px';
+                cursor.style.height = '20px';
+                cursor.style.borderRadius = '50%';
+                cursor.style.backgroundColor = 'rgba(255, 0, 0, 0.8)';
+                cursor.style.border = '2px solid rgba(255, 255, 255, 0.9)';
+                cursor.style.boxShadow = '0 0 10px rgba(255, 0, 0, 0.8)';
+                cursor.style.zIndex = '999999';
+                cursor.style.pointerEvents = 'none';
+                cursor.style.transition = 'all 0.3s ease-out';
+                cursor.style.display = 'none';
+                document.body.appendChild(cursor);
+            }
+        """)
+        logger.debug("Visual cursor injected")
+    except Exception as e:
+        logger.warning(f"Failed to inject visual cursor: {e}")
+
+
+def _move_cursor_to_element(page: Page, selector: str, timeout: int = 5000):
+    """Move the visual cursor to an element before interacting with it."""
+    try:
+        # First ensure element exists
+        page.wait_for_selector(selector, timeout=timeout)
+
+        # Move cursor to element
+        page.evaluate(f"""
+            (selector) => {{
+                const cursor = document.getElementById('automation-cursor');
+                if (!cursor) return;
+
+                const element = document.querySelector(selector);
+                if (!element) return;
+
+                const rect = element.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+
+                cursor.style.display = 'block';
+                cursor.style.left = x - 10 + 'px';
+                cursor.style.top = y - 10 + 'px';
+            }}
+        """, selector)
+
+        # Small delay to see the cursor movement
+        page.wait_for_timeout(200)
+        logger.debug(f"Moved cursor to: {selector}")
+    except Exception as e:
+        logger.warning(f"Failed to move cursor to {selector}: {e}")
+
+
+
 def _login(
     page: Page,
     url: str,
@@ -179,6 +240,9 @@ def _login(
 
         logger.info(f"Navigating to {url}")
         page.goto(url, timeout=timeout)
+
+        # Inject visual cursor
+        _inject_cursor(page)
 
         if sim_logger:
             sim_logger.apply_delay(page)
@@ -213,7 +277,9 @@ def _login(
 
         # Fill credentials
         logger.info(f"Filling in username: {username}")
+        _move_cursor_to_element(page, SELECTORS["username_input"])
         page.fill(SELECTORS["username_input"], username)
+        _move_cursor_to_element(page, SELECTORS["password_input"])
         page.fill(SELECTORS["password_input"], password)
 
         if sim_logger:
@@ -231,6 +297,7 @@ def _login(
         # Use Promise.all pattern to wait for navigation after click
         try:
             # Wait for either navigation or URL change
+            _move_cursor_to_element(page, SELECTORS["login_button"])
             page.click(SELECTORS["login_button"])
 
             if sim_logger:
@@ -326,6 +393,9 @@ def _perform_checkin(
     try:
         logger.info(f"Starting check-in procedure at location={location}")
 
+        # Re-inject cursor on dashboard page (lost after navigation from login)
+        _inject_cursor(page)
+
         if sim_logger:
             sim_logger.add_step(
                 "view_dashboard",
@@ -339,6 +409,7 @@ def _perform_checkin(
         logger.info("Looking for check-in/out button")
         try:
             page.wait_for_selector(SELECTORS["checkin_button"], timeout=timeout)
+            _move_cursor_to_element(page, SELECTORS["checkin_button"])
             page.click(SELECTORS["checkin_button"], timeout=SELECTOR_TIMEOUT_MS)
             logger.info("Check-in button clicked")
 
@@ -380,6 +451,7 @@ def _perform_checkin(
         if location:
             try:
                 logger.info(f"Selecting location: {location}")
+                _move_cursor_to_element(page, SELECTORS["location_selector"])
                 page.click(SELECTORS["location_selector"], timeout=SELECTOR_TIMEOUT_MS)
                 page.wait_for_timeout(1000)
 
@@ -400,6 +472,7 @@ def _perform_checkin(
                 location_selected = False
                 for loc_selector in location_options:
                     try:
+                        _move_cursor_to_element(page, loc_selector, timeout=1000)
                         page.click(loc_selector, timeout=2000)
                         logger.info(f"Selected location: {location}")
                         location_selected = True
@@ -434,19 +507,60 @@ def _perform_checkin(
                         page
                     )
 
-        # Time fields should be pre-filled
-        logger.info("Time fields should be pre-filled")
+        # Extract times from URL to know what to fill
+        from urllib.parse import urlparse, parse_qs
+        current_url = page.url
+        parsed = urlparse(current_url)
+        query_params = parse_qs(parsed.query)
+
+        checkin_time = query_params.get('checkin', ['09:00'])[0]
+        checkout_time = query_params.get('checkout', ['17:00'])[0]
+        event_type = query_params.get('event_type', ['checkIn'])[0]
+
+        logger.info(f"Filling time fields: event_type={event_type}, checkin={checkin_time}, checkout={checkout_time}")
+
+        # Fill check-in time field (ONLY for check-in event)
+        if event_type == "checkIn":
+            try:
+                _move_cursor_to_element(page, SELECTORS["checkin_time_field"])
+                page.wait_for_timeout(300)
+                page.click(SELECTORS["checkin_time_field"])
+                page.wait_for_timeout(200)
+                # Clear any existing value
+                page.fill(SELECTORS["checkin_time_field"], "")
+                # Type the time
+                page.fill(SELECTORS["checkin_time_field"], checkin_time)
+                logger.info(f"Filled check-in time: {checkin_time}")
+            except Exception as e:
+                logger.warning(f"Failed to fill check-in time: {e}")
+
+        # Fill check-out time field (ONLY for check-out event)
+        if event_type == "checkOut":
+            try:
+                _move_cursor_to_element(page, SELECTORS["checkout_time_field"])
+                page.wait_for_timeout(300)
+                page.click(SELECTORS["checkout_time_field"])
+                page.wait_for_timeout(200)
+                # Clear any existing value
+                page.fill(SELECTORS["checkout_time_field"], "")
+                # Type the time
+                page.fill(SELECTORS["checkout_time_field"], checkout_time)
+                logger.info(f"Filled check-out time: {checkout_time}")
+            except Exception as e:
+                logger.warning(f"Failed to fill check-out time: {e}")
+
         if sim_logger:
             sim_logger.add_step(
-                "verify_time_fields",
+                "fill_time_fields",
                 "success",
-                "Time fields are pre-filled with current time",
+                f"Filled time fields: check-in={checkin_time}, check-out={checkout_time}",
                 page
             )
             sim_logger.apply_delay(page)
 
         # Submit form
         logger.info("Clicking submit button")
+        _move_cursor_to_element(page, SELECTORS["submit_button"])
         page.click(SELECTORS["submit_button"], timeout=timeout)
 
         if sim_logger:
@@ -458,7 +572,7 @@ def _perform_checkin(
             )
 
         # Wait for submission
-        page.wait_for_timeout(3000)
+        page.wait_for_timeout(2000)  # Wait for submission to complete (reduced from 3000ms)
         page.wait_for_load_state("networkidle", timeout=timeout)
 
         if sim_logger:
@@ -506,6 +620,21 @@ def _perform_checkin(
 
             msg = f"Check-in completed at location={location}"
             logger.info(msg)
+
+            # If we're on success page, navigate back to dashboard for next event
+            if "success" in page.url.lower() or "/submit" in page.url.lower():
+                logger.info("Navigating back to dashboard for next event")
+                dashboard_url = page.url.split("?")[0].replace("/submit", "/dashboard")
+                page.goto(dashboard_url, timeout=timeout)
+                page.wait_for_timeout(1000)
+                if sim_logger:
+                    sim_logger.add_step(
+                        "navigate_to_dashboard",
+                        "success",
+                        "Returned to dashboard for next event",
+                        page
+                    )
+
             return ("success", msg)
 
     except PlaywrightTimeoutError:
@@ -532,6 +661,99 @@ def _perform_checkin(
         return ("failure", msg)
 
 
+def run_simulation_sequence(
+    location: str,
+    checkin_time: str,
+    checkout_time: str,
+    user_settings: Dict[str, Any],
+    capture_screenshots: bool,
+    speed: str,
+    mock_url_base: str,
+    screenshot_storage,
+    uid: str,
+    timestamp: str,
+    date: Optional[str] = None
+) -> Tuple[Any, Any]:
+    """
+    Run both check-in and check-out in a single browser session.
+    """
+    checkin_result = None
+    checkout_result = None
+
+    headless = user_settings.get("iflowHeadless", True)
+
+    try:
+        with sync_playwright() as playwright:
+            # 1. Launch browser once
+            browser = _setup_browser(playwright, headless)
+            context = browser.new_context(
+                viewport={'width': 1280, 'height': 720},
+                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            )
+            page = context.new_page()
+
+            # Inject cursor immediately
+            _inject_cursor(page)
+
+            # 2. Run Check-in
+            checkin_params = f"event_type=checkIn&checkin={checkin_time}&location={location}"
+            if date:
+                checkin_params += f"&date={date}"
+            checkin_mock_url = f"{mock_url_base}?{checkin_params}"
+
+            checkin_result = run_iso_check_enhanced(
+                event_type="checkIn",
+                location=location,
+                user_settings=user_settings,
+                capture_screenshots=capture_screenshots,
+                speed=speed,
+                use_mock_url=checkin_mock_url,
+                screenshot_storage=screenshot_storage,
+                uid=uid,
+                timestamp=f"{timestamp}-checkin",
+                existing_page=page,
+                close_browser_on_exit=False
+            )
+
+            # Small pause between operations
+            page.wait_for_timeout(1000)  # Reduced from 2000ms
+
+            # 3. Run Check-out
+            checkout_params = f"event_type=checkOut&checkin={checkin_time}&checkout={checkout_time}&location={location}"
+            if date:
+                checkout_params += f"&date={date}"
+            checkout_mock_url = f"{mock_url_base}?{checkout_params}"
+
+            checkout_result = run_iso_check_enhanced(
+                event_type="checkOut",
+                location=location,
+                user_settings=user_settings,
+                capture_screenshots=capture_screenshots,
+                speed=speed,
+                use_mock_url=checkout_mock_url,
+                screenshot_storage=screenshot_storage,
+                uid=uid,
+                timestamp=f"{timestamp}-checkout",
+                existing_page=page,
+                close_browser_on_exit=False
+            )
+
+            # Cleanup handled by context manager
+            page.close()
+            context.close()
+            browser.close()
+
+    except Exception as e:
+        logger.error(f"Error in simulation sequence: {e}")
+        # If we failed before getting results, create failure results
+        if not checkin_result:
+            checkin_result = ("failure", f"Sequence error: {e}", [], 0)
+        if not checkout_result:
+            checkout_result = ("failure", f"Sequence error: {e}", [], 0)
+
+    return checkin_result, checkout_result
+
+
 def _perform_checkout(
     page: Page,
     location: Optional[str],
@@ -552,7 +774,9 @@ def run_iso_check_enhanced(
     use_mock_url: Optional[str] = None,
     screenshot_storage = None,
     uid: str = "",
-    timestamp: str = ""
+    timestamp: str = "",
+    existing_page: Optional[Page] = None,
+    close_browser_on_exit: bool = True
 ) -> Tuple[str, str, List[SimulationStep], int]:
     """
     Execute iFlow check-in/out with enhanced logging and screenshots.
@@ -567,6 +791,8 @@ def run_iso_check_enhanced(
         screenshot_storage: ScreenshotStorage instance for saving screenshots
         uid: User ID for screenshot path
         timestamp: Timestamp for screenshot path
+        existing_page: Optional existing Playwright page to reuse
+        close_browser_on_exit: Whether to close the browser after execution
 
     Returns:
         Tuple of (status, message, steps, duration_ms)
@@ -634,8 +860,18 @@ def run_iso_check_enhanced(
         f"Configuration validated: {event_type} at {location or 'default location'}"
     )
 
+    browser = None
+    context = None
+    page = None
+    playwright = None
+
     try:
-        with sync_playwright() as playwright:
+        if existing_page:
+            logger.info("Using existing browser page")
+            page = existing_page
+            # We don't manage the lifecycle of existing page
+        else:
+            playwright = sync_playwright().start()
             browser = _setup_browser(playwright, headless)
             context = browser.new_context(
                 viewport={'width': 1280, 'height': 720},
@@ -643,16 +879,44 @@ def run_iso_check_enhanced(
             )
             page = context.new_page()
 
-            try:
-                sim_logger.add_step(
-                    "browser_launched",
-                    "success",
-                    f"Browser launched (headless={headless})",
-                    page
-                )
-                sim_logger.apply_delay(page)
+            sim_logger.add_step(
+                "browser_launched",
+                "success",
+                f"Browser launched (headless={headless})",
+                page
+            )
+            sim_logger.apply_delay(page)
 
-                # Perform login
+        try:
+            # Perform login
+            # If reusing page, check if we're already on dashboard
+            if existing_page:
+                current_url = page.url.lower()
+                if "dashboard" in current_url:
+                    logger.info("Reusing existing page already on dashboard, skipping login")
+                    # Navigate to dashboard with new query parameters
+                    dashboard_url = url.replace("/login", "/dashboard")
+                    logger.info(f"Navigating to dashboard with new params: {dashboard_url}")
+                    page.goto(dashboard_url, timeout=timeout)
+                    page.wait_for_timeout(1000)
+                    if sim_logger:
+                        sim_logger.add_step(
+                            "navigate_dashboard",
+                            "success",
+                            f"Navigated to dashboard with new parameters",
+                            page
+                        )
+                else:
+                    # Need to login
+                    if not _login(page, url, username, password, timeout, sim_logger):
+                        return (
+                            "failure",
+                            "Login failed - check credentials",
+                            sim_logger.steps,
+                            sim_logger.get_total_duration_ms()
+                        )
+            else:
+                # New page, always login
                 if not _login(page, url, username, password, timeout, sim_logger):
                     return (
                         "failure",
@@ -661,26 +925,30 @@ def run_iso_check_enhanced(
                         sim_logger.get_total_duration_ms()
                     )
 
-                # Perform action
-                if event_type_lower == "checkin":
-                    status, message = _perform_checkin(page, location, timeout, sim_logger)
-                else:
-                    status, message = _perform_checkout(page, location, timeout, sim_logger)
+            # Perform action
+            if event_type_lower == "checkin":
+                status, message = _perform_checkin(page, location, timeout, sim_logger)
+            else:
+                status, message = _perform_checkout(page, location, timeout, sim_logger)
 
-                duration_ms = sim_logger.get_total_duration_ms()
-                logger.info(f"=== Enhanced automation completed: {status} - {message} ({duration_ms}ms) ===")
+            duration_ms = sim_logger.get_total_duration_ms()
+            logger.info(f"=== Enhanced automation completed: {status} - {message} ({duration_ms}ms) ===")
 
-                return (status, message, sim_logger.steps, duration_ms)
+            return (status, message, sim_logger.steps, duration_ms)
 
-            finally:
+        finally:
+            if close_browser_on_exit and not existing_page:
                 sim_logger.add_step(
                     "cleanup",
                     "success",
                     "Closing browser and cleaning up resources"
                 )
-                page.close()
-                context.close()
-                browser.close()
+                if page: page.close()
+                if context: context.close()
+                if browser: browser.close()
+                if playwright: playwright.stop()
+            elif not close_browser_on_exit:
+                logger.info("Keeping browser open for next step")
 
     except Exception as e:
         msg = f"Unexpected error: {str(e)}"

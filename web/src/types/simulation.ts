@@ -1,4 +1,4 @@
-export type SimulationMode = "visual" | "screenshot" | "backend-only";
+export type SimulationMode = "visual" | "screenshot" | "backend";
 export type SimulationSpeed = "slow" | "normal" | "fast";
 export type SimulationScenario = "checkIn" | "checkOut";
 export type SimulationStatus = "idle" | "running" | "success" | "failed";
@@ -22,9 +22,20 @@ export interface PublicSimulationOptions {
 }
 
 // Advanced simulation options (authenticated users)
+// Advanced simulation options (authenticated users)
+export interface JitterConfig {
+  execution: boolean;
+  executionRange: number;
+  time: boolean;
+  timeRange: number;
+}
+
 export interface AdvancedSimulationOptions {
   duration: SimulationDuration;
   spec: unknown; // ScheduleSpec - keeping as unknown to avoid circular deps
+  speed?: SimulationSpeed;
+  mode?: SimulationMode;
+  jitter?: JitterConfig;
 }
 
 export interface SimulationLogEntry {

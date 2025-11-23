@@ -130,7 +130,7 @@ def get_login_page(error: str = "") -> str:
 """
 
 
-def get_dashboard_page(session_id: str, event_type: str = None, checkin_time: str = None, checkout_time: str = None) -> str:
+def get_dashboard_page(session_id: str, event_type: str = None, checkin_time: str = None, checkout_time: str = None, location: str = None, date: str = None) -> str:
     """
     Generate dashboard page HTML with check-in button and modal using REAL iFlow HTML.
 
@@ -492,43 +492,10 @@ def get_dashboard_page(session_id: str, event_type: str = None, checkin_time: st
         const isCheckIn = eventType === "checkIn";
         const isCheckOut = eventType === "checkOut";
 
-        // Set current date and time as defaults
-        const now = new Date();
-        const day = String(now.getDate()).padStart(2, '0');
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const year = now.getFullYear();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
+        // Note: Pre-filling happens in openModal() when the modal is actually visible
+        // Don't pre-fill on DOMContentLoaded because the modal fields aren't visible yet
 
-        // Set date (always current date)
-        document.getElementById('td-ckeck-in-out-date-65').value = day + '/' + month + '/' + year;
 
-        // Set time fields based on event type
-        const checkinTime = "{checkin_time or ''}";
-        const checkoutTime = "{checkout_time or ''}";
-
-        if (isCheckIn) {{
-            // For check-in: only fill check-in time, disable check-out field
-            document.getElementById('td-ckeck-in-out-start-time-65').value = checkinTime || (hours + ':' + minutes);
-            document.getElementById('td-ckeck-in-out-end-time-65').disabled = true;
-            document.getElementById('td-ckeck-in-out-end-time-65').style.backgroundColor = '#f5f5f5';
-        }} else if (isCheckOut) {{
-            // For check-out: fill both times (check-in for context, check-out as main)
-            document.getElementById('td-ckeck-in-out-start-time-65').value = checkinTime || '';
-            document.getElementById('td-ckeck-in-out-start-time-65').disabled = true;
-            document.getElementById('td-ckeck-in-out-start-time-65').style.backgroundColor = '#f5f5f5';
-            document.getElementById('td-ckeck-in-out-end-time-65').value = checkoutTime || (hours + ':' + minutes);
-        }} else {{
-            // Default: show both, fill what's provided
-            if (checkinTime) {{
-                document.getElementById('td-ckeck-in-out-start-time-65').value = checkinTime;
-            }}
-            if (checkoutTime) {{
-                document.getElementById('td-ckeck-in-out-end-time-65').value = checkoutTime;
-            }}
-        }}
-
-        // Calculate total hours
         function calculateTotalHours() {{
             const start = document.getElementById('td-ckeck-in-out-start-time-65').value;
             const end = document.getElementById('td-ckeck-in-out-end-time-65').value;
@@ -567,7 +534,52 @@ def get_dashboard_page(session_id: str, event_type: str = None, checkin_time: st
 
         function openModal() {{
             document.getElementById('checkinModal').classList.add('show');
+
+            // Read URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const dateParam = urlParams.get('date');
+            const checkinParam = urlParams.get('checkin');
+            const checkoutParam = urlParams.get('checkout');
+
+            console.log('openModal called');
+            console.log('URL Params:', {{ date: dateParam, checkin: checkinParam, checkout: checkoutParam }});
+            console.log('Event type:', eventType, 'isCheckIn:', isCheckIn, 'isCheckOut:', isCheckOut);
+
+            // ALWAYS pre-fill date if provided (for both checkin and checkout)
+            if (dateParam) {{
+                const dateField = document.getElementById('td-ckeck-in-out-date-65');
+                if (dateField) {{
+                    console.log('Setting date to:', dateParam);
+                    dateField.value = dateParam;
+                    dateField.dispatchEvent(new Event('input', {{ bubbles: true }}));
+                }} else {{
+                    console.error('Date field not found');
+                }}
+            }}
+
+            // Pre-fill check-in time ONLY for checkout events (reference time)
+            // For checkin events, the user/bot should type the time
+            if (checkinParam && isCheckOut) {{
+                const startTimeField = document.getElementById('td-ckeck-in-out-start-time-65');
+                if (startTimeField) {{
+                    console.log('Setting checkin time to:', checkinParam);
+                    startTimeField.value = checkinParam;
+                    startTimeField.dispatchEvent(new Event('input', {{ bubbles: true }}));
+                }} else {{
+                    console.error('Start time field not found');
+                }}
+            }} else if (isCheckIn) {{
+                console.log('CheckIn event - checkin time will NOT be pre-filled (bot will type it)');
+            }}
+
+            // NEVER pre-fill checkout time - the bot needs to type it
+            // (even if checkoutParam is in URL, we ignore it for pre-filling)
+            console.log('Checkout time will NOT be pre-filled - bot will type it');
+
+            // Recalculate total hours after pre-filling
+            calculateTotalHours();
         }}
+
 
         function closeModal() {{
             document.getElementById('checkinModal').classList.remove('show');

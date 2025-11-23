@@ -120,9 +120,11 @@ class ScreenshotStorage:
 
             logger.debug(f"Screenshot saved locally: {full_path}")
 
-            # Return relative path from project root
-            # This will be used by frontend to construct URL
-            return str(Path(path))
+            # Return URL path accessible via static mount
+            # We mounted "screenshots" dir to "/screenshots" path
+            # LOCAL_STORAGE_ROOT is "screenshots/simulations"
+            # So the URL should be "/screenshots/simulations/" + path
+            return f"/screenshots/simulations/{path}"
 
         except Exception as e:
             logger.error(f"Failed to save screenshot locally: {e}")

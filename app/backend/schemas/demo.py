@@ -133,10 +133,20 @@ class PublicSimulationResult(BaseModel):
     summary: str = Field(description="Human-readable summary of both runs")
 
 
+
+class JitterConfig(BaseModel):
+    """Configuration for randomization (jitter)."""
+
+    execution: bool = Field(default=False, description="Randomize execution time (when script runs)")
+    executionRange: int = Field(default=15, description="Range in minutes for execution jitter (+/-)")
+    time: bool = Field(default=False, description="Randomize input time (what is written in form)")
+    timeRange: int = Field(default=5, description="Range in minutes for time jitter (+/-)")
+
+
 class AdvancedSimulationRequest(BaseModel):
     """Request for advanced simulation with full schedule spec."""
 
-    duration: Literal["1week", "1month", "3months"] = Field(
+    duration: Literal["1-week", "1-month", "3-months"] = Field(
         description="Time period to simulate"
     )
 
@@ -144,9 +154,19 @@ class AdvancedSimulationRequest(BaseModel):
         description="Full schedule specification (same format as regular schedules)"
     )
 
-    mode: Literal["screenshot", "backend"] = Field(
+    jitter: Optional[JitterConfig] = Field(
+        default=None,
+        description="Jitter configuration"
+    )
+
+    mode: Literal["screenshot", "backend", "visual"] = Field(
         default="backend",
-        description="Execution mode"
+        description="Execution mode: visual (shows browser for first 3 days), screenshot, or backend"
+    )
+
+    speed: Optional[Literal["slow", "normal", "fast"]] = Field(
+        default="fast",
+        description="Execution speed: slow, normal, or fast"
     )
 
 
@@ -155,10 +175,22 @@ class AdvancedSimulationEvent(BaseModel):
 
     date: str = Field(description="Date of event (YYYY-MM-DD)")
     time: str = Field(description="Time of event (HH:MM)")
-    event_type: Literal["checkIn", "checkOut"] = Field(description="Type of event")
+    event_type: Literal["checkIn", "checkOut"] = Field(description="Type of event", serialization_alias="type")
     location: Optional[str] = Field(description="Location for event")
     status: Literal["success", "failure", "skipped"] = Field(description="Event outcome")
     reason: Optional[str] = Field(default=None, description="Reason for skip/failure")
+    scheduledAt: str = Field(description="ISO timestamp of scheduled event")
+    localDate: str = Field(description="Local date string (YYYY-MM-DD)")
+
+
+class AdvancedSimulationSummary(BaseModel):
+    """Summary statistics for advanced simulation."""
+
+    totalEvents: int = Field(description="Total number of events")
+    successCount: int = Field(description="Number of successful events")
+    failureCount: int = Field(description="Number of failed events")
+    holidaysSkipped: int = Field(description="Number of holidays skipped")
+    dateRange: Dict[str, str] = Field(description="Start and end dates")
 
 
 class AdvancedSimulationResult(BaseModel):
@@ -184,5 +216,5 @@ class AdvancedSimulationResult(BaseModel):
         description="Statistics about holiday handling"
     )
 
-    summary: str = Field(description="Human-readable summary")
+    summary: AdvancedSimulationSummary = Field(description="Simulation summary statistics")
     duration_ms: int = Field(description="Total simulation time")
