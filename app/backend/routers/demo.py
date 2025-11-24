@@ -215,8 +215,10 @@ async def run_public_simulation(request: PublicSimulationRequest):
     logger.info(f"Using mock iFlow with times: checkin={checkin_time}, checkout={checkout_time}")
 
     # Determine settings based on mode
+    # NOTE: Backend simulations ALWAYS run headless (servers have no display)
+    # "visual" mode means the user can watch via client-side auto-play in their browser
     capture_screenshots = request.mode in ["screenshot", "visual"]
-    headless = request.mode != "visual"  # Show browser if visual mode
+    headless = True  # Always headless on server
 
     # Get screenshot storage if needed
     screenshot_storage = None
@@ -662,7 +664,7 @@ async def run_advanced_simulation_dev(
         "iflowUrl": mock_url,
         "iflowUsername": "demo@example.com",
         "iflowPassword": "demo123",
-        "iflowHeadless": request.mode != "visual",  # Show browser in visual mode
+        "iflowHeadless": True,  # Always headless on server (backend mode)
         "iflowTimeout": 30000
     }
 
