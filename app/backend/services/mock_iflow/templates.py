@@ -643,6 +643,65 @@ def get_dashboard_page(session_id: str, event_type: str = None, checkin_time: st
                 dropdown.style.visibility = 'hidden';
             }}
         }});
+
+        // AUTO-PLAY SIMULATION FEATURE
+        // If autoplay=true is in URL, automatically click through the simulation
+        const urlParams = new URLSearchParams(window.location.search);
+        const autoplay = urlParams.get('autoplay');
+        const autoplaySpeed = parseInt(urlParams.get('speed') || '1000'); // Default 1 second delays
+
+        if (autoplay === 'true') {{
+            console.log('Auto-play mode enabled');
+
+            // Add visual indicator that auto-play is running
+            const  indicator = document.createElement('div');
+            indicator.style.cssText = 'position:fixed;top:10px;right:10px;background:#ff9800;color:white;padding:10px 20px;border-radius:4px;z-index:10000;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.3);';
+            indicator.innerHTML = '🤖 AUTO-PLAY ACTIVE';
+            document.body.appendChild(indicator);
+
+            // Auto-sequence
+            setTimeout(() => {{
+                console.log('Auto-play: Opening modal...');
+                openModal();
+
+                setTimeout(() => {{
+                    // Modal should be open now, fill in the form
+                    console.log('Auto-play: Form should be pre-filled, submitting...');
+
+                    // If location needs to be selected (not pre-filled), do it
+                    const locationInput = document.getElementById('selected-location-display');
+                    if (locationInput && !locationInput.value) {{
+                        console.log('Auto-play: Selecting location...');
+                        const locationOptions = document.querySelectorAll('.td-dropdown-menu-simple li');
+                        if (locationOptions.length > 0) {{
+                            locationOptions[0].click();
+                        }}
+                    }}
+
+                    // Submit the form
+                    setTimeout(() => {{
+                        console.log('Auto-play: Submitting form...');
+                        submitForm();
+
+                        // After submission success, wait a bit then close the tab
+                        setTimeout(() => {{
+                            console.log('Auto-play: Simulation complete, closing tab...');
+                            indicator.innerHTML = '✅ SIMULATION COMPLETE';
+                            indicator.style.background = '#4caf50';
+
+                            setTimeout(() => {{
+                                // Close the tab/window
+                                window.close();
+                                // If window.close() doesn't work (some browsers block it), show message
+                                setTimeout(() => {{
+                                    indicator.innerHTML = 'You can close this tab now';
+                                }}, 500);
+                            }}, 2000);
+                        }}, 3000);
+                    }}, autoplaySpeed);
+                }}, autoplaySpeed);
+            }}, autoplaySpeed);
+        }}
     </script>
 </body>
 </html>
