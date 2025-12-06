@@ -9,6 +9,7 @@ import asyncio
 from typing import Optional
 from fastapi import APIRouter, Form, Response, Cookie, Query
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
+from urllib.parse import quote
 
 from .templates import get_login_page, get_dashboard_page, get_success_page
 from .state import get_mock_state
@@ -29,7 +30,11 @@ async def mock_login_page(
     event_type: Optional[str] = Query(None, description="Event type (checkIn or checkOut)"),
     checkin: Optional[str] = Query(None, description="Check-in time to preserve"),
     checkout: Optional[str] = Query(None, description="Check-out time to preserve"),
-    date: Optional[str] = Query(None, description="Date to preserve (dd/mm/yyyy)")
+    location: Optional[str] = Query(None, description="Location to preserve"),
+    date: Optional[str] = Query(None, description="Date to preserve (dd/mm/yyyy)"),
+    auto_run: Optional[str] = Query(None, description="Auto-run bot mode"),
+    speed: Optional[str] = Query(None, description="Bot speed (slow/normal/fast)"),
+    next_url: Optional[str] = Query(None, description="Next URL to redirect after automation")
 ):
     """
     Display login page with exact selectors matching real iFlow.
@@ -47,16 +52,20 @@ async def mock_login_page(
     await asyncio.sleep(state.page_load_delay / 1000.0)
 
     # Store query params in state if provided (for redirect after login)
-    if event_type or checkin or checkout or date:
+    if event_type or checkin or checkout or location or date or auto_run or speed or next_url:
         if not hasattr(state, 'pending_query_params'):
             state.pending_query_params = {}
         state.pending_query_params['latest'] = {
             'event_type': event_type,
             'checkin': checkin,
             'checkout': checkout,
-            'date': date
+            'location': location,
+            'date': date,
+            'auto_run': auto_run,
+            'speed': speed,
+            'next_url': next_url
         }
-        logger.info(f"Storing query params for redirect: event_type={event_type}, checkin={checkin}, checkout={checkout}, date={date}")
+        logger.info(f"Storing query params for redirect: event_type={event_type}, checkin={checkin}, checkout={checkout}, location={location}, date={date}, auto_run={auto_run}, speed={speed}, next_url={next_url}")
 
     return HTMLResponse(content=get_login_page())
 
@@ -109,8 +118,16 @@ async def mock_login_submit(
             query_parts.append(f"checkin={params['checkin']}")
         if params.get('checkout'):
             query_parts.append(f"checkout={params['checkout']}")
+        if params.get('location'):
+            query_parts.append(f"location={params['location']}")
         if params.get('date'):
             query_parts.append(f"date={params['date']}")
+        if params.get('auto_run'):
+            query_parts.append(f"auto_run={params['auto_run']}")
+        if params.get('speed'):
+            query_parts.append(f"speed={params['speed']}")
+        if params.get('next_url'):
+            query_parts.append(f"next_url={quote(params['next_url'])}")
         if query_parts:
             redirect_url += "?" + "&".join(query_parts)
             logger.info(f"Redirecting with query params: {redirect_url}")
@@ -222,10 +239,14 @@ async def mock_submit_checkin(
 
     # Success
     logger.info(f"Mock {event_type} successful")
+
+    # Determine which time to show in message
+    recorded_time = checkout_time if checkout_time else checkin_time
+
     return JSONResponse(
         content={
             "status": "success",
-            "message": f"{event_type.title()} recorded successfully at {checkin_time or checkout_time} ({location or 'No location'})"
+            "message": f"{event_type.title()} recorded successfully at {recorded_time} ({location or 'No location'})"
         }
     )
 

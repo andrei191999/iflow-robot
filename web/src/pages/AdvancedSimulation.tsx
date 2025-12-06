@@ -86,14 +86,118 @@ export default function AdvancedSimulation() {
     setResponse(null);
 
     try {
-      const options: AdvancedSimulationOptions = {
-        duration,
-        spec,
-        mode,
-        jitter: jitterConfig,
-      };
-      const result = await api.runAdvancedSimulation(options);
-      setResponse(result);
+      if (mode === "visual") {
+        // Client-side visual simulation
+        // Find first enabled day to simulate
+        const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
+        const eventsToChain: {
+          dateStr: string;
+          dayConfig: typeof spec.week[keyof typeof spec.week];
+        }[] = [];
+
+        // Find next 3 enabled days
+        let currentDate = new Date();
+        let daysFound = 0;
+        let attempts = 0;
+
+        while (daysFound < 3 && attempts < 14) { // Look ahead up to 2 weeks
+          const dayName = currentDate.toLocaleDateString("en-US", { weekday: "short" }) as keyof typeof spec.week;
+          // Map 'Sun', 'Mon' etc. correctly if locale differs, but en-US short is standard.
+          // Note: spec.week keys matches these standard short names.
+
+          if (spec.week[dayName] && spec.week[dayName].enabled) {
+            const dd = String(currentDate.getDate()).padStart(2, '0');
+            const mm = String(currentDate.getMonth() + 1).padStart(2, '0');
+            const yyyy = currentDate.getFullYear();
+            const dateStr = `${dd}/${mm}/${yyyy}`;
+
+            eventsToChain.push({
+              dateStr,
+              dayConfig: spec.week[dayName]
+            });
+            daysFound++;
+          }
+
+          // Next day
+          currentDate.setDate(currentDate.getDate() + 1);
+          attempts++;
+        }
+
+        if (eventsToChain.length === 0) {
+          throw new Error("No enabled days found in the next 2 weeks");
+        }
+
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+        let nextUrl = ""; // End of chain
+
+        // Check availability of dayConfig properties before using them
+        // Build chain in reverse
+        for (let i = eventsToChain.length - 1; i >= 0; i--) {
+          const { dateStr, dayConfig } = eventsToChain[i];
+
+          // 2. Check-Out Event
+          const checkOutParams = new URLSearchParams({
+            auto_run: "true",
+            username: "demo@example.com",
+            password: "demo123",
+            event_type: "checkOut",
+            checkin: dayConfig.checkIn || "",
+            checkout: dayConfig.checkOut || "",
+            location: dayConfig.location || "telemunca",
+            speed: "normal",
+            date: dateStr,
+          });
+
+          if (nextUrl) {
+            checkOutParams.append("next_url", nextUrl);
+          }
+
+          const checkOutUrl = `${baseUrl}/mock-iflow/login?${checkOutParams.toString()}`;
+
+          // 1. Check-In Event
+          const checkInParams = new URLSearchParams({
+            auto_run: "true",
+            username: "demo@example.com",
+            password: "demo123",
+            event_type: "checkIn",
+            checkin: dayConfig.checkIn || "",
+            checkout: dayConfig.checkOut || "",
+            location: dayConfig.location || "telemunca",
+            speed: "normal",
+            date: dateStr,
+            next_url: checkOutUrl,
+          });
+
+          nextUrl = `${baseUrl}/mock-iflow/login?${checkInParams.toString()}`;
+        }
+
+        const checkInUrl = nextUrl; // The start of the chain
+
+        window.open(checkInUrl, "_blank", "width=1200,height=800");
+
+        // Mock response
+        setResponse({
+          success: true,
+          summary: {
+            totalEvents: 2,
+            successCount: 2,
+            failureCount: 0,
+            holidaysSkipped: 0,
+            dateRange: { start: new Date().toISOString(), end: new Date().toISOString() }
+          },
+          events: []
+        });
+      } else {
+        // Backend simulation
+        const options: AdvancedSimulationOptions = {
+          duration,
+          spec,
+          mode,
+          jitter: jitterConfig,
+        };
+        const result = await api.runAdvancedSimulation(options);
+        setResponse(result);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Simulation failed");
     } finally {

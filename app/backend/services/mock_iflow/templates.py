@@ -1,10 +1,181 @@
-"""
-HTML templates for mock iFlow server.
+import json
 
-These templates use the exact same selectors as the real app.hriflow.ro
-to ensure automation code works identically.
-"""
+# Client-side simulation bot script
+SIMULATION_BOT_SCRIPT = """
+<script>
+class SimulationBot {
+    constructor() {
+        const params = new URLSearchParams(window.location.search);
+        this.autoRun = params.get('auto_run') === 'true';
+        this.speed = params.get('speed') || 'normal';
+        this.delays = {
+            slow: 1000,
+            normal: 500,
+            fast: 100
+        };
+        this.delay = this.delays[this.speed] || 500;
 
+        if (this.autoRun) {
+            console.log('🤖 Simulation Bot Activated', { speed: this.speed, delay: this.delay });
+            this.init();
+        }
+    }
+
+    async wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async type(selector, text) {
+        const el = document.querySelector(selector);
+        if (!el) {
+            console.error('Element not found:', selector);
+            return;
+        }
+
+        el.focus();
+        el.value = '';
+
+        // Simulate typing
+        for (let char of text) {
+            el.value += char;
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            await this.wait(50); // Typing speed
+        }
+
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+        console.log('Typed:', text, 'into', selector);
+        await this.wait(this.delay);
+    }
+
+    async click(selector) {
+        const el = document.querySelector(selector);
+        if (!el) {
+            console.error('Element not found:', selector);
+            return;
+        }
+        await this.clickElement(el);
+    }
+
+    async clickElement(el) {
+        if (!el) return;
+
+        // Visual feedback
+        const originalBorder = el.style.border;
+        el.style.border = '2px solid red';
+        await this.wait(200);
+        el.style.border = originalBorder;
+
+        el.click();
+        console.log('Clicked:', el);
+        await this.wait(this.delay);
+    }
+
+    async init() {
+        // Page-specific logic implemented by subclasses or conditional
+        if (document.getElementById('td_reg_email')) {
+            await this.runLogin();
+        } else if (document.querySelector('.td-check-in-out-button')) {
+            await this.runDashboard();
+        }
+    }
+
+    async runLogin() {
+        const params = new URLSearchParams(window.location.search);
+        const username = params.get('username') || 'demo@example.com';
+        const password = params.get('password') || 'demo123';
+
+        await this.wait(1000);
+        await this.type('#td_reg_email', username);
+        await this.type('#td_reg_password', password);
+        await this.click('button[type="submit"]');
+    }
+
+    async runDashboard() {
+        const params = new URLSearchParams(window.location.search);
+        const eventType = params.get('event_type') || 'checkIn';
+        const checkinTime = params.get('checkin') || '09:00';
+        const checkoutTime = params.get('checkout') || '17:00';
+        const location = params.get('location') || 'telemunca';
+
+        await this.wait(1000);
+
+        // 1. Click Check In/Out button
+        await this.click('.td-check-in-out-button');
+
+        // 2. Wait for modal
+        await this.wait(1000);
+
+        // 3. Select location
+        if (location) {
+            console.log('Selecting location:', location);
+            // Open dropdown
+            await this.click('.td-select-single-button');
+            await this.wait(500);
+
+            // Find option case-insensitive
+            const options = Array.from(document.querySelectorAll('.location-option'));
+            const targetOption = options.find(opt =>
+                opt.textContent.trim().toLowerCase() === location.toLowerCase()
+            );
+
+            if (targetOption) {
+                await this.clickElement(targetOption);
+            } else {
+                console.warn('Location option not found:', location);
+                // Close dropdown
+                await this.click('.td-select-single-button');
+            }
+            await this.wait(500);
+        }
+
+        // 4. Type time
+        if (eventType === 'checkIn') {
+            await this.type('#td-ckeck-in-out-start-time-65', checkinTime);
+        } else if (eventType === 'checkOut') {
+            // Checkin time is pre-filled by template logic, type checkout time
+            await this.type('#td-ckeck-in-out-end-time-65', checkoutTime);
+        }
+
+        // 5. Submit
+        await this.click('.btn.modal-default-button');
+
+        // 6. Show success and close
+        await this.wait(2000);
+
+        // Create a success overlay
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0, 255, 0, 0.3)';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.style.zIndex = '9999';
+
+        const actionText = eventType === 'checkIn' ? 'CHECK IN COMPLETE' : 'CHECK OUT COMPLETE';
+        overlay.innerHTML = `<h1 style="color: white; text-shadow: 2px 2px 4px #000; font-size: 4em;">${actionText}</h1>`;
+        document.body.appendChild(overlay);
+
+        await this.wait(3000);
+
+        const nextUrl = params.get('next_url');
+        if (nextUrl) {
+            console.log('Redirecting to next event:', nextUrl);
+            window.location.href = nextUrl;
+        } else {
+            window.close();
+        }
+    }
+}
+// Start the bot
+window.addEventListener('load', () => {
+    new SimulationBot();
+});
+</script>
+"""
 
 def get_login_page(error: str = "") -> str:
     """
@@ -125,6 +296,7 @@ def get_login_page(error: str = "") -> str:
             </div>
         </div>
     </div>
+{SIMULATION_BOT_SCRIPT}
 </body>
 </html>
 """
@@ -643,66 +815,8 @@ def get_dashboard_page(session_id: str, event_type: str = None, checkin_time: st
                 dropdown.style.visibility = 'hidden';
             }}
         }});
-
-        // AUTO-PLAY SIMULATION FEATURE
-        // If autoplay=true is in URL, automatically click through the simulation
-        const urlParams = new URLSearchParams(window.location.search);
-        const autoplay = urlParams.get('autoplay');
-        const autoplaySpeed = parseInt(urlParams.get('speed') || '1000'); // Default 1 second delays
-
-        if (autoplay === 'true') {{
-            console.log('Auto-play mode enabled');
-
-            // Add visual indicator that auto-play is running
-            const  indicator = document.createElement('div');
-            indicator.style.cssText = 'position:fixed;top:10px;right:10px;background:#ff9800;color:white;padding:10px 20px;border-radius:4px;z-index:10000;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.3);';
-            indicator.innerHTML = '🤖 AUTO-PLAY ACTIVE';
-            document.body.appendChild(indicator);
-
-            // Auto-sequence
-            setTimeout(() => {{
-                console.log('Auto-play: Opening modal...');
-                openModal();
-
-                setTimeout(() => {{
-                    // Modal should be open now, fill in the form
-                    console.log('Auto-play: Form should be pre-filled, submitting...');
-
-                    // If location needs to be selected (not pre-filled), do it
-                    const locationInput = document.getElementById('selected-location-display');
-                    if (locationInput && !locationInput.value) {{
-                        console.log('Auto-play: Selecting location...');
-                        const locationOptions = document.querySelectorAll('.td-dropdown-menu-simple li');
-                        if (locationOptions.length > 0) {{
-                            locationOptions[0].click();
-                        }}
-                    }}
-
-                    // Submit the form
-                    setTimeout(() => {{
-                        console.log('Auto-play: Submitting form...');
-                        submitForm();
-
-                        // After submission success, wait a bit then close the tab
-                        setTimeout(() => {{
-                            console.log('Auto-play: Simulation complete, closing tab...');
-                            indicator.innerHTML = '✅ SIMULATION COMPLETE';
-                            indicator.style.background = '#4caf50';
-
-                            setTimeout(() => {{
-                                // Close the tab/window
-                                window.close();
-                                // If window.close() doesn't work (some browsers block it), show message
-                                setTimeout(() => {{
-                                    indicator.innerHTML = 'You can close this tab now';
-                                }}, 500);
-                            }}, 2000);
-                        }}, 3000);
-                    }}, autoplaySpeed);
-                }}, autoplaySpeed);
-            }}, autoplaySpeed);
-        }}
     </script>
+{SIMULATION_BOT_SCRIPT}
 </body>
 </html>
 """

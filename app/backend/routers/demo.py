@@ -6,7 +6,7 @@ Provides endpoints to run simulations with various modes and capture detailed lo
 
 import asyncio
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Dict, List
 from playwright.sync_api import sync_playwright
 
@@ -25,9 +25,9 @@ from schemas.demo import (
 )
 from services.screenshot_storage import get_screenshot_storage
 from services.iso_task_enhanced import run_iso_check_enhanced, run_simulation_sequence
+from services.holiday_utils import get_holiday_dates, is_holiday, find_next_workday
 from services.mock_iflow.state import set_mock_behavior
 from services.scheduler_math import compute_next_event
-from services.holiday_utils import get_holiday_dates, is_holiday, find_next_workday
 
 logger = logging.getLogger(__name__)
 
@@ -215,10 +215,8 @@ async def run_public_simulation(request: PublicSimulationRequest):
     logger.info(f"Using mock iFlow with times: checkin={checkin_time}, checkout={checkout_time}")
 
     # Determine settings based on mode
-    # NOTE: Backend simulations ALWAYS run headless (servers have no display)
-    # "visual" mode means the user can watch via client-side auto-play in their browser
     capture_screenshots = request.mode in ["screenshot", "visual"]
-    headless = True  # Always headless on server
+    headless = request.mode != "visual"  # Show browser if visual mode
 
     # Get screenshot storage if needed
     screenshot_storage = None
@@ -347,7 +345,12 @@ def _run_advanced_simulation_sync(
     page = None
 
 
-    # Load holiday dates if configured
+    # Iterate through each day
+    current_date = start_date
+    run_count = 0
+    day_names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+    # Load holidays
     holidays_config = spec.get("holidays", {})
     holiday_dates = set()
     if holidays_config:
@@ -358,14 +361,6 @@ def _run_advanced_simulation_sync(
                 public_calendars=holidays_config.get("publicCalendars", []),
                 personal_dates=holidays_config.get("personalDates", [])
             ))
-        logger.info(f"Loaded {len(holiday_dates)} holiday dates")
-
-    # Iterate through each day
-    current_date = start_date
-    run_count = 0
-    day_names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-
-
 
     while current_date < end_date:
         day_of_week = current_date.weekday()
@@ -379,20 +374,19 @@ def _run_advanced_simulation_sync(
             # Check if current_date is a holiday
             if holidays_config and is_holiday(current_date.date(), holiday_dates):
                 behavior = holidays_config.get("behavior", "skip")
-                logger.info(f"{current_date.date()} is a holiday, behavior={behavior}")
 
                 if behavior == "skip":
-                    # Skip this day entirely
-                    skipped_events += 2  # checkIn + checkOut
+                    # Skip this day
+                    skipped_events += 2  # Both checkin and checkout skipped
                     current_date += timedelta(days=1)
                     continue
                 elif behavior == "move_to_next_workday":
                     # Move to next workday
                     next_workday = find_next_workday(current_date.date(), holiday_dates)
                     current_date = datetime.combine(next_workday, datetime.min.time()).replace(tzinfo=tz)
-                    # Re-evaluate this new date (continue to check if it's enabled)
+                    # Re-check this day's config (continue loop with new date)
                     continue
-                # elif behavior == "force_checkin": proceed normally (fall through)
+                # elif behavior == "force_checkin": proceed normally
 
             checkin_time_str = day_config.get("checkIn", "09:00")
             checkout_time_str = day_config.get("checkOut", "17:00")
@@ -664,7 +658,7 @@ async def run_advanced_simulation_dev(
         "iflowUrl": mock_url,
         "iflowUsername": "demo@example.com",
         "iflowPassword": "demo123",
-        "iflowHeadless": True,  # Always headless on server (backend mode)
+        "iflowHeadless": request.mode != "visual",  # Show browser in visual mode
         "iflowTimeout": 30000
     }
 

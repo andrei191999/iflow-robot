@@ -9,8 +9,8 @@ python-dotenv
 python-dateutil
 croniter
 httpx
-holidays
+holidays==0.37
 pytest
 pytest-cov
 freezegun
-playwright
+playwright==1.40.0

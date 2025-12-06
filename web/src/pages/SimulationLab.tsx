@@ -39,8 +39,55 @@ export default function SimulationLab() {
     setResponse(null);
 
     try {
-      const result = await api.runPublicSimulation(options);
-      setResponse(result);
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+
+      // Calculate date for simulation (today)
+      const today = new Date();
+      const dd = String(today.getDate()).padStart(2, '0');
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const yyyy = today.getFullYear();
+      const dateStr = `${dd}/${mm}/${yyyy}`;
+
+      // Construct Check-Out URL (to be run second)
+      const checkOutParams = new URLSearchParams({
+        auto_run: "true",
+        username: "demo@example.com",
+        password: "demo123",
+        event_type: "checkOut",
+        checkin: options.checkInTime,
+        checkout: options.checkOutTime,
+        location: options.location,
+        speed: options.speed,
+        date: dateStr // Add date parameter
+      });
+      const checkOutUrl = `${baseUrl}/mock-iflow/login?${checkOutParams.toString()}`;
+
+      // Construct Check-In URL (to be run first)
+      const checkInParams = new URLSearchParams({
+        auto_run: "true",
+        username: "demo@example.com",
+        password: "demo123",
+        event_type: "checkIn",
+        checkin: options.checkInTime,
+        checkout: options.checkOutTime,
+        location: options.location,
+        speed: options.speed,
+        date: dateStr, // Add date parameter
+        next_url: checkOutUrl // Chain the next event
+      });
+      const checkInUrl = `${baseUrl}/mock-iflow/login?${checkInParams.toString()}`;
+
+      // Open in new window
+      window.open(checkInUrl, "_blank", "width=1200,height=800");
+
+      // Mock response for UI feedback
+      setResponse({
+        success: true,
+        message: "Simulation started in new window",
+        checkIn: { status: "success", duration: 0, stepCount: 0, logs: [], screenshots: [] },
+        checkOut: { status: "pending", duration: 0, stepCount: 0, logs: [], screenshots: [] }
+      });
+
     } catch (err) {
       setError(err instanceof Error ? err.message : "Simulation failed");
     } finally {
