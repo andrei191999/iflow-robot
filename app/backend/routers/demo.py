@@ -650,8 +650,9 @@ async def run_advanced_simulation(
     # Configure mock server
     set_mock_behavior(behavior="success")
     import os
-    base_url = os.getenv("BASE_URL", "http://localhost:8000")
-    mock_url = f"{base_url}/mock-iflow/login"
+    port = os.getenv("PORT", "8000")
+    # Use 127.0.0.1 for internal loopback to mock server to avoid external routing issues and connection refused
+    mock_url = f"http://127.0.0.1:{port}/mock-iflow/login"
 
     # Screenshot storage
     screenshot_storage = None
@@ -724,8 +725,9 @@ async def run_advanced_simulation_dev(
 
     # Configure mock server
     set_mock_behavior(behavior="success")
-    base_url = os.getenv("BASE_URL", "http://localhost:8000")
-    mock_url = f"{base_url}/mock-iflow/login"
+    port = os.getenv("PORT", "8000")
+    # Use 127.0.0.1 for internal loopback to mock server
+    mock_url = f"http://127.0.0.1:{port}/mock-iflow/login"
 
     # Screenshot storage
     screenshot_storage = None
