@@ -40,25 +40,26 @@ export default function SimulationLab() {
 
     try {
       // Construct URLs for the Visual Simulation (Client-Side)
-      // We chain Check-In -> Check-Out using the 'next_url' parameter
       const baseApi = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
+      const today = new Date();
+      const dateStr = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
+
       // 2. The Check-Out Simulation URL (Step 2)
-      // This will be triggered after Check-In completes
+      // Points to /dashboard to reuse session (skip login)
       const checkOutParams = new URLSearchParams({
         auto_run: "true",
-        username: "demo@example.com",
-        password: "demo123",
         event_type: "checkOut",
-        checkin: options.checkInTime,
+        checkin: options.checkInTime, // Needed as reference
         checkout: options.checkOutTime,
         location: options.location,
         speed: options.speed,
-        // No next_url -> bot closes window
+        date: dateStr
       });
-      const checkOutUrl = `${baseApi}/mock-iflow/login?${checkOutParams.toString()}`;
+      const checkOutUrl = `${baseApi}/mock-iflow/dashboard?${checkOutParams.toString()}`;
 
       // 1. The Check-In Simulation URL (Step 1)
+      // Points to /login to start session
       const checkInParams = new URLSearchParams({
         auto_run: "true",
         username: "demo@example.com",
@@ -67,7 +68,8 @@ export default function SimulationLab() {
         checkin: options.checkInTime,
         location: options.location,
         speed: options.speed,
-        next_url: checkOutUrl // Chain to Check-Out
+        date: dateStr,
+        next_url: checkOutUrl // Chain to Check-Out dashboard
       });
       const checkInUrl = `${baseApi}/mock-iflow/login?${checkInParams.toString()}`;
 

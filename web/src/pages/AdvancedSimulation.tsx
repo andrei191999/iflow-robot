@@ -108,10 +108,14 @@ export default function AdvancedSimulation() {
           // Build chain backwards
           for (let i = limitedEvents.length - 1; i >= 0; i--) {
             const event = limitedEvents[i];
+            const isFirst = (i === 0);
+
+            // Only first event needs login, others use dashboard (reuse session)
+            const endpoint = isFirst ? "/mock-iflow/login" : "/mock-iflow/dashboard";
+            const currentBaseUrl = `${baseApi}${endpoint}`;
+
             const params = new URLSearchParams({
               auto_run: "true",
-              username: "demo@example.com",
-              password: "demo123",
               event_type: event.type,
               [event.type === 'checkIn' ? 'checkin' : 'checkout']: event.time,
               location: event.location || "telemunca",
@@ -119,11 +123,25 @@ export default function AdvancedSimulation() {
               date: event.localDate
             });
 
+            // Add credentials only for the first event (login)
+            if (isFirst) {
+                params.append("username", "demo@example.com");
+                params.append("password", "demo123");
+            }
+
+            // For CheckOut events, add the reference CheckIn time from previous event
+            if (event.type === 'checkOut' && i > 0) {
+                const prevEvent = limitedEvents[i-1];
+                if (prevEvent.type === 'checkIn') {
+                    params.append("checkin", prevEvent.time);
+                }
+            }
+
             if (nextUrl) {
               params.append("next_url", nextUrl);
             }
 
-            nextUrl = `${baseApi}/mock-iflow/login?${params.toString()}`;
+            nextUrl = `${currentBaseUrl}?${params.toString()}`;
           }
 
           window.open(nextUrl, "_blank", "width=1280,height=800");
