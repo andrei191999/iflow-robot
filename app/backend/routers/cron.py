@@ -18,7 +18,7 @@ from services.scheduler_math import compute_next_event
 from services.user_passwords import get_password_manager
 
 logger = logging.getLogger(__name__)
-router = APIRouter(tags=["cron"])
+router = APIRouter(prefix="/api", tags=["cron"])
 
 def _verify_scheduler_oidc(request: Request, expected_audience: str):
     auth_header = request.headers.get("Authorization") or ""
@@ -175,3 +175,18 @@ def cron_tick(request: Request) -> Dict[str, int]:
 
     logger.info(f"=== Cron tick completed: {processed} schedules processed ===")
     return {"processed": processed}
+
+
+@router.post("/cron/cleanup")
+def cron_cleanup() -> Dict[str, int]:
+    """Clean up old resources like screenshots."""
+    from services.screenshot_storage import get_screenshot_storage
+
+    logger.info("=== Cleanup task started ===")
+
+    # Clean up screenshots based on retention policy
+    storage = get_screenshot_storage()
+    deleted_count = storage.cleanup_old_screenshots()
+
+    logger.info(f"=== Cleanup task completed: {deleted_count} files deleted ===")
+    return {"deleted_screenshots": deleted_count}

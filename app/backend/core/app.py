@@ -74,9 +74,11 @@ def create_app() -> FastAPI:
     from fastapi.staticfiles import StaticFiles
     import os
 
-    # Ensure directory exists
-    os.makedirs("screenshots", exist_ok=True)
-    app.mount("/screenshots", StaticFiles(directory="screenshots"), name="screenshots")
+    # Ensure project root screenshots directory exists
+    # We are in app/backend, so root is ../../
+    screenshots_dir = os.path.abspath("../../screenshots")
+    os.makedirs(screenshots_dir, exist_ok=True)
+    app.mount("/screenshots", StaticFiles(directory=screenshots_dir), name="screenshots")
 
     return app
 

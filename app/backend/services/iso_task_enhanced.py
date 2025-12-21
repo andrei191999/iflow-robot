@@ -16,6 +16,13 @@ from datetime import datetime
 from playwright.sync_api import sync_playwright, Browser, Page, TimeoutError as PlaywrightTimeoutError
 
 from schemas.demo import SimulationStep
+try:
+    from .screenshot_storage import ScreenshotStorage
+except ImportError:
+    # Fallback/Mock for circular imports if any
+    ScreenshotStorage = Any
+except Exception:
+    ScreenshotStorage = Any
 
 # Configure logging
 logging.basicConfig(
@@ -23,7 +30,6 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
 # Constants
 DEFAULT_PAGE_WAIT_MS = 1000  # Reduced from 2000ms
 SELECTOR_TIMEOUT_MS = 5000
@@ -80,7 +86,8 @@ class SimulationLogger:
         name: str,
         status: str = "success",
         message: str = "",
-        page: Optional[Page] = None
+        page: Optional[Page] = None,
+        capture_screenshot: bool = True
     ) -> SimulationStep:
         """
         Add a step to the simulation log.
@@ -90,6 +97,7 @@ class SimulationLogger:
             status: success, warning, or error
             message: Detailed message
             page: Playwright page for screenshot capture
+            capture_screenshot: Whether to capture screenshot for this step
 
         Returns:
             The created SimulationStep
@@ -97,8 +105,8 @@ class SimulationLogger:
         step_start = datetime.utcnow()
         screenshot_url = None
 
-        # Capture screenshot if enabled
-        if self.capture_screenshots and page and self.screenshot_storage:
+        # Capture screenshot if enabled AND this step should be captured
+        if self.capture_screenshots and page and self.screenshot_storage and capture_screenshot:
             try:
                 screenshot_bytes = page.screenshot(type='png', full_page=False)
                 screenshot_url = self.screenshot_storage.save_screenshot(
@@ -235,7 +243,8 @@ def _login(
                 "navigate_to_login",
                 "success",
                 f"Navigating to {url}",
-                page
+                page,
+                capture_screenshot=False
             )
 
         logger.info(f"Navigating to {url}")
@@ -260,7 +269,8 @@ def _login(
                     "login_form_detected",
                     "success",
                     "Login form found on page",
-                    page
+                    page,
+                    capture_screenshot=False
                 )
 
         except PlaywrightTimeoutError:
@@ -271,7 +281,8 @@ def _login(
                         "already_logged_in",
                         "success",
                         "Already authenticated, no login needed",
-                        page
+                        page,
+                        capture_screenshot=False
                     )
                 return True
 
@@ -305,7 +316,8 @@ def _login(
                     "click_login_button",
                     "success",
                     "Submitted login form",
-                    page
+                    page,
+                    capture_screenshot=False
                 )
 
             # Wait for navigation to complete - try multiple strategies
@@ -331,7 +343,8 @@ def _login(
                 "login_complete",
                 "success",
                 f"Login navigation complete, current URL: {page.url}",
-                page
+                page,
+                capture_screenshot=False
             )
 
         # Verify login success - check if we're NOT on login page anymore
@@ -401,7 +414,8 @@ def _perform_checkin(
                 "view_dashboard",
                 "success",
                 "Viewing dashboard page",
-                page
+                page,
+                capture_screenshot=False
             )
             sim_logger.apply_delay(page)
 
@@ -418,7 +432,8 @@ def _perform_checkin(
                     "click_checkin_button",
                     "success",
                     "Opened check-in/out modal",
-                    page
+                    page,
+                    capture_screenshot=False
                 )
                 sim_logger.apply_delay(page)
 
@@ -443,7 +458,8 @@ def _perform_checkin(
                 "modal_opened",
                 "success",
                 "Check-in/out modal is now visible",
-                page
+                page,
+                capture_screenshot=False
             )
             sim_logger.apply_delay(page)
 
@@ -486,14 +502,16 @@ def _perform_checkin(
                             "select_location",
                             "success",
                             f"Selected location: {location}",
-                            page
+                            page,
+                            capture_screenshot=False
                         )
                     else:
                         sim_logger.add_step(
                             "select_location",
                             "warning",
                             f"Could not select location '{location}', proceeding anyway",
-                            page
+                            page,
+                            capture_screenshot=False
                         )
                     sim_logger.apply_delay(page)
 
@@ -504,7 +522,8 @@ def _perform_checkin(
                         "location_error",
                         "warning",
                         f"Location selection failed: {e}, continuing",
-                        page
+                        page,
+                        capture_screenshot=False
                     )
 
         # Extract times from URL to know what to fill
@@ -568,7 +587,8 @@ def _perform_checkin(
                 "click_submit",
                 "success",
                 "Submitted check-in form",
-                page
+                page,
+                capture_screenshot=False
             )
 
         # Wait for submission
@@ -581,7 +601,8 @@ def _perform_checkin(
                 "submission_complete",
                 "success",
                 "Form submission processed",
-                page
+                page,
+                capture_screenshot=False
             )
 
         # Verify success
@@ -661,6 +682,9 @@ def _perform_checkin(
         return ("failure", msg)
 
 
+    return checkin_result, checkout_result
+
+
 def run_simulation_sequence(
     location: str,
     checkin_time: str,
@@ -682,6 +706,10 @@ def run_simulation_sequence(
 
     headless = user_settings.get("iflowHeadless", True)
 
+    # Pre-calculate timestamps for consistent folder structure
+    checkin_ts = f"{timestamp}-checkin"
+    checkout_ts = f"{timestamp}-checkout"
+
     try:
         with sync_playwright() as playwright:
             # 1. Launch browser once
@@ -694,6 +722,8 @@ def run_simulation_sequence(
 
             # Inject cursor immediately
             _inject_cursor(page)
+
+            logger.info(f"Starting simulation sequence: location={location}, date={date}")
 
             # 2. Run Check-in
             checkin_params = f"event_type=checkIn&checkin={checkin_time}&location={location}"
@@ -710,19 +740,25 @@ def run_simulation_sequence(
                 use_mock_url=checkin_mock_url,
                 screenshot_storage=screenshot_storage,
                 uid=uid,
-                timestamp=f"{timestamp}-checkin",
+                timestamp=checkin_ts,
                 existing_page=page,
                 close_browser_on_exit=False
             )
 
             # Small pause between operations
-            page.wait_for_timeout(1000)  # Reduced from 2000ms
+            page.wait_for_timeout(1000)
 
             # 3. Run Check-out
+            # IMPORTANT: The page remains open. We need to navigate to the new mock URL for checkout.
+            # The previous run_iso_check_enhanced might have left us on a "success" page or dashboard.
+            # We explicitly navigate to the checkout mock URL to reset state for the next action.
+
             checkout_params = f"event_type=checkOut&checkin={checkin_time}&checkout={checkout_time}&location={location}"
             if date:
                 checkout_params += f"&date={date}"
             checkout_mock_url = f"{mock_url_base}?{checkout_params}"
+
+            logger.info(f"Proceeding to check-out using URL: {checkout_mock_url}")
 
             checkout_result = run_iso_check_enhanced(
                 event_type="checkOut",
@@ -733,7 +769,7 @@ def run_simulation_sequence(
                 use_mock_url=checkout_mock_url,
                 screenshot_storage=screenshot_storage,
                 uid=uid,
-                timestamp=f"{timestamp}-checkout",
+                timestamp=checkout_ts,
                 existing_page=page,
                 close_browser_on_exit=False
             )
@@ -891,32 +927,37 @@ def run_iso_check_enhanced(
             # Perform login
             # If reusing page, check if we're already on dashboard
             if existing_page:
-                current_url = page.url.lower()
-                if "dashboard" in current_url:
-                    logger.info("Reusing existing page already on dashboard, skipping login")
-                    # Navigate to dashboard with new query parameters
-                    dashboard_url = url.replace("/login", "/dashboard")
-                    logger.info(f"Navigating to dashboard with new params: {dashboard_url}")
-                    page.goto(dashboard_url, timeout=timeout)
-                    page.wait_for_timeout(1000)
-                    if sim_logger:
-                        sim_logger.add_step(
-                            "navigate_dashboard",
-                            "success",
-                            f"Navigated to dashboard with new parameters",
-                            page
-                        )
+                # We are reusing a page from a previous step
+                # If we are using the mock server, we MUST navigate to the new URL because arguments (checkin/checkout/time) are in the query string
+                if "mock-iflow" in url:
+                    logger.info(f"Reusing page for mock simulation, navigating to new URL: {url}")
+                    page.goto(url, timeout=timeout)
+                    # Re-inject cursor after navigation
+                    _inject_cursor(page)
+
+                    # Check if we need to login again (mock might redirect to login)
+                    try:
+                        page.wait_for_selector(SELECTORS["username_input"], timeout=2000)
+                        logger.info("Mock redirected to login, logging in...")
+                        if not _login(page, url, username, password, timeout, sim_logger):
+                             return ("failure", "Login failed during sequence", sim_logger.steps, sim_logger.get_total_duration_ms())
+                    except:
+                        # Not on login page, assume we are good (maybe auto-authorized or session persisted)
+                        pass
+
                 else:
-                    # Need to login
-                    if not _login(page, url, username, password, timeout, sim_logger):
-                        return (
-                            "failure",
-                            "Login failed - check credentials",
-                            sim_logger.steps,
-                            sim_logger.get_total_duration_ms()
-                        )
+                    # Real server: check if we are still logged in
+                    current_url = page.url.lower()
+                    if "login" in current_url:
+                         logger.info("Session expired or logged out, re-logging in...")
+                         if not _login(page, url, username, password, timeout, sim_logger):
+                             return ("failure", "Login failed during sequence", sim_logger.steps, sim_logger.get_total_duration_ms())
+                    elif "dashboard" not in current_url:
+                        # Navigate to dashboard
+                         logger.info("Navigating to dashboard...")
+                         page.goto(url, timeout=timeout)
             else:
-                # New page, always login
+                # New page, full login flow
                 if not _login(page, url, username, password, timeout, sim_logger):
                     return (
                         "failure",

@@ -95,9 +95,9 @@ class DemoResult(BaseModel):
 class PublicSimulationRequest(BaseModel):
     """Request for public simulation endpoint (no auth required)."""
 
-    mode: Literal["visual"] = Field(
+    mode: Literal["visual", "screenshot", "backend"] = Field(
         default="visual",
-        description="Execution mode: always visual for public demo"
+        description="Execution mode: visual, screenshot or backend"
     )
 
     speed: Literal["slow", "normal", "fast"] = Field(
@@ -181,6 +181,8 @@ class AdvancedSimulationEvent(BaseModel):
     reason: Optional[str] = Field(default=None, description="Reason for skip/failure")
     scheduledAt: str = Field(description="ISO timestamp of scheduled event")
     localDate: str = Field(description="Local date string (YYYY-MM-DD)")
+    screenshots: Optional[List[str]] = Field(default=None, description="Screenshot URLs for this event")
+
 
 
 class AdvancedSimulationSummary(BaseModel):

@@ -14,7 +14,7 @@ export interface SimulationOptions {
 
 // Public demo simulation options (both check-in and check-out)
 export interface PublicSimulationOptions {
-  mode: "visual"; // Always visual for public demo
+  mode: SimulationMode;
   speed: SimulationSpeed;
   location: "telemunca" | "birou";
   checkInTime: string; // HH:mm format
@@ -52,6 +52,8 @@ export interface SimulationScreenshot {
 
 export interface SimulationResult {
   status: SimulationStatus;
+  success?: boolean;
+  summary?: string;
   duration: number; // milliseconds
   stepCount: number;
   logs: SimulationLogEntry[];
@@ -68,6 +70,7 @@ export interface SimulationResponse {
 // Public demo simulation response (combines check-in and check-out)
 export interface PublicSimulationResponse {
   success: boolean;
+  summary?: string;
   checkIn?: SimulationResult;
   checkOut?: SimulationResult;
   error?: string;
@@ -88,11 +91,15 @@ export interface AdvancedSimulationResponse {
   };
   events: Array<{
     type: "checkIn" | "checkOut";
+    time: string;
     scheduledAt: string;
     localDate: string;
     location: string;
     status: "success" | "failure" | "skipped";
+    reason: string;
     result?: SimulationResult;
+    screenshots?: string[];
   }>;
+  sample_screenshots?: string[];
   error?: string;
 }

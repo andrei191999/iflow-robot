@@ -136,7 +136,14 @@ async def run_simulation(
             mode=request.mode,
             steps=steps,
             screenshots=[step.screenshot_url for step in steps if step.screenshot_url],
-            summary=_generate_summary(status, request.scenario, request.location, duration_ms, len(steps)),
+            summary=_generate_summary(
+                status,
+                request.scenario,
+                request.location,
+                duration_ms,
+                len(steps),
+                date_val=datetime.now().strftime("%d/%m/%Y")
+            ),
             error=message if status != "success" else None
         )
 
@@ -160,70 +167,61 @@ def _generate_summary(
     scenario: str,
     location: str,
     duration_ms: int,
-    step_count: int
+    step_count: int,
+    time_val: str = "",
+    date_val: str = "",
+    actual_time: str = ""
 ) -> str:
     """Generate human-readable summary of simulation run."""
-    location_str = f" at {location}" if location else ""
+    # Use actual_time if provided, otherwise fall back to time_val (for backward compatibility)
+    actual = actual_time if actual_time else time_val
+
+    # Multi-line format matching advanced simulation
+    if time_val:
+        timing_details = f"Scheduled action: {time_val}, Actual action time: {actual}\n"
+        timing_details += f"Scheduled {scenario} time: {time_val}, Actual {scenario} time: {actual}"
+    else:
+        timing_details = ""
 
     if status == "success":
-        return (
-            f"Successfully completed {scenario}{location_str} in {duration_ms}ms "
-            f"({step_count} steps). All automation steps executed correctly."
-        )
+        if timing_details:
+            return timing_details
+        else:
+            return f"Successfully completed {scenario} at {location} in {duration_ms}ms ({step_count} steps)."
     else:
-        return (
-            f"Failed to complete {scenario}{location_str} after {duration_ms}ms "
-            f"({step_count} steps executed before failure). Check error details and step logs."
-        )
+        error_msg = f"Failed to complete {scenario}"
+        if timing_details:
+            return f"{error_msg}\n{timing_details}"
+        else:
+            return f"{error_msg} after {duration_ms}ms ({step_count} steps executed before failure)."
 
 
 @router.post("/run-public", response_model=PublicSimulationResult)
 async def run_public_simulation(request: PublicSimulationRequest):
     """
     Run a public simulation with both check-in and check-out (no auth required).
-
-    This endpoint is designed for public demos and marketing purposes.
-    It runs both check-in and check-out operations in sequence using mock credentials.
-
-    **Restrictions:**
-    - Always uses mock iFlow server
-    - No visual mode (only screenshot or backend)
-    - Limited to demo credentials
-    - Returns combined results for both operations
-
-    **No authentication required**
     """
     timestamp = datetime.utcnow().isoformat().replace(":", "-").replace(".", "-")
     uid = "public-demo"
+    logger.info(f"Starting public simulation: mode={request.mode}")
 
-    logger.info(
-        f"Starting public simulation: mode={request.mode}, speed={request.speed}, "
-        f"location={request.location}"
-    )
-
-    # Configure mock server for success behavior
+    # Configure mock
     set_mock_behavior(behavior="success")
-
-    # Use mock URL with time parameters
     import os
     base_url = os.getenv("BASE_URL", "http://localhost:8000")
     mock_url_base = f"{base_url}/mock-iflow/login"
 
-    # Store times for later use in separate operations
     checkin_time = request.checkInTime
     checkout_time = request.checkOutTime
-    logger.info(f"Using mock iFlow with times: checkin={checkin_time}, checkout={checkout_time}")
 
-    # Determine settings based on mode
+    # Store settings
     capture_screenshots = request.mode in ["screenshot", "visual"]
-    headless = request.mode != "visual"  # Show browser if visual mode
+    headless = request.mode != "visual"
 
-    # Get screenshot storage if needed
     screenshot_storage = None
     if capture_screenshots:
         screenshot_storage = get_screenshot_storage()
 
-    # Prepare demo user settings
     user_settings = {
         "iflowUrl": mock_url_base,
         "iflowUsername": "demo@example.com",
@@ -233,11 +231,9 @@ async def run_public_simulation(request: PublicSimulationRequest):
     }
 
     total_start_time = datetime.utcnow()
+    current_date_str = datetime.now().strftime("%d/%m/%Y")
 
-    # Run full simulation sequence (check-in AND check-out) in a single browser session
     try:
-        logger.info("Running simulation sequence")
-
         checkin_result_tuple, checkout_result_tuple = await asyncio.to_thread(
             run_simulation_sequence,
             location=request.location,
@@ -250,63 +246,72 @@ async def run_public_simulation(request: PublicSimulationRequest):
             screenshot_storage=screenshot_storage,
             uid=uid,
             timestamp=timestamp,
-            date=datetime.now().strftime("%d/%m/%Y")
+            date=current_date_str
         )
 
         # Unpack results
-        checkin_status, checkin_message, checkin_steps, checkin_duration = checkin_result_tuple
-        checkout_status, checkout_message, checkout_steps, checkout_duration = checkout_result_tuple
+        checkin_status, checkin_msg, checkin_steps, checkin_dur = checkin_result_tuple
+        checkout_status, checkout_msg, checkout_steps, checkout_dur = checkout_result_tuple
+
+        # Normalize status
+        checkin_success = (checkin_status == "success")
+        checkout_success = (checkout_status == "success")
 
         checkin_result = DemoResult(
-            success=(checkin_status == "success"),
-            duration_ms=checkin_duration,
+            success=checkin_success,
+            duration_ms=checkin_dur,
             step_count=len(checkin_steps),
             scenario="check-in",
             location=request.location,
             mode=request.mode,
             steps=checkin_steps,
             screenshots=[step.screenshot_url for step in checkin_steps if step.screenshot_url],
-            summary=_generate_summary(checkin_status, "check-in", request.location, checkin_duration, len(checkin_steps)),
-            error=checkin_message if checkin_status != "success" else None
+            summary=_generate_summary(checkin_status, "check-in", request.location, checkin_dur, len(checkin_steps), time_val=checkin_time, date_val=current_date_str),
+            error=checkin_msg if not checkin_success else None
         )
 
         checkout_result = DemoResult(
-            success=(checkout_status == "success"),
-            duration_ms=checkout_duration,
+            success=checkout_success,
+            duration_ms=checkout_dur,
             step_count=len(checkout_steps),
             scenario="check-out",
             location=request.location,
             mode=request.mode,
             steps=checkout_steps,
             screenshots=[step.screenshot_url for step in checkout_steps if step.screenshot_url],
-            summary=_generate_summary(checkout_status, "check-out", request.location, checkout_duration, len(checkout_steps)),
-            error=checkout_message if checkout_status != "success" else None
+            summary=_generate_summary(checkout_status, "check-out", request.location, checkout_dur, len(checkout_steps), time_val=checkout_time, date_val=current_date_str),
+            error=checkout_msg if not checkout_success else None
         )
 
     except Exception as e:
         logger.error(f"Simulation failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-    # Calculate total duration
     total_duration = int((datetime.utcnow() - total_start_time).total_seconds() * 1000)
 
-    # Build combined result
-    both_success = checkin_result.success and checkout_result.success
-    summary = (
-        f"Public demo completed in {total_duration}ms. "
-        f"Check-in: {checkin_result.success}, Check-out: {checkout_result.success}. "
-        f"Location: {request.location or 'default'}"
-    )
+    # Detailed summary
+    summary_parts = []
+    summary_parts.append(f"Simulation completed in {total_duration}ms.")
+
+    if checkin_result.success:
+        summary_parts.append(f"Check-in: Success ({checkin_time}).")
+    else:
+        summary_parts.append(f"Check-in: Failed.")
+
+    if checkout_result.success:
+        summary_parts.append(f"Check-out: Success ({checkout_time}).")
+    else:
+        summary_parts.append(f"Check-out: Failed.")
 
     result = PublicSimulationResult(
-        success=both_success,
+        success=checkin_result.success and checkout_result.success,
         total_duration_ms=total_duration,
         checkin_result=checkin_result,
         checkout_result=checkout_result,
-        summary=summary
+        summary=" ".join(summary_parts)
     )
 
-    logger.info(f"Public simulation completed: success={both_success}, duration={total_duration}ms")
+    logger.info(f"Public simulation completed: success={result.success}, duration={total_duration}ms")
 
     return result
 
@@ -362,9 +367,13 @@ def _run_advanced_simulation_sync(
                 personal_dates=holidays_config.get("personalDates", [])
             ))
 
+    # Initialize counters
+    skipped_events = 0
+
     while current_date < end_date:
         day_of_week = current_date.weekday()
         day_name = day_names[day_of_week]
+        event_date_local = current_date.strftime("%Y-%m-%d")
 
         # Check if enabled
         day_config = spec.get("week", {}).get(day_name, {})
@@ -372,18 +381,44 @@ def _run_advanced_simulation_sync(
 
         if is_enabled:
             # Check if current_date is a holiday
+            is_holiday_today = False
             if holidays_config and is_holiday(current_date.date(), holiday_dates):
+                is_holiday_today = True
                 behavior = holidays_config.get("behavior", "skip")
 
                 if behavior == "skip":
                     # Skip this day
                     skipped_events += 2  # Both checkin and checkout skipped
+
+                    # Add skipped events to the list so they appear in UI
+                    events.append(AdvancedSimulationEvent(
+                        date=event_date_local,
+                        time="00:00",
+                        event_type="checkIn",
+                        location="holiday",
+                        status="skipped",
+                        reason="Skipped due to holiday",
+                        scheduledAt=current_date.isoformat(),
+                        localDate=event_date_local
+                    ))
+                    events.append(AdvancedSimulationEvent(
+                        date=event_date_local,
+                        time="00:00",
+                        event_type="checkOut",
+                        location="holiday",
+                        status="skipped",
+                        reason="Skipped due to holiday",
+                        scheduledAt=current_date.isoformat(),
+                        localDate=event_date_local
+                    ))
+
                     current_date += timedelta(days=1)
                     continue
                 elif behavior == "move_to_next_workday":
                     # Move to next workday
                     next_workday = find_next_workday(current_date.date(), holiday_dates)
-                    current_date = datetime.combine(next_workday, datetime.min.time()).replace(tzinfo=tz)
+                    # Create a new datetime for the next workday
+                    current_date = datetime.combine(next_workday, datetime.min.time()).replace(tzinfo=current_date.tzinfo)
                     # Re-check this day's config (continue loop with new date)
                     continue
                 # elif behavior == "force_checkin": proceed normally
@@ -395,16 +430,18 @@ def _run_advanced_simulation_sync(
             # Apply jitter
             jitter_config = request.jitter
 
-            # Time Jitter
+            # Initialize jitter values
             checkin_jitter_minutes = 0
             checkout_jitter_minutes = 0
+            exec_checkin_jitter_minutes = 0
+            exec_checkout_jitter_minutes = 0
+
+            # Time Jitter (affects the time TYPED in the form)
             if jitter_config and jitter_config.time:
                 checkin_jitter_minutes = random.randint(-jitter_config.timeRange, jitter_config.timeRange)
                 checkout_jitter_minutes = random.randint(-jitter_config.timeRange, jitter_config.timeRange)
 
-            # Execution Jitter
-            exec_checkin_jitter_minutes = 0
-            exec_checkout_jitter_minutes = 0
+            # Execution Jitter (affects WHEN the script would run)
             if jitter_config and jitter_config.execution:
                 exec_checkin_jitter_minutes = random.randint(-jitter_config.executionRange, jitter_config.executionRange)
                 exec_checkout_jitter_minutes = random.randint(-jitter_config.executionRange, jitter_config.executionRange)
@@ -416,16 +453,16 @@ def _run_advanced_simulation_sync(
             checkin_base = current_date.replace(hour=checkin_hour, minute=checkin_min, second=0, microsecond=0)
             checkout_base = current_date.replace(hour=checkout_hour, minute=checkout_min, second=0, microsecond=0)
 
+            # Apply Time Jitter
             checkin_dt = checkin_base + timedelta(minutes=checkin_jitter_minutes)
             checkout_dt = checkout_base + timedelta(minutes=checkout_jitter_minutes)
 
+            # Apply Execution Jitter (for "scheduledAt" visualization)
             checkin_exec_dt = checkin_dt + timedelta(minutes=exec_checkin_jitter_minutes)
             checkout_exec_dt = checkout_dt + timedelta(minutes=exec_checkout_jitter_minutes)
 
             checkin_utc = checkin_exec_dt.astimezone(timezone.utc)
             checkout_utc = checkout_exec_dt.astimezone(timezone.utc)
-
-            event_date_local = current_date.strftime("%Y-%m-%d")
 
             # Run CheckIn and CheckOut as a pair using run_simulation_sequence
             # This keeps the browser open between the two events
@@ -459,13 +496,31 @@ def _run_advanced_simulation_sync(
                     checkout_status_str, checkout_message, checkout_steps, checkout_duration = checkout_result_tuple
                     checkout_status = "success" if checkout_status_str == "success" else "failure"
 
-                    # Collect screenshots
-                    for step in checkin_steps:
-                        if step.screenshot_url:
-                            sample_screenshots.append(step.screenshot_url)
-                    for step in checkout_steps:
-                        if step.screenshot_url:
-                            sample_screenshots.append(step.screenshot_url)
+                    # Collect screenshots per event
+                    checkin_screenshots = [step.screenshot_url for step in checkin_steps if step.screenshot_url]
+                    checkout_screenshots = [step.screenshot_url for step in checkout_steps if step.screenshot_url]
+
+                    # Also add to global sample list (limit total global samples if needed, but we reduced capture rate)
+                    sample_screenshots.extend(checkin_screenshots)
+                    sample_screenshots.extend(checkout_screenshots)
+
+                    # Update message with detailed timing info (User requested detailed multi-line format without Success prefix)
+                    checkin_exec_fmt = checkin_exec_dt.strftime("%H:%M")
+                    checkout_exec_fmt = checkout_exec_dt.strftime("%H:%M")
+
+                    c_msg = checkin_message or 'Success'
+                    checkin_details = f"Scheduled action: {checkin_time_str}, Actual action time: {checkin_exec_fmt}\nScheduled check/in time: {checkin_time_str}, Actual check/in time: {checkin_time_str_fmt}"
+                    if c_msg == 'Success':
+                        checkin_message = checkin_details
+                    else:
+                        checkin_message = f"{c_msg}\n{checkin_details}"
+
+                    co_msg = checkout_message or 'Success'
+                    checkout_details = f"Scheduled action: {checkout_time_str}, Actual action time: {checkout_exec_fmt}\nScheduled check/out time: {checkout_time_str}, Actual check/out time: {checkout_time_str_fmt}"
+                    if co_msg == 'Success':
+                        checkout_message = checkout_details
+                    else:
+                        checkout_message = f"{co_msg}\n{checkout_details}"
 
                 except Exception as e:
                     logger.error(f"Day simulation failed: {e}")
@@ -473,12 +528,26 @@ def _run_advanced_simulation_sync(
                     checkin_message = str(e)
                     checkout_status = "failure"
                     checkout_message = str(e)
+                    checkin_screenshots = []
+                    checkout_screenshots = []
             else:
                 # Simulated events (not actually run)
                 checkin_status = "success"
-                checkin_message = None
                 checkout_status = "success"
-                checkout_message = None
+
+                checkin_time_str_fmt = checkin_dt.strftime("%H:%M")
+                checkout_time_str_fmt = checkout_dt.strftime("%H:%M")
+
+                checkin_exec_fmt = checkin_exec_dt.strftime("%H:%M")
+                checkout_exec_fmt = checkout_exec_dt.strftime("%H:%M")
+
+                checkin_message = f"Scheduled action: {checkin_time_str}, Actual action time: {checkin_exec_fmt}\nScheduled check/in time: {checkin_time_str}, Actual check/in time: {checkin_time_str_fmt}"
+                checkout_message = f"Scheduled action: {checkout_time_str}, Actual action time: {checkout_exec_fmt}\nScheduled check/out time: {checkout_time_str}, Actual check/out time: {checkout_time_str_fmt}"
+
+                checkin_screenshots = []
+                checkout_screenshots = []
+
+                # Jitter info removed from text as per request
 
             # Add both events
             events.append(AdvancedSimulationEvent(
@@ -489,7 +558,8 @@ def _run_advanced_simulation_sync(
                 status=checkin_status,
                 reason=checkin_message,
                 scheduledAt=checkin_utc.isoformat(),
-                localDate=event_date_local
+                localDate=event_date_local,
+                screenshots=checkin_screenshots
             ))
 
             events.append(AdvancedSimulationEvent(
@@ -500,7 +570,8 @@ def _run_advanced_simulation_sync(
                 status=checkout_status,
                 reason=checkout_message,
                 scheduledAt=checkout_utc.isoformat(),
-                localDate=event_date_local
+                localDate=event_date_local,
+                screenshots=checkout_screenshots
             ))
 
             run_count += 2  # Increment by 2 since we ran both checkin and checkout
@@ -509,9 +580,12 @@ def _run_advanced_simulation_sync(
 
     # Calculate stats
     total_events = len(events)
+    # Count success/failure from ALL events (including simulated ones)
     success_events = len([e for e in events if e.status == "success"])
     failed_events = len([e for e in events if e.status == "failure"])
-    skipped_events = len([e for e in events if e.status == "skipped"])
+    # Skipped count is now coming from the events list directly
+    skipped_count_from_list = len([e for e in events if e.status == "skipped"])
+
     success_rate = (success_events / total_events * 100) if total_events > 0 else 0
 
     return AdvancedSimulationResult(
@@ -519,17 +593,17 @@ def _run_advanced_simulation_sync(
         total_events=total_events,
         successful_events=success_events,
         failed_events=failed_events,
-        skipped_events=skipped_events,
+        skipped_events=skipped_count_from_list,
         success_rate=success_rate,
         events=events,
         sample_screenshots=sample_screenshots,
-        holiday_handling={"holidaysSkipped": 0, "exceptionsApplied": 0},
+        holiday_handling={"holidaysSkipped": skipped_count_from_list, "exceptionsApplied": 0},
         summary=AdvancedSimulationSummary(
             totalEvents=total_events,
             successCount=success_events,
             failureCount=failed_events,
-            holidaysSkipped=0,
-            dateRange={"start": "", "end": ""}
+            holidaysSkipped=skipped_count_from_list,
+            dateRange={"start": start_date.strftime("%Y-%m-%d"), "end": end_date.strftime("%Y-%m-%d")}
         ),
         duration_ms=0
     )

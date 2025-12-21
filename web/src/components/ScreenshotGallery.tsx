@@ -10,6 +10,12 @@ interface ScreenshotGalleryProps {
   mode?: "grid" | "slideshow";
 }
 
+const getFullUrl = (url: string) => {
+  if (url.startsWith("http")) return url;
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+  return `${baseUrl.replace(/\/$/, "")}${url.startsWith("/") ? "" : "/"}${url}`;
+};
+
 export default function ScreenshotGallery({
   screenshots,
   mode = "grid",
@@ -71,7 +77,7 @@ export default function ScreenshotGallery({
                   className="group relative aspect-video rounded-lg overflow-hidden border border-gray-200 hover:border-primary hover:shadow-md transition-all cursor-zoom-in"
                 >
                   <img
-                    src={screenshot.url}
+                    src={getFullUrl(screenshot.url)}
                     alt={screenshot.step}
                     className="w-full h-full object-cover"
                   />
@@ -111,7 +117,7 @@ export default function ScreenshotGallery({
                     className="w-full hover:opacity-80 transition-opacity cursor-zoom-in"
                   >
                     <img
-                      src={screenshot.url}
+                      src={getFullUrl(screenshot.url)}
                       alt={screenshot.step}
                       className="w-full"
                     />
@@ -200,7 +206,7 @@ export default function ScreenshotGallery({
                 </div>
                 <div className="flex-1 overflow-auto bg-gray-50 rounded-b-lg flex items-center justify-center">
                   <img
-                    src={screenshots[selectedIndex].url}
+                    src={getFullUrl(screenshots[selectedIndex].url)}
                     alt={screenshots[selectedIndex].step}
                     className="max-w-full max-h-full object-contain"
                   />

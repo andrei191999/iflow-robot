@@ -86,118 +86,15 @@ export default function AdvancedSimulation() {
     setResponse(null);
 
     try {
-      if (mode === "visual") {
-        // Client-side visual simulation
-        // Find first enabled day to simulate
-        const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
-        const eventsToChain: {
-          dateStr: string;
-          dayConfig: typeof spec.week[keyof typeof spec.week];
-        }[] = [];
-
-        // Find next 3 enabled days
-        let currentDate = new Date();
-        let daysFound = 0;
-        let attempts = 0;
-
-        while (daysFound < 3 && attempts < 14) { // Look ahead up to 2 weeks
-          const dayName = currentDate.toLocaleDateString("en-US", { weekday: "short" }) as keyof typeof spec.week;
-          // Map 'Sun', 'Mon' etc. correctly if locale differs, but en-US short is standard.
-          // Note: spec.week keys matches these standard short names.
-
-          if (spec.week[dayName] && spec.week[dayName].enabled) {
-            const dd = String(currentDate.getDate()).padStart(2, '0');
-            const mm = String(currentDate.getMonth() + 1).padStart(2, '0');
-            const yyyy = currentDate.getFullYear();
-            const dateStr = `${dd}/${mm}/${yyyy}`;
-
-            eventsToChain.push({
-              dateStr,
-              dayConfig: spec.week[dayName]
-            });
-            daysFound++;
-          }
-
-          // Next day
-          currentDate.setDate(currentDate.getDate() + 1);
-          attempts++;
-        }
-
-        if (eventsToChain.length === 0) {
-          throw new Error("No enabled days found in the next 2 weeks");
-        }
-
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
-        let nextUrl = ""; // End of chain
-
-        // Check availability of dayConfig properties before using them
-        // Build chain in reverse
-        for (let i = eventsToChain.length - 1; i >= 0; i--) {
-          const { dateStr, dayConfig } = eventsToChain[i];
-
-          // 2. Check-Out Event
-          const checkOutParams = new URLSearchParams({
-            auto_run: "true",
-            username: "demo@example.com",
-            password: "demo123",
-            event_type: "checkOut",
-            checkin: dayConfig.checkIn || "",
-            checkout: dayConfig.checkOut || "",
-            location: dayConfig.location || "telemunca",
-            speed: "normal",
-            date: dateStr,
-          });
-
-          if (nextUrl) {
-            checkOutParams.append("next_url", nextUrl);
-          }
-
-          const checkOutUrl = `${baseUrl}/mock-iflow/login?${checkOutParams.toString()}`;
-
-          // 1. Check-In Event
-          const checkInParams = new URLSearchParams({
-            auto_run: "true",
-            username: "demo@example.com",
-            password: "demo123",
-            event_type: "checkIn",
-            checkin: dayConfig.checkIn || "",
-            checkout: dayConfig.checkOut || "",
-            location: dayConfig.location || "telemunca",
-            speed: "normal",
-            date: dateStr,
-            next_url: checkOutUrl,
-          });
-
-          nextUrl = `${baseUrl}/mock-iflow/login?${checkInParams.toString()}`;
-        }
-
-        const checkInUrl = nextUrl; // The start of the chain
-
-        window.open(checkInUrl, "_blank", "width=1200,height=800");
-
-        // Mock response
-        setResponse({
-          success: true,
-          summary: {
-            totalEvents: 2,
-            successCount: 2,
-            failureCount: 0,
-            holidaysSkipped: 0,
-            dateRange: { start: new Date().toISOString(), end: new Date().toISOString() }
-          },
-          events: []
-        });
-      } else {
-        // Backend simulation
-        const options: AdvancedSimulationOptions = {
-          duration,
-          spec,
-          mode,
-          jitter: jitterConfig,
-        };
-        const result = await api.runAdvancedSimulation(options);
-        setResponse(result);
-      }
+      // Always use backend API - it handles visual mode, holidays, jitter, exceptions properly
+      const options: AdvancedSimulationOptions = {
+        duration,
+        spec,
+        mode,
+        jitter: jitterConfig,
+      };
+      const result = await api.runAdvancedSimulation(options);
+      setResponse(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Simulation failed");
     } finally {
@@ -416,12 +313,13 @@ export default function AdvancedSimulation() {
                         {getStatusIcon(event.status)}
                         <div>
                           <div className="font-medium">
-                            {event.type === "checkIn" ? "Check-In" : "Check-Out"} -{" "}
-                            {event.localDate}
+                            {event.type === "checkIn" ? "Check-In" : "Check-Out"} at {event.time} from {event.location} - {event.localDate}
                           </div>
-                          <div className="text-xs text-muted-foreground">
-                            {new Date(event.scheduledAt).toLocaleString()} | {event.location}
-                          </div>
+                          {event.reason && (
+                            <div className="text-xs text-muted-foreground mt-1 whitespace-pre-wrap">
+                              {event.reason}
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="text-sm">
@@ -440,22 +338,50 @@ export default function AdvancedSimulation() {
                     </div>
 
                     {/* Expanded Details */}
-                    {expandedEvents.has(idx) && event.result && (
-                      <div className="mt-3 pt-3 border-t space-y-3">
-                        <div className="text-sm">
-                          Duration: {(event.result.duration / 1000).toFixed(2)}s | Steps:{" "}
-                          {event.result.stepCount}
-                        </div>
-                        {event.result.screenshots && event.result.screenshots.length > 0 && (
+                    {expandedEvents.has(idx) && (
+                      <div
+                        className="mt-3 pt-3 border-t space-y-3 cursor-default"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {event.result && (
+                          <div className="text-sm">
+                            Duration: {(event.result.duration / 1000).toFixed(2)}s | Steps:{" "}
+                            {event.result.stepCount}
+                          </div>
+                        )}
+
+                        {/* Screenshots direct from event */}
+                        {event.screenshots && event.screenshots.length > 0 && (
+                          <div>
+                            <div className="text-sm font-medium mb-2">Screenshots:</div>
+                            <ScreenshotGallery
+                              screenshots={event.screenshots.map((url, sIdx) => ({
+                                url,
+                                step: `Screenshot ${sIdx + 1}`,
+                                timestamp: event.localDate
+                              }))}
+                            />
+                          </div>
+                        )}
+
+                        {/* Fallback to result screenshots if any (legacy) */}
+                        {!event.screenshots && event.result?.screenshots && event.result.screenshots.length > 0 && (
                           <div>
                             <div className="text-sm font-medium mb-2">Screenshots:</div>
                             <ScreenshotGallery screenshots={event.result.screenshots.slice(0, 3)} />
                           </div>
                         )}
-                        {event.result.error && (
+
+                        {/* Error info */}
+                        {event.result?.error && (
                           <div className="rounded-md bg-red-50 p-2 text-sm text-red-700">
                             {event.result.error}
                           </div>
+                        )}
+
+                        {/* Show raw info if no specific result but we have screenshots/logs */}
+                        {!event.result && !event.screenshots && (
+                             <div className="text-xs text-muted-foreground">No detailed logs available for this event.</div>
                         )}
                       </div>
                     )}
@@ -470,26 +396,20 @@ export default function AdvancedSimulation() {
             </CardContent>
           </Card>
 
-          {/* Sample Screenshots from First 3 Events */}
-          {response.events.slice(0, 3).some((e) => e.result?.screenshots?.length) && (
+          {/* Sample Screenshots */}
+          {response.sample_screenshots && response.sample_screenshots.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Sample Screenshots (First 3 Events)</CardTitle>
+                <CardTitle>Sample Screenshots</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {response.events.slice(0, 3).map((event, idx) => {
-                    if (!event.result?.screenshots?.length) return null;
-                    return (
-                      <div key={idx}>
-                        <div className="text-sm font-medium mb-2">
-                          Event {idx + 1}: {event.type} - {event.localDate}
-                        </div>
-                        <ScreenshotGallery screenshots={event.result.screenshots} />
-                      </div>
-                    );
-                  })}
-                </div>
+                <ScreenshotGallery
+                  screenshots={response.sample_screenshots.map((url, idx) => ({
+                    url,
+                    step: `Screenshot ${idx + 1}`,
+                    timestamp: new Date().toISOString()
+                  }))}
+                />
               </CardContent>
             </Card>
           )}

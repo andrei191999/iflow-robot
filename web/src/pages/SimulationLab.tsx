@@ -27,7 +27,7 @@ export default function SimulationLab() {
     location: "telemunca",
     checkInTime: "09:00",
     checkOutTime: "17:00",
-    speed: "normal",
+    speed: "fast",
   });
   const [isRunning, setIsRunning] = useState(false);
   const [response, setResponse] = useState<PublicSimulationResponse | null>(null);
@@ -39,55 +39,8 @@ export default function SimulationLab() {
     setResponse(null);
 
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
-
-      // Calculate date for simulation (today)
-      const today = new Date();
-      const dd = String(today.getDate()).padStart(2, '0');
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const yyyy = today.getFullYear();
-      const dateStr = `${dd}/${mm}/${yyyy}`;
-
-      // Construct Check-Out URL (to be run second)
-      const checkOutParams = new URLSearchParams({
-        auto_run: "true",
-        username: "demo@example.com",
-        password: "demo123",
-        event_type: "checkOut",
-        checkin: options.checkInTime,
-        checkout: options.checkOutTime,
-        location: options.location,
-        speed: options.speed,
-        date: dateStr // Add date parameter
-      });
-      const checkOutUrl = `${baseUrl}/mock-iflow/login?${checkOutParams.toString()}`;
-
-      // Construct Check-In URL (to be run first)
-      const checkInParams = new URLSearchParams({
-        auto_run: "true",
-        username: "demo@example.com",
-        password: "demo123",
-        event_type: "checkIn",
-        checkin: options.checkInTime,
-        checkout: options.checkOutTime,
-        location: options.location,
-        speed: options.speed,
-        date: dateStr, // Add date parameter
-        next_url: checkOutUrl // Chain the next event
-      });
-      const checkInUrl = `${baseUrl}/mock-iflow/login?${checkInParams.toString()}`;
-
-      // Open in new window
-      window.open(checkInUrl, "_blank", "width=1200,height=800");
-
-      // Mock response for UI feedback
-      setResponse({
-        success: true,
-        message: "Simulation started in new window",
-        checkIn: { status: "success", duration: 0, stepCount: 0, logs: [], screenshots: [] },
-        checkOut: { status: "pending", duration: 0, stepCount: 0, logs: [], screenshots: [] }
-      });
-
+      const result = await api.runPublicSimulation(options);
+      setResponse(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Simulation failed");
     } finally {
@@ -99,7 +52,7 @@ export default function SimulationLab() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          {result.status === "success" ? (
+          {result.status === "success" || result.success ? (
             <span className="text-green-600">{title} - Success</span>
           ) : (
             <span className="text-red-600">{title} - Failed</span>
@@ -107,14 +60,14 @@ export default function SimulationLab() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {result.summary && (
+             <div className="text-sm font-medium whitespace-pre-wrap">{result.summary}</div>
+        )}
         <div className="text-sm text-muted-foreground">
           Duration: {(result.duration / 1000).toFixed(2)}s | Steps: {result.stepCount}
         </div>
         {result.logs && result.logs.length > 0 && (
           <LogViewer logs={result.logs} />
-        )}
-        {result.screenshots && result.screenshots.length > 0 && (
-          <ScreenshotGallery screenshots={result.screenshots} />
         )}
         {result.error && (
           <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
@@ -138,27 +91,14 @@ export default function SimulationLab() {
         </div>
       </div>
 
-      {/* Demo Banner */}
-      <Card className="bg-blue-50 border-blue-200">
-        <CardContent className="p-4 flex items-start gap-3">
-          <InfoIcon className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-          <div className="text-sm text-blue-900">
-            <p className="font-medium">Demo mode - using test account</p>
-            <p className="text-blue-700 mt-1">
-              This simulation runs both check-in and check-out automatically. Sign in to access
-              advanced simulation features with your own schedule configuration.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Configuration Panel */}
       <Card>
         <CardHeader>
           <CardTitle>Configuration</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
             {/* Check-in Time */}
             <div className="space-y-2">
               <Label>Check-in Time</Label>
@@ -210,33 +150,10 @@ export default function SimulationLab() {
                 Work location
               </p>
             </div>
-
-            {/* Speed */}
-            <div className="space-y-2">
-              <Label>Speed</Label>
-              <Select
-                value={options.speed}
-                onValueChange={(v) =>
-                  setOptions({ ...options, speed: v as "slow" | "normal" | "fast" })
-                }
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="slow">Slow (2s delays)</SelectItem>
-                  <SelectItem value="normal">Normal (0.5s)</SelectItem>
-                  <SelectItem value="fast">Fast (no delays)</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">
-                Playback speed
-              </p>
-            </div>
           </div>
 
           <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">
-            💡 This demo runs in <strong>visual mode</strong> - you'll see the browser automation in real-time with a red dot showing where it's clicking
+            💡 This demo runs in <strong>visual mode</strong> - you'll see the browser automation in real-time with fast execution speed.
           </div>
 
           {/* Run Button */}
@@ -257,7 +174,7 @@ export default function SimulationLab() {
       )}
 
       {/* Results */}
-      {response && response.success && (
+      {response && (
         <div className="space-y-4">
           {response.checkIn && renderResult(response.checkIn, "Check-In")}
           {response.checkOut && renderResult(response.checkOut, "Check-Out")}

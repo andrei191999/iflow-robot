@@ -246,6 +246,7 @@ app/backend/*.jpg
 app/backend/*.jpeg
 app/backend/*.gif
 app/backend/screenshots/
+screenshots/
 
 # ============================================
 # OS-SPECIFIC

@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 # Configuration
 STORAGE_MODE = os.getenv("SCREENSHOT_STORAGE", "local")  # "firebase" or "local"
-LOCAL_STORAGE_ROOT = os.getenv("LOCAL_SCREENSHOT_PATH", "screenshots/simulations")
+LOCAL_STORAGE_ROOT = os.getenv("LOCAL_SCREENSHOT_PATH", "../../screenshots/simulations")
 FIREBASE_BUCKET = os.getenv("FIREBASE_STORAGE_BUCKET", "iflow-robot.appspot.com")
 SCREENSHOT_RETENTION_DAYS = int(os.getenv("SCREENSHOT_RETENTION_DAYS", "7"))
 
@@ -264,7 +264,9 @@ class ScreenshotStorage:
             for file in sorted(simulation_dir.glob("*.png")):
                 # Return relative path
                 rel_path = file.relative_to(self.local_root)
-                paths.append(str(rel_path))
+                # Ensure forward slashes for URL
+                rel_path_str = str(rel_path).replace(os.path.sep, "/")
+                paths.append(f"/screenshots/simulations/{rel_path_str}")
 
             return paths
 
