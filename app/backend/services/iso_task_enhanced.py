@@ -868,6 +868,11 @@ def run_iso_check_enhanced(
         # For screenshot/visual modes, might want to see browser
         pass
 
+    # FORCE headless if running on Cloud Run (no display available)
+    if os.getenv("K_SERVICE"):
+        headless = True
+        logger.info("Forcing headless=True because running in Cloud Run environment")
+
     logger.info(f"Configuration: url={url}, username={username}, headless={headless}, timeout={timeout}ms")
 
     # Validate configuration

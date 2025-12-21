@@ -77,8 +77,9 @@ async def run_simulation(
         # In production this would be the deployed backend URL + /mock-iflow
         # For local dev, assume running on same server
         import os
-        base_url = os.getenv("BASE_URL", "http://localhost:8000")
-        mock_url = f"{base_url}/mock-iflow/login"
+        port = os.getenv("PORT", "8000")
+        # Use localhost for internal loopback to mock server to avoid external routing issues
+        mock_url = f"http://127.0.0.1:{port}/mock-iflow/login"
         logger.info(f"Using mock iFlow at: {mock_url}")
 
     # Determine settings based on mode
