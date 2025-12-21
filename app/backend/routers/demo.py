@@ -80,7 +80,7 @@ async def run_simulation(
         port = os.getenv("PORT", "8000")
         # Use localhost for internal loopback to mock server to avoid external routing issues
         mock_url = f"http://127.0.0.1:{port}/mock-iflow/login"
-        logger.info(f"Using mock iFlow at: {mock_url}")
+        logger.info(f"Using UPDATED dynamic mock iFlow at: {mock_url}")
 
     # Determine settings based on mode
     capture_screenshots = request.mode in ["screenshot", "visual"]
