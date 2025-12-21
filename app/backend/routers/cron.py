@@ -18,7 +18,7 @@ from services.scheduler_math import compute_next_event
 from services.user_passwords import get_password_manager
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/api", tags=["cron"])
+router = APIRouter(prefix="", tags=["cron"])
 
 def _verify_scheduler_oidc(request: Request, expected_audience: str):
     auth_header = request.headers.get("Authorization") or ""
