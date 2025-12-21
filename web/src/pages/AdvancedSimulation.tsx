@@ -94,6 +94,42 @@ export default function AdvancedSimulation() {
         jitter: jitterConfig,
       };
       const result = await api.runAdvancedSimulation(options);
+
+      if (mode === "visual" && result.success && result.events.length > 0) {
+        // Chain the planned events for client-side execution
+        const plannedEvents = result.events.filter(e => e.status === "planned");
+        // Limit to first 6 events (3 days)
+        const limitedEvents = plannedEvents.slice(0, 6);
+
+        if (limitedEvents.length > 0) {
+          const baseApi = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+          let nextUrl = "";
+
+          // Build chain backwards
+          for (let i = limitedEvents.length - 1; i >= 0; i--) {
+            const event = limitedEvents[i];
+            const params = new URLSearchParams({
+              auto_run: "true",
+              username: "demo@example.com",
+              password: "demo123",
+              event_type: event.type,
+              [event.type === 'checkIn' ? 'checkin' : 'checkout']: event.time,
+              location: event.location || "telemunca",
+              speed: "fast",
+              date: event.localDate
+            });
+
+            if (nextUrl) {
+              params.append("next_url", nextUrl);
+            }
+
+            nextUrl = `${baseApi}/mock-iflow/login?${params.toString()}`;
+          }
+
+          window.open(nextUrl, "_blank", "width=1280,height=800");
+        }
+      }
+
       setResponse(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Simulation failed");
@@ -150,6 +186,8 @@ export default function AdvancedSimulation() {
         return <CheckCircle2Icon className="w-4 h-4 text-green-600" />;
       case "failure":
         return <XCircleIcon className="w-4 h-4 text-red-600" />;
+      case "planned":
+        return <PlayCircleIcon className="w-4 h-4 text-blue-600" />;
       case "skipped":
         return <MinusCircleIcon className="w-4 h-4 text-gray-400" />;
       default:

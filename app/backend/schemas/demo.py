@@ -177,7 +177,7 @@ class AdvancedSimulationEvent(BaseModel):
     time: str = Field(description="Time of event (HH:MM)")
     event_type: Literal["checkIn", "checkOut"] = Field(description="Type of event", serialization_alias="type")
     location: Optional[str] = Field(description="Location for event")
-    status: Literal["success", "failure", "skipped"] = Field(description="Event outcome")
+    status: Literal["success", "failure", "skipped", "planned"] = Field(description="Event outcome")
     reason: Optional[str] = Field(default=None, description="Reason for skip/failure")
     scheduledAt: str = Field(description="ISO timestamp of scheduled event")
     localDate: str = Field(description="Local date string (YYYY-MM-DD)")

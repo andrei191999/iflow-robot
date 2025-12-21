@@ -33,16 +33,55 @@ export default function SimulationLab() {
   const [response, setResponse] = useState<PublicSimulationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleRun = async () => {
+  const handleRun = () => {
     setIsRunning(true);
     setError(null);
     setResponse(null);
 
     try {
-      const result = await api.runPublicSimulation(options);
-      setResponse(result);
+      // Construct URLs for the Visual Simulation (Client-Side)
+      // We chain Check-In -> Check-Out using the 'next_url' parameter
+      const baseApi = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+
+      // 2. The Check-Out Simulation URL (Step 2)
+      // This will be triggered after Check-In completes
+      const checkOutParams = new URLSearchParams({
+        auto_run: "true",
+        username: "demo@example.com",
+        password: "demo123",
+        event_type: "checkOut",
+        checkin: options.checkInTime,
+        checkout: options.checkOutTime,
+        location: options.location,
+        speed: options.speed,
+        // No next_url -> bot closes window
+      });
+      const checkOutUrl = `${baseApi}/mock-iflow/login?${checkOutParams.toString()}`;
+
+      // 1. The Check-In Simulation URL (Step 1)
+      const checkInParams = new URLSearchParams({
+        auto_run: "true",
+        username: "demo@example.com",
+        password: "demo123",
+        event_type: "checkIn",
+        checkin: options.checkInTime,
+        location: options.location,
+        speed: options.speed,
+        next_url: checkOutUrl // Chain to Check-Out
+      });
+      const checkInUrl = `${baseApi}/mock-iflow/login?${checkInParams.toString()}`;
+
+      // Launch the simulation
+      window.open(checkInUrl, "_blank", "width=1280,height=800");
+
+      setResponse({
+          success: true,
+          summary: "Visual simulation launched in a new tab.\n\nPlease follow the 'Step 1: Check-in' and 'Step 2: Check-out' actions in the new window.",
+          duration_ms: 0
+      } as any);
+
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Simulation failed");
+      setError(err instanceof Error ? err.message : "Failed to launch simulation");
     } finally {
       setIsRunning(false);
     }
