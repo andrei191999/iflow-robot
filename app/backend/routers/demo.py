@@ -80,7 +80,7 @@ async def run_simulation(
         port = os.getenv("PORT", "8000")
         # Use localhost for internal loopback to mock server to avoid external routing issues
         mock_url = f"http://127.0.0.1:{port}/mock-iflow/login"
-        logger.info(f"Using UPDATED dynamic mock iFlow at: {mock_url}")
+        logger.info(f"Using mock iFlow at: {mock_url}")
 
     # Determine settings based on mode
     capture_screenshots = request.mode in ["screenshot", "visual"]
@@ -209,8 +209,9 @@ async def run_public_simulation(request: PublicSimulationRequest):
     # Configure mock
     set_mock_behavior(behavior="success")
     import os
-    base_url = os.getenv("BASE_URL", "http://localhost:8000")
-    mock_url_base = f"{base_url}/mock-iflow/login"
+    port = os.getenv("PORT", "8000")
+    # Use localhost for internal loopback to mock server
+    mock_url_base = f"http://127.0.0.1:{port}/mock-iflow/login"
 
     checkin_time = request.checkInTime
     checkout_time = request.checkOutTime
@@ -646,8 +647,9 @@ async def run_advanced_simulation(
     # Configure mock server
     set_mock_behavior(behavior="success")
     import os
-    base_url = os.getenv("BASE_URL", "http://localhost:8000")
-    mock_url = f"{base_url}/mock-iflow/login"
+    port = os.getenv("PORT", "8000")
+    # Use localhost for internal loopback to mock server
+    mock_url = f"http://127.0.0.1:{port}/mock-iflow/login"
 
     # Screenshot storage
     screenshot_storage = None
@@ -720,8 +722,10 @@ async def run_advanced_simulation_dev(
 
     # Configure mock server
     set_mock_behavior(behavior="success")
-    base_url = os.getenv("BASE_URL", "http://localhost:8000")
-    mock_url = f"{base_url}/mock-iflow/login"
+    import os
+    port = os.getenv("PORT", "8000")
+    # Use localhost for internal loopback to mock server
+    mock_url = f"http://127.0.0.1:{port}/mock-iflow/login"
 
     # Screenshot storage
     screenshot_storage = None
