@@ -46,6 +46,12 @@ class ScreenshotStorage:
                 self.bucket = storage.bucket(FIREBASE_BUCKET)
                 logger.info(f"Firebase storage bucket: {FIREBASE_BUCKET}")
             except Exception as e:
+            except Exception as e:
+                # In AWS/Cloud Run, local storage is ephemeral. We must NOT fallback if configured for cloud.
+                if os.getenv("IS_CLOUD_RUN", "false").lower() == "true":
+                    logger.critical(f"Firebase Storage init failed in Cloud Run: {e}. Cannot fallback to local (ephemeral).")
+                    raise e
+
                 logger.error(f"Failed to initialize Firebase storage: {e}")
                 logger.warning("Falling back to local storage")
                 self.mode = "local"

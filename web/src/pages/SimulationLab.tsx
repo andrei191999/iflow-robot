@@ -234,6 +234,23 @@ Scheduled check-out time: ${options.checkOutTime}, Actual check-out time: ${opti
       {/* Results */}
       {response && (
         <div className="space-y-4">
+          {/* Main Summary (Visual Mode or General) */}
+          {response.summary && (
+             <Card>
+               <CardHeader className="pb-2">
+                 <CardTitle className="text-lg flex items-center gap-2">
+                    <InfoIcon className="w-5 h-5 text-blue-500" />
+                    Simulation Summary
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-sm font-medium whitespace-pre-wrap font-mono bg-muted/30 p-3 rounded-md border text-xs leading-relaxed">
+                    {response.summary}
+                 </div>
+               </CardContent>
+             </Card>
+          )}
+
           {response.checkIn && renderResult(response.checkIn, "Check-In")}
           {response.checkOut && renderResult(response.checkOut, "Check-Out")}
         </div>

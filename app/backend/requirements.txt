@@ -14,3 +14,4 @@ pytest
 pytest-cov
 freezegun
 playwright==1.49.0
+cryptography

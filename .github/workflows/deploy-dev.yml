@@ -67,7 +67,7 @@ jobs:
             --allow-unauthenticated \
             --memory 2Gi \
             --timeout 60s \
-            --set-env-vars ENVIRONMENT=development,GOOGLE_CLOUD_PROJECT=${{ env.PROJECT_ID }},FIREBASE_PROJECT_ID=${{ env.PROJECT_ID }},ENABLE_DEBUG_LOGIN=0,DEV_SKIP_OIDC=0,SCREENSHOT_STORAGE=firebase,IS_CLOUD_RUN=true,CLOUD_RUN_BASE_URL=https://iso-backend-dev-416751442341.europe-west1.run.app
+            --set-env-vars ENVIRONMENT=development,GOOGLE_CLOUD_PROJECT=${{ env.PROJECT_ID }},FIREBASE_PROJECT_ID=${{ env.PROJECT_ID }},ENABLE_DEBUG_LOGIN=0,DEV_SKIP_OIDC=0,SCREENSHOT_STORAGE=firebase,IS_CLOUD_RUN=true,CLOUD_RUN_BASE_URL=https://iso-backend-dev-416751442341.europe-west1.run.app,APP_SECRET=dev-secret-key-do-not-use-in-prod
 
       - name: Get service URL
         id: deploy
