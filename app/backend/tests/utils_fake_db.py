@@ -16,21 +16,34 @@ class _DocRef:
     def __init__(self, col, doc_id: str | None = None):
         self._col = col
         self.id = doc_id or str(uuid.uuid4()).replace("-", "")[:20]
+
     def set(self, data: Dict[str, Any]):
         self._col._docs[self.id] = dict(data)
+
     def get(self, transaction=None) -> _DocSnap:
         # Return a snapshot with None data if document doesn't exist
-        # transaction parameter ignored for fake DB
         data = self._col._docs.get(self.id)
         return _DocSnap(self.id, data, self)
+
     def update(self, fields: Dict[str, Any]):
         if self.id in self._col._docs:
             self._col._docs[self.id].update(fields)
         else:
             # For update on non-existent doc, create it
             self._col._docs[self.id] = dict(fields)
+
     def delete(self):
         self._col._docs.pop(self.id, None)
+
+    def collection(self, name: str):
+        """Support for subcollections."""
+        # Check if the parent collection has a reference to the DB
+        if hasattr(self._col, '_db') and self._col._db:
+            # Construct nested path: parent_col/doc_id/sub_col
+            path = f"{self._col._name}/{self.id}/{name}"
+            return self._col._db.collection(path)
+        # Fallback (should ideally not happen if initialized via FakeDB)
+        return FakeCollection(f"{self._col._name}/{self.id}/{name}")
 
 class _Query:
     def __init__(self, col, filters: List, order: str | None):
@@ -38,7 +51,6 @@ class _Query:
         self._filters = filters
         self._order = order
     def where(self, *, filter):
-        # filter has .field_path, .op_string, .value (same names as google FieldFilter)
         self._filters.append((filter.field_path, filter.op_string, filter.value))
         return self
     def order_by(self, field: str):
@@ -75,23 +87,21 @@ def _get_nested(d: Dict[str, Any], path: str | None):
     return cur
 
 class FakeCollection:
-    def __init__(self, name: str):
+    def __init__(self, name: str, db=None):
         self._name = name
+        self._db = db
         self._docs: Dict[str, Dict[str, Any]] = {}
     def document(self, doc_id: str | None = None):
         return _DocRef(self, doc_id)
-    # Support both .where(filter=FieldFilter(...)) and .where(...).where(...)
     def where(self, *, filter):
         return _Query(self, [(filter.field_path, filter.op_string, filter.value)], order=None)
     def stream(self):
-        # not used directly in our app, but handy
         for doc_id, data in self._docs.items():
             yield _DocSnap(doc_id, data, _DocRef(self, doc_id))
 
 class FakeTransaction:
     """
     Fake transaction for testing - mimics basic Firestore transaction interface.
-    In tests, transactions don't need real ACID properties.
     """
     def __init__(self):
         self._read_only = False
@@ -99,24 +109,11 @@ class FakeTransaction:
         self._write_pbs = []
         self._max_attempts = 3
 
-    def _begin(self, retry_id=None):
-        """Mock begin - no-op for testing"""
-        pass
-
-    def _rollback(self):
-        """Mock rollback - no-op for testing"""
-        pass
-
-    def _commit(self):
-        """Mock commit - no-op for testing"""
-        pass
-
-    def _clean_up(self):
-        """Mock cleanup - no-op for testing"""
-        pass
-
+    def _begin(self, retry_id=None): pass
+    def _rollback(self): pass
+    def _commit(self): pass
+    def _clean_up(self): pass
     def update(self, reference, data):
-        """Mock update - directly updates the document"""
         reference.update(data)
 
 class FakeDB:
@@ -124,8 +121,7 @@ class FakeDB:
         self._cols: Dict[str, FakeCollection] = {}
     def collection(self, name: str) -> FakeCollection:
         if name not in self._cols:
-            self._cols[name] = FakeCollection(name)
+            self._cols[name] = FakeCollection(name, self)
         return self._cols[name]
     def transaction(self):
-        """Return a fake transaction object for testing"""
         return FakeTransaction()
