@@ -13,4 +13,4 @@ holidays==0.37
 pytest
 pytest-cov
 freezegun
-playwright==1.40.0
+playwright==1.49.0

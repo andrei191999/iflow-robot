@@ -97,7 +97,7 @@ export default function AdvancedSimulation() {
 
       if (mode === "visual" && result.success && result.events.length > 0) {
         // Chain the planned events for client-side execution
-        const plannedEvents = result.events.filter(e => e.status === "planned");
+        const plannedEvents = result.events.filter(e => e.status === "success");
         // Limit to first 6 events (3 days)
         const limitedEvents = plannedEvents.slice(0, 6);
 

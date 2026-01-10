@@ -538,12 +538,8 @@ def _run_advanced_simulation_sync(
                     checkout_screenshots = []
             else:
                 # Simulated events (not actually run)
-                if request.mode == "visual":
-                    checkin_status = "planned"
-                    checkout_status = "planned"
-                else:
-                    checkin_status = "success"
-                    checkout_status = "success"
+                checkin_status = "success"
+                checkout_status = "success"
 
                 checkin_time_str_fmt = checkin_dt.strftime("%H:%M")
                 checkout_time_str_fmt = checkout_dt.strftime("%H:%M")
