@@ -869,7 +869,7 @@ def run_iso_check_enhanced(
         pass
 
     # FORCE headless if running on Cloud Run (no display available)
-    if os.getenv("K_SERVICE"):
+    if os.getenv("IS_CLOUD_RUN") or os.getenv("K_SERVICE"):
         headless = True
         logger.info("Forcing headless=True because running in Cloud Run environment")
 

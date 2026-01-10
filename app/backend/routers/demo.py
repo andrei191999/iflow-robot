@@ -171,7 +171,8 @@ def _generate_summary(
     step_count: int,
     time_val: str = "",
     date_val: str = "",
-    actual_time: str = ""
+    actual_time: str = "",
+    error_details: str = None
 ) -> str:
     """Generate human-readable summary of simulation run."""
     # Use actual_time if provided, otherwise fall back to time_val (for backward compatibility)
@@ -190,7 +191,8 @@ def _generate_summary(
         else:
             return f"Successfully completed {scenario} at {location} in {duration_ms}ms ({step_count} steps)."
     else:
-        error_msg = f"Failed to complete {scenario}"
+        # Use provided error details if available, otherwise generic message
+        error_msg = error_details if error_details and error_details != "Success" else f"Failed to complete {scenario}"
         if timing_details:
             return f"{error_msg}\n{timing_details}"
         else:
@@ -208,9 +210,12 @@ async def run_public_simulation(request: PublicSimulationRequest):
 
     # Configure mock
     set_mock_behavior(behavior="success")
+    # Configure mock
+    set_mock_behavior(behavior="success")
     import os
-    base_url = os.getenv("BASE_URL", "http://localhost:8000")
-    mock_url_base = f"{base_url}/mock-iflow/login"
+    port = os.getenv("PORT", "8000")
+    # Use 127.0.0.1 for internal loopback to mock server
+    mock_url_base = f"http://127.0.0.1:{port}/mock-iflow/login"
 
     checkin_time = request.checkInTime
     checkout_time = request.checkOutTime
@@ -267,7 +272,7 @@ async def run_public_simulation(request: PublicSimulationRequest):
             mode=request.mode,
             steps=checkin_steps,
             screenshots=[step.screenshot_url for step in checkin_steps if step.screenshot_url],
-            summary=_generate_summary(checkin_status, "check-in", request.location, checkin_dur, len(checkin_steps), time_val=checkin_time, date_val=current_date_str),
+            summary=_generate_summary(checkin_status, "check-in", request.location, checkin_dur, len(checkin_steps), time_val=checkin_time, date_val=current_date_str, error_details=checkin_msg),
             error=checkin_msg if not checkin_success else None
         )
 
@@ -280,7 +285,7 @@ async def run_public_simulation(request: PublicSimulationRequest):
             mode=request.mode,
             steps=checkout_steps,
             screenshots=[step.screenshot_url for step in checkout_steps if step.screenshot_url],
-            summary=_generate_summary(checkout_status, "check-out", request.location, checkout_dur, len(checkout_steps), time_val=checkout_time, date_val=current_date_str),
+            summary=_generate_summary(checkout_status, "check-out", request.location, checkout_dur, len(checkout_steps), time_val=checkout_time, date_val=current_date_str, error_details=checkout_msg),
             error=checkout_msg if not checkout_success else None
         )
 
